@@ -789,6 +789,9 @@ public final class DemoApp implements EntryPoint {
                 .trigger(Button.create("Tooltip left").variant(ButtonVariant.SECONDARY))
                 .element());
         floating.appendChild(HoverCard.create()
+                .side(OverlaySide.BOTTOM)
+                .showDelay(200)
+                .hideDelay(250)
                 .trigger(Button.create("Hover card").variant(ButtonVariant.GHOST))
                 .content(raw(textElement("p", "demo-muted", "HoverCard shares the same trigger pattern as Tooltip, but can render richer content.")))
                 .element());
@@ -810,6 +813,9 @@ public final class DemoApp implements EntryPoint {
                         + "    .side(OverlaySide.LEFT)\n"
                         + "    .trigger(Button.create(\"Tooltip left\"));\n\n"
                         + "HoverCard.create()\n"
+                        + "    .side(OverlaySide.BOTTOM)\n"
+                        + "    .showDelay(200)\n"
+                        + "    .hideDelay(250)\n"
                         + "    .trigger(Button.create(\"Hover card\"))\n"
                         + "    .content(raw(content));"));
 
