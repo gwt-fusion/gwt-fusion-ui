@@ -181,22 +181,22 @@ This file turns the roadmap into concrete, checkable implementation milestones. 
 
 ## Milestone 11: Data Display Components
 
-- [ ] Implement `Table`.
-- [ ] Implement `Avatar`.
-- [ ] Implement `Kbd`.
-- [ ] Implement `Item` as a reusable display primitive if useful.
-- [ ] Implement `Timeline`.
-- [ ] Implement `Calendar`.
-- [ ] Implement `DatePicker` after `Calendar`, `Popover`, and form utilities are stable.
-- [ ] Implement `DataTable` separately from basic `Table`.
-- [ ] Add sorting support to `DataTable` only after the base table is stable.
-- [ ] Add filtering support to `DataTable` only after sorting is stable.
-- [ ] Add pagination examples using `Pagination`.
-- [ ] Implement `Carousel` after keyboard utilities are stable.
-- [ ] Evaluate `Chart` implementation strategy: SVG-first, external dependency, or deferred.
-- [ ] Add realistic sample data to the demo.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile.
+- [x] Implement `Table`.
+- [x] Implement `Avatar`.
+- [x] Implement `Kbd`.
+- [x] Implement `Item` as a reusable display primitive if useful.
+- [x] Implement `Timeline`.
+- [x] Implement `Calendar`.
+- [x] Implement `DatePicker` after `Calendar`, `Popover`, and form utilities are stable.
+- [x] Implement `DataTable` separately from basic `Table`.
+- [x] Add sorting support to `DataTable` only after the base table is stable.
+- [x] Add filtering support to `DataTable` only after sorting is stable.
+- [x] Add pagination examples using `Pagination`.
+- [x] Implement `Carousel` after keyboard utilities are stable.
+- [x] Evaluate `Chart` implementation strategy: SVG-first, external dependency, or deferred.
+- [x] Add realistic sample data to the demo.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile.
 
 ## Milestone 12: Advanced UX Components
 

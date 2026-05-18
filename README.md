@@ -58,19 +58,25 @@ Slider.create()
 
 | | | |
 |---|---|---|
-| `Accordion` | `ContextMenu` | `RadioGroup` |
-| `Alert` | `Dialog` | `ScrollArea` |
-| `AlertDialog` | `Drawer` | `Separator` |
-| `AspectRatio` | `DropdownMenu` | `Sheet` |
-| `Badge` | `FormDescription` | `Slider` |
-| `Breadcrumb` | `FormField` | `Switch` |
-| `Button` | `FormLabel` | `Tabs` |
-| `ButtonGroup` | `FormMessage` | `Textarea` |
-| `Card` | `HoverCard` | `Toggle` |
-| `Checkbox` | `Icon` | `ToggleGroup` |
-| `CodeBlock` | `Input` | `Tooltip` |
-| `Collapsible` | `InputGroup` | `Typography` |
+| `Accordion` | `Alert` | `AlertDialog` |
+| `AspectRatio` | `Avatar` | `Badge` |
+| `Breadcrumb` | `Button` | `ButtonGroup` |
+| `Calendar` | `Card` | `Carousel` |
+| `Checkbox` | `CodeBlock` | `Collapsible` |
+| `ContextMenu` | `DataTable` | `DatePicker` |
+| `Dialog` | `Drawer` | `DropdownMenu` |
+| `EmptyState` | `FormDescription` | `FormField` |
+| `FormLabel` | `FormMessage` | `HoverCard` |
+| `Icon` | `Input` | `InputGroup` |
+| `Item` | `Kbd` | `Label` |
 | `NativeSelect` | `Pagination` | `Popover` |
+| `Progress` | `RadioGroup` | `ScrollArea` |
+| `Separator` | `Sheet` | `Skeleton` |
+| `Slider` | `Spinner` | `StatusIndicator` |
+| `Switch` | `Table` | `Tabs` |
+| `Textarea` | `Timeline` | `Toast` |
+| `ToastManager` | `Toggle` | `ToggleGroup` |
+| `Tooltip` | `Typography` | |
 
 ## Design Principles
 

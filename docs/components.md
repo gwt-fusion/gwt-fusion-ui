@@ -49,6 +49,15 @@
 - StatusIndicator
 - Toast
 - ToastManager
+- Table
+- DataTable
+- Avatar
+- Kbd
+- Item
+- Timeline
+- Calendar
+- DatePicker
+- Carousel
 
 ## Next Candidates
 
@@ -57,6 +66,7 @@
 - NavigationMenu
 - Sidebar
 - Menubar
+- Chart
 
 ## Component Contract
 
