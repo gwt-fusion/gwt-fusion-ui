@@ -21,6 +21,9 @@ public final class Avatar extends BaseComponent<Avatar> {
         classes(ROOT_CLASSES);
         image.className = IMAGE_CLASSES;
         fallback.className = FALLBACK_CLASSES;
+        image.addEventListener("load", event -> showImage());
+        image.addEventListener("error", event -> showFallback());
+        showFallback();
         element.appendChild(image);
         element.appendChild(fallback);
         size(AvatarSize.MD);
@@ -35,6 +38,7 @@ public final class Avatar extends BaseComponent<Avatar> {
 
     public Avatar src(String src) {
         image.src = src == null ? "" : src;
+        showFallback();
         return this;
     }
 
@@ -54,5 +58,15 @@ public final class Avatar extends BaseComponent<Avatar> {
         }
         this.size = size == null ? AvatarSize.MD : size;
         return classes(this.size.classes());
+    }
+
+    private void showImage() {
+        image.removeAttribute("hidden");
+        fallback.setAttribute("hidden", "");
+    }
+
+    private void showFallback() {
+        image.setAttribute("hidden", "");
+        fallback.removeAttribute("hidden");
     }
 }

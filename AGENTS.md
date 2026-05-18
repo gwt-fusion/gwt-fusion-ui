@@ -59,4 +59,4 @@ This repository contains `gwt-fusion-ui`, a UI component library for GWT 2.13 an
 - Base classes: `UiComponent`, `BaseComponent`, `CssClasses`, `ThemeManager`.
 - Demo: home page, component view with categorized preview/Java code examples, form foundation examples, layout/navigation examples, overlay examples, icon gallery, events examples, and theme view.
 - Tailwind 3 is configured and executed through `frontend-maven-plugin`.
-- Current working status: Milestone 11 Data Display Components is in progress.
+- Current working status: Milestone 11 Data Display Components is complete.

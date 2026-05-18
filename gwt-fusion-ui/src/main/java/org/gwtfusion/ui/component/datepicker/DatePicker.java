@@ -49,7 +49,8 @@ public final class DatePicker extends BaseComponent<DatePicker> {
 
     public DatePicker selectedDay(int selectedDay) {
         calendar.selectedDay(selectedDay);
-        trigger.text(month.isEmpty() ? String.valueOf(selectedDay) : month + " " + selectedDay);
+        int actualSelectedDay = calendar.selectedDay();
+        trigger.text(month.isEmpty() ? String.valueOf(actualSelectedDay) : month + " " + actualSelectedDay);
         return this;
     }
 

@@ -66,6 +66,10 @@ public final class Calendar extends BaseComponent<Calendar> {
         return this;
     }
 
+    public int selectedDay() {
+        return selectedDay;
+    }
+
     public Calendar weekdays(String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday) {
         clear(weekdays);
         addWeekday(monday);

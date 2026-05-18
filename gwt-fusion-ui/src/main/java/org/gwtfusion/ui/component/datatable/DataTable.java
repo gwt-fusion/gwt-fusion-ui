@@ -41,7 +41,7 @@ public final class DataTable extends BaseComponent<DataTable> {
     }
 
     public DataTable rows(String[][] rows) {
-        this.rows = rows == null ? new String[0][0] : rows;
+        this.rows = normalizeRows(rows);
         render();
         return this;
     }
@@ -65,6 +65,7 @@ public final class DataTable extends BaseComponent<DataTable> {
     }
 
     private void render() {
+        rows = normalizeRows(rows);
         clear(tableSlot);
         Table table = Table.create();
         Table.Part headerRow = Table.row();
@@ -125,6 +126,26 @@ public final class DataTable extends BaseComponent<DataTable> {
         String rightValue = sortColumn < right.length && right[sortColumn] != null ? right[sortColumn] : "";
         int result = leftValue.compareToIgnoreCase(rightValue);
         return sortDescending ? -result : result;
+    }
+
+    private static String[][] normalizeRows(String[][] rows) {
+        if (rows == null) {
+            return new String[0][0];
+        }
+        String[][] normalized = new String[rows.length][];
+        for (int i = 0; i < rows.length; i++) {
+            String[] row = rows[i];
+            if (row == null) {
+                normalized[i] = new String[0];
+                continue;
+            }
+            String[] normalizedRow = new String[row.length];
+            for (int j = 0; j < row.length; j++) {
+                normalizedRow[j] = row[j] == null ? "" : row[j];
+            }
+            normalized[i] = normalizedRow;
+        }
+        return normalized;
     }
 
     private static void clear(HTMLElement element) {

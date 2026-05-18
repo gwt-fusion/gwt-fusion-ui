@@ -33,7 +33,9 @@ public final class Table extends BaseComponent<Table> {
     }
 
     public Table add(UiComponent component) {
-        table.appendChild(component.element());
+        if (component != null) {
+            table.appendChild(component.element());
+        }
         return this;
     }
 
