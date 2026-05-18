@@ -37,7 +37,7 @@ Overlay components should compose these utilities instead of adding separate glo
 - `AlertDialog`: `Dialog` wrapper using `role="alertdialog"` for confirmation flows.
 - `DropdownMenu`: trigger menu with menu roles, configurable `OverlaySide` placement, and Arrow/Home/End/Enter/Space/Escape keyboard support.
 - `ContextMenu`: right-click menu using the same menu keyboard behavior and configurable `OverlaySide` pointer offset direction.
-- `HoverCard`: hover/focus-triggered rich content panel.
+- `HoverCard`: hover/focus-triggered rich content panel with trigger-anchored placement, scroll/resize repositioning, and configurable show/hide delays in milliseconds.
 - `Sheet`: modal edge panel built on `Dialog` behavior.
 - `Drawer`: modal bottom panel built on `Dialog` behavior.
 

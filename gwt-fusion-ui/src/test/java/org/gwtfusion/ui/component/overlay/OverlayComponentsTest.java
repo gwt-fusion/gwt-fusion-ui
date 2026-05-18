@@ -41,6 +41,9 @@ class OverlayComponentsTest {
         assertFalse(Tooltip.CONTENT_CLASSES.contains("left-1/2"));
         assertFalse(Tooltip.CONTENT_CLASSES.contains("-translate-x-1/2"));
         assertTrue(HoverCard.CONTENT_CLASSES.contains("w-80"));
+        assertTrue(HoverCard.CONTENT_CLASSES.contains("fixed"));
+        assertFalse(HoverCard.CONTENT_CLASSES.contains("left-1/2"));
+        assertFalse(HoverCard.CONTENT_CLASSES.contains("-translate-x-1/2"));
     }
 
     @Test
@@ -49,6 +52,7 @@ class OverlayComponentsTest {
         assertTrue(Popover.OFFSET > 0);
         assertTrue(ContextMenu.OFFSET > 0);
         assertTrue(Tooltip.OFFSET > 0);
+        assertTrue(HoverCard.OFFSET > 0);
         assertTrue(hasOverlaySide(OverlaySide.TOP));
         assertTrue(hasOverlaySide(OverlaySide.RIGHT));
         assertTrue(hasOverlaySide(OverlaySide.BOTTOM));
