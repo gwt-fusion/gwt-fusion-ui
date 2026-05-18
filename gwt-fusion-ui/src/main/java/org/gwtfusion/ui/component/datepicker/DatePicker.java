@@ -13,6 +13,7 @@ import org.gwtfusion.ui.overlay.OverlaySide;
 
 public final class DatePicker extends BaseComponent<DatePicker> {
     public static final String ROOT_CLASSES = "inline-flex";
+    public static final String CALENDAR_CLASSES = "grid gap-3 text-sm";
 
     private final Button trigger;
     private final Calendar calendar;
@@ -23,7 +24,9 @@ public final class DatePicker extends BaseComponent<DatePicker> {
         super(element);
         classes(ROOT_CLASSES);
         trigger = Button.create("Pick a date").variant(ButtonVariant.OUTLINE);
-        calendar = Calendar.create();
+        calendar = Calendar.create()
+                .removeClasses(Calendar.ROOT_CLASSES)
+                .classes(CALENDAR_CLASSES);
         popover = Popover.create().side(OverlaySide.BOTTOM).trigger(trigger).content(calendar);
         calendar.onDaySelect(day -> {
             trigger.text(month.isEmpty() ? String.valueOf(day) : month + " " + day);

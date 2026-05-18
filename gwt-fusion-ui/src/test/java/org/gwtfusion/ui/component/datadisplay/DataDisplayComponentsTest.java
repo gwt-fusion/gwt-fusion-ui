@@ -1,6 +1,7 @@
 package org.gwtfusion.ui.component.datadisplay;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.gwtfusion.ui.component.avatar.Avatar;
@@ -8,6 +9,7 @@ import org.gwtfusion.ui.component.avatar.AvatarSize;
 import org.gwtfusion.ui.component.calendar.Calendar;
 import org.gwtfusion.ui.component.carousel.Carousel;
 import org.gwtfusion.ui.component.datatable.DataTable;
+import org.gwtfusion.ui.component.datepicker.DatePicker;
 import org.gwtfusion.ui.component.item.Item;
 import org.gwtfusion.ui.component.kbd.Kbd;
 import org.gwtfusion.ui.component.table.Table;
@@ -24,6 +26,8 @@ class DataDisplayComponentsTest {
         assertTrue(Item.ROOT_CLASSES.contains("flex"));
         assertTrue(Timeline.ITEM_CLASSES.contains("before:absolute"));
         assertTrue(Calendar.ROOT_CLASSES.contains("w-72"));
+        assertFalse(DatePicker.CALENDAR_CLASSES.contains("w-72"));
+        assertFalse(DatePicker.CALENDAR_CLASSES.contains("border"));
         assertTrue(DataTable.EMPTY_CLASSES.contains("border-dashed"));
         assertTrue(Carousel.VIEWPORT_CLASSES.contains("overflow-hidden"));
     }

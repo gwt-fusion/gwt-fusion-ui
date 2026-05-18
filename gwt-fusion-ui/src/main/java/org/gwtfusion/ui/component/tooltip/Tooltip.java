@@ -15,6 +15,7 @@ import org.gwtfusion.ui.overlay.Portal;
 public final class Tooltip extends BaseComponent<Tooltip> {
     public static final String ROOT_CLASSES = "inline-flex";
     public static final String CONTENT_CLASSES = "fixed z-50 max-w-xs rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground shadow-lg";
+    public static final String ARROW_CLASSES = "absolute h-2 w-2 rotate-45 bg-primary";
     public static final int OFFSET = 6;
 
     private final IdGenerator ids = IdGenerator.create("tooltip");
@@ -89,8 +90,25 @@ public final class Tooltip extends BaseComponent<Tooltip> {
         tooltip.setAttribute("id", tooltipId);
         tooltip.setAttribute("role", "tooltip");
         tooltip.textContent = text;
+        HTMLElement arrow = (HTMLElement) DomGlobal.document.createElement("div");
+        arrow.className = ARROW_CLASSES + " " + arrowClasses();
+        arrow.setAttribute("aria-hidden", "true");
+        tooltip.appendChild(arrow);
         portal = Portal.appendToBody(tooltip);
         positionAtTrigger();
+    }
+
+    private String arrowClasses() {
+        if (side == OverlaySide.RIGHT) {
+            return "-left-1 top-1/2 -translate-y-1/2";
+        }
+        if (side == OverlaySide.BOTTOM) {
+            return "-top-1 left-1/2 -translate-x-1/2";
+        }
+        if (side == OverlaySide.LEFT) {
+            return "-right-1 top-1/2 -translate-y-1/2";
+        }
+        return "-bottom-1 left-1/2 -translate-x-1/2";
     }
 
     private void unmount() {
