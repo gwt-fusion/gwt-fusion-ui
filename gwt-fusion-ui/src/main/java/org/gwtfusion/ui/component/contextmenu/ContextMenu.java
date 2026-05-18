@@ -414,16 +414,20 @@ public final class ContextMenu extends BaseComponent<ContextMenu> {
         int next = Keyboard.indexForKey(event.key, current, submenuItemElements.size(), true);
         if (Keyboard.isEscape(event.key)) {
             event.preventDefault();
+            event.stopPropagation();
             open(false);
         } else if ("ArrowLeft".equals(event.key)) {
             event.preventDefault();
+            event.stopPropagation();
             closeSubmenu();
             FocusManager.focus(trigger);
         } else if (next != current) {
             event.preventDefault();
+            event.stopPropagation();
             focusSubmenuItem(next);
         } else if (Keyboard.isActivationKey(event.key) && current >= 0 && current < submenuFocusableItems.size()) {
             event.preventDefault();
+            event.stopPropagation();
             select(submenuFocusableItems.get(current));
         }
     }

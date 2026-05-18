@@ -232,6 +232,13 @@ public final class Tabs extends BaseComponent<Tabs> {
             select(items.get(index).value, notify);
         } else {
             value = null;
+            clearSelection();
+        }
+    }
+
+    private void clearSelection() {
+        for (Item item : items) {
+            applyItemState(item, false);
         }
     }
 
