@@ -42,6 +42,13 @@
 - HoverCard
 - Sheet
 - Drawer
+- Progress
+- Skeleton
+- Spinner
+- EmptyState
+- StatusIndicator
+- Toast
+- ToastManager
 
 ## Next Candidates
 

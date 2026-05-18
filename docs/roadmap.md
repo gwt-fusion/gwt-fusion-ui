@@ -150,7 +150,7 @@ Add components for loading, status, and user feedback.
 ### Implementation Notes
 
 - `Toast` likely needs a small `ToastManager`.
-- `Sonner` should be treated as a toast presentation style or a higher-level toast API, not as a completely separate system unless the API needs it.
+- `Sonner` is treated as `ToastStyle.SONNER`, not as a separate toast system.
 - `ToastManager` must avoid unnecessary static side effects. Initialize DOM containers lazily.
 - `Progress` should expose `value(double)` and ARIA progress attributes.
 - `Skeleton` and `Spinner` should stay CSS-first and minimal.

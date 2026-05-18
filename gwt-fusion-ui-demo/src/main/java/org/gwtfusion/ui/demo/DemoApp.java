@@ -29,6 +29,7 @@ import org.gwtfusion.ui.component.contextmenu.ContextMenu;
 import org.gwtfusion.ui.component.dialog.Dialog;
 import org.gwtfusion.ui.component.drawer.Drawer;
 import org.gwtfusion.ui.component.dropdown.DropdownMenu;
+import org.gwtfusion.ui.component.emptystate.EmptyState;
 import org.gwtfusion.ui.component.form.FormField;
 import org.gwtfusion.ui.component.hovercard.HoverCard;
 import org.gwtfusion.ui.component.icon.IconRegistry;
@@ -39,6 +40,7 @@ import org.gwtfusion.ui.component.inputgroup.InputGroup;
 import org.gwtfusion.ui.component.label.Label;
 import org.gwtfusion.ui.component.pagination.Pagination;
 import org.gwtfusion.ui.component.popover.Popover;
+import org.gwtfusion.ui.component.progress.Progress;
 import org.gwtfusion.ui.component.radio.RadioGroup;
 import org.gwtfusion.ui.component.radio.RadioGroupOrientation;
 import org.gwtfusion.ui.component.scrollarea.ScrollArea;
@@ -47,12 +49,21 @@ import org.gwtfusion.ui.component.separator.Separator;
 import org.gwtfusion.ui.component.separator.SeparatorOrientation;
 import org.gwtfusion.ui.component.sheet.Sheet;
 import org.gwtfusion.ui.component.sheet.SheetSide;
+import org.gwtfusion.ui.component.skeleton.Skeleton;
 import org.gwtfusion.ui.component.slider.Slider;
+import org.gwtfusion.ui.component.spinner.Spinner;
+import org.gwtfusion.ui.component.spinner.SpinnerSize;
+import org.gwtfusion.ui.component.status.StatusIndicator;
+import org.gwtfusion.ui.component.status.StatusIndicatorVariant;
 import org.gwtfusion.ui.component.switcher.Switch;
 import org.gwtfusion.ui.component.tabs.Tabs;
 import org.gwtfusion.ui.component.textarea.Textarea;
 import org.gwtfusion.ui.component.toggle.Toggle;
 import org.gwtfusion.ui.component.toggle.ToggleVariant;
+import org.gwtfusion.ui.component.toast.Toast;
+import org.gwtfusion.ui.component.toast.ToastManager;
+import org.gwtfusion.ui.component.toast.ToastStyle;
+import org.gwtfusion.ui.component.toast.ToastVariant;
 import org.gwtfusion.ui.component.tooltip.Tooltip;
 import org.gwtfusion.ui.component.togglegroup.ToggleGroup;
 import org.gwtfusion.ui.component.togglegroup.ToggleGroupType;
@@ -255,6 +266,12 @@ public final class DemoApp implements EntryPoint {
                 componentDemo("drawer", "Overlays", "Drawer", "Bottom panel presentation for compact layouts.", this::renderDrawerComponent),
 
                 componentDemo("alert", "Feedback", "Alert", "Inline status, warning, and error communication.", this::renderFeedback),
+                componentDemo("progress", "Feedback", "Progress", "ARIA progress feedback for loading and completion states.", this::renderProgressComponent),
+                componentDemo("skeleton", "Feedback", "Skeleton", "CSS-first loading placeholders for pending content.", this::renderSkeletonComponent),
+                componentDemo("spinner", "Feedback", "Spinner", "Compact loading indicator with accessible status text.", this::renderSpinnerComponent),
+                componentDemo("empty-state", "Feedback", "EmptyState", "Composed empty views with title, description, and actions.", this::renderEmptyStateComponent),
+                componentDemo("status-indicator", "Feedback", "StatusIndicator", "Inline success, warning, error, info, and neutral status labels.", this::renderStatusIndicatorComponent),
+                componentDemo("toast", "Feedback", "Toast", "Lazy toast notifications with default and Sonner-style presentation.", this::renderToastComponent),
                 componentDemo("overlay-utilities", "Utilities", "Overlay utilities", "Portal, outside-click, keyboard, focus, ARIA, and ID helpers.", this::renderOverlayUtilitiesComponent),
                 componentDemo("events", "Utilities", "Events", "ListenerRegistration and semantic value-change examples.", this::renderEvents)
         };
@@ -1643,6 +1660,163 @@ public final class DemoApp implements EntryPoint {
                         + "    .variant(AlertVariant.DESTRUCTIVE)\n"
                         + "    .add(Alert.title(\"Error\"))\n"
                         + "    .add(Alert.description(\"The destructive style uses its own variant.\"));"));
+    }
+
+    private void renderProgressComponent(HTMLElement grid) {
+        HTMLElement progress = preview("demo-stack-preview");
+        progress.appendChild(Progress.create().value(35).element());
+        progress.appendChild(Progress.create().value(100).element());
+        progress.appendChild(Progress.create().indeterminate().element());
+        grid.appendChild(example("Loading and completed states", progress,
+                "Progress.create().value(35);\n"
+                        + "Progress.create().value(100);\n"
+                        + "Progress.create().indeterminate();"));
+
+        HTMLElement custom = preview("demo-stack-preview");
+        custom.appendChild(Progress.create().max(200).value(125).element());
+        custom.appendChild(StatusIndicator.create("Deployment complete").variant(StatusIndicatorVariant.SUCCESS).element());
+        grid.appendChild(example("Custom max with status", custom,
+                "Progress.create()\n"
+                        + "    .max(200)\n"
+                        + "    .value(125);\n\n"
+                        + "StatusIndicator.create(\"Deployment complete\")\n"
+                        + "    .variant(StatusIndicatorVariant.SUCCESS);"));
+    }
+
+    private void renderSkeletonComponent(HTMLElement grid) {
+        HTMLElement skeletons = preview("demo-stack-preview");
+        skeletons.appendChild(Skeleton.create().size("h-4 w-48").element());
+        skeletons.appendChild(Skeleton.create().size("h-4 w-72").element());
+        skeletons.appendChild(Skeleton.create().size("h-24 w-full").element());
+        grid.appendChild(example("Content placeholder", skeletons,
+                "Skeleton.create().size(\"h-4 w-48\");\n"
+                        + "Skeleton.create().size(\"h-4 w-72\");\n"
+                        + "Skeleton.create().size(\"h-24 w-full\");"));
+
+        HTMLElement card = preview("demo-stack-preview");
+        card.appendChild(Skeleton.create().size("h-32 w-full").element());
+        card.appendChild(Skeleton.create().size("h-5 w-40").element());
+        card.appendChild(Skeleton.create().size("h-4 w-64").element());
+        grid.appendChild(example("Card loading state", card,
+                "Skeleton.create().size(\"h-32 w-full\");\n"
+                        + "Skeleton.create().size(\"h-5 w-40\");\n"
+                        + "Skeleton.create().size(\"h-4 w-64\");"));
+    }
+
+    private void renderSpinnerComponent(HTMLElement grid) {
+        HTMLElement spinners = preview();
+        spinners.appendChild(Spinner.create().size(SpinnerSize.SM).element());
+        spinners.appendChild(Spinner.create().element());
+        spinners.appendChild(Spinner.create().size(SpinnerSize.LG).label("Saving").element());
+        grid.appendChild(example("Sizes", spinners,
+                "Spinner.create().size(SpinnerSize.SM);\n"
+                        + "Spinner.create();\n"
+                        + "Spinner.create().size(SpinnerSize.LG).label(\"Saving\");"));
+
+        HTMLElement saving = preview();
+        saving.appendChild(Button.create("Saving").disabled(true).icon(LucideIcons.loaderCircle()).element());
+        saving.appendChild(Spinner.create().label("Submitting form").element());
+        grid.appendChild(example("Inline loading", saving,
+                "Button.create(\"Saving\")\n"
+                        + "    .disabled(true)\n"
+                        + "    .icon(LucideIcons.loaderCircle());\n\n"
+                        + "Spinner.create().label(\"Submitting form\");"));
+    }
+
+    private void renderEmptyStateComponent(HTMLElement grid) {
+        HTMLElement empty = preview("demo-stack-preview");
+        empty.appendChild(EmptyState.create()
+                .title("No projects yet")
+                .description("Create a project to start organizing components, examples, and release notes.")
+                .action(Button.create("Create project"))
+                .action(Button.create("Import").variant(ButtonVariant.OUTLINE))
+                .element());
+        grid.appendChild(example("Empty list", empty,
+                "EmptyState.create()\n"
+                        + "    .title(\"No projects yet\")\n"
+                        + "    .description(\"Create a project to start organizing work.\")\n"
+                        + "    .action(Button.create(\"Create project\"))\n"
+                        + "    .action(Button.create(\"Import\").variant(ButtonVariant.OUTLINE));"));
+
+        HTMLElement search = preview("demo-stack-preview");
+        search.appendChild(EmptyState.create()
+                .title("No results found")
+                .description("Try another search term or clear the current filters.")
+                .action(Button.create("Clear filters").variant(ButtonVariant.SECONDARY))
+                .element());
+        grid.appendChild(example("Empty search", search,
+                "EmptyState.create()\n"
+                        + "    .title(\"No results found\")\n"
+                        + "    .description(\"Try another search term.\")\n"
+                        + "    .action(Button.create(\"Clear filters\"));"));
+    }
+
+    private void renderStatusIndicatorComponent(HTMLElement grid) {
+        HTMLElement statuses = preview();
+        statuses.appendChild(StatusIndicator.create("Queued").element());
+        statuses.appendChild(StatusIndicator.create("Healthy").variant(StatusIndicatorVariant.SUCCESS).element());
+        statuses.appendChild(StatusIndicator.create("Delayed").variant(StatusIndicatorVariant.WARNING).element());
+        statuses.appendChild(StatusIndicator.create("Failed").variant(StatusIndicatorVariant.ERROR).element());
+        statuses.appendChild(StatusIndicator.create("Syncing").variant(StatusIndicatorVariant.INFO).element());
+        grid.appendChild(example("Status variants", statuses,
+                "StatusIndicator.create(\"Queued\");\n"
+                        + "StatusIndicator.create(\"Healthy\").variant(StatusIndicatorVariant.SUCCESS);\n"
+                        + "StatusIndicator.create(\"Delayed\").variant(StatusIndicatorVariant.WARNING);\n"
+                        + "StatusIndicator.create(\"Failed\").variant(StatusIndicatorVariant.ERROR);\n"
+                        + "StatusIndicator.create(\"Syncing\").variant(StatusIndicatorVariant.INFO);"));
+    }
+
+    private void renderToastComponent(HTMLElement grid) {
+        ToastManager toastManager = ToastManager.create();
+
+        HTMLElement toastPreviews = preview("demo-stack-preview");
+        toastPreviews.appendChild(Toast.create()
+                .title("Saved")
+                .description("Your changes are ready for review.")
+                .variant(ToastVariant.SUCCESS)
+                .duration(0)
+                .element());
+        toastPreviews.appendChild(Toast.create()
+                .title("Build warning")
+                .description("The build finished with one non-blocking warning.")
+                .variant(ToastVariant.WARNING)
+                .style(ToastStyle.SONNER)
+                .duration(0)
+                .element());
+        grid.appendChild(example("Toast surfaces", toastPreviews,
+                "Toast.create()\n"
+                        + "    .title(\"Saved\")\n"
+                        + "    .description(\"Your changes are ready for review.\")\n"
+                        + "    .variant(ToastVariant.SUCCESS);\n\n"
+                        + "Toast.create()\n"
+                        + "    .title(\"Build warning\")\n"
+                        + "    .variant(ToastVariant.WARNING)\n"
+                        + "    .style(ToastStyle.SONNER);"));
+
+        HTMLElement trigger = preview("demo-stack-preview");
+        HTMLElement note = textElement("p", "demo-muted", "Click the button to append a toast to the lazy viewport in the top-right corner.");
+        trigger.appendChild(Button.create("Show toast")
+                .onClick(event -> toastManager.show(Toast.create()
+                        .title("Toast triggered")
+                        .description("ToastManager created the viewport only when this button was clicked.")
+                        .variant(ToastVariant.DEFAULT)
+                        .style(ToastStyle.SONNER)))
+                .element());
+        trigger.appendChild(Button.create("Show error")
+                .variant(ButtonVariant.DESTRUCTIVE)
+                .onClick(event -> toastManager.show(Toast.create()
+                        .title("Something failed")
+                        .description("Use error toasts for short-lived failure feedback.")
+                        .variant(ToastVariant.ERROR)))
+                .element());
+        trigger.appendChild(note);
+        grid.appendChild(example("Trigger a toast", trigger,
+                "ToastManager toastManager = ToastManager.create();\n\n"
+                        + "Button.create(\"Show toast\")\n"
+                        + "    .onClick(event -> toastManager.show(Toast.create()\n"
+                        + "        .title(\"Toast triggered\")\n"
+                        + "        .description(\"Created lazily on click.\")\n"
+                        + "        .style(ToastStyle.SONNER)));"));
     }
 
     private HTMLElement categoryNav() {
