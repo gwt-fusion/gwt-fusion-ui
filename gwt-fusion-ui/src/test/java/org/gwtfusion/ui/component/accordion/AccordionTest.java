@@ -9,6 +9,7 @@ class AccordionTest {
     void classesExposeAccordionStructureAndKeyboardTargets() {
         assertTrue(Accordion.ROOT_CLASSES.contains("grid"));
         assertTrue(Accordion.TRIGGER_CLASSES.contains("focus-visible:ring-ring"));
+        assertTrue(Accordion.TRIGGER_CLASSES.contains("disabled:cursor-not-allowed"));
         assertTrue(Accordion.CONTENT_CLASSES.contains("text-muted-foreground"));
     }
 }

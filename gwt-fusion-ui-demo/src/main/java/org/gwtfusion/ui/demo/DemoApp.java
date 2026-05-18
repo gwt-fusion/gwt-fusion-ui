@@ -65,6 +65,8 @@ import org.gwtfusion.ui.component.status.StatusIndicator;
 import org.gwtfusion.ui.component.status.StatusIndicatorVariant;
 import org.gwtfusion.ui.component.switcher.Switch;
 import org.gwtfusion.ui.component.tabs.Tabs;
+import org.gwtfusion.ui.component.tabs.TabsOrientation;
+import org.gwtfusion.ui.component.tabs.TabsVariant;
 import org.gwtfusion.ui.component.table.Table;
 import org.gwtfusion.ui.component.textarea.Textarea;
 import org.gwtfusion.ui.component.timeline.Timeline;
@@ -492,29 +494,130 @@ public final class DemoApp implements EntryPoint {
     }
 
     private void renderTabsComponent(HTMLElement grid) {
-        HTMLElement tabPreview = preview("demo-tabs-preview");
-        tabPreview.appendChild(Tabs.create()
-                .addTab("preview", "Preview", raw(textElement("p", "demo-muted", "Tabs keep related panels in the same flow and support arrow-key navigation.")))
-                .addTab("code", "Code", CodeBlock.create("Tabs.create()\n    .addTab(\"preview\", \"Preview\", previewContent)\n    .addTab(\"code\", \"Code\", codeContent);").language("java"))
+        HTMLElement overview = preview("demo-tabs-preview");
+        overview.appendChild(Tabs.create()
+                .addTab("overview", "Overview", raw(textElement("p", "demo-muted", "View key metrics and recent project activity across all active projects.")))
+                .addTab("analytics", "Analytics", raw(textElement("p", "demo-muted", "Track traffic, conversions, and component usage over time.")))
+                .addTab("reports", "Reports", raw(textElement("p", "demo-muted", "Export weekly status reports and release summaries.")))
+                .addTab("settings", "Settings", raw(textElement("p", "demo-muted", "Configure project defaults, notifications, and team access.")))
                 .element());
-        grid.appendChild(example("Preview and code tabs", tabPreview,
+        grid.appendChild(example("Overview tabs", overview,
                 "Tabs.create()\n"
-                        + "    .addTab(\"preview\", \"Preview\", previewContent)\n"
-                        + "    .addTab(\"code\", \"Code\", codeContent);"));
+                        + "    .addTab(\"overview\", \"Overview\", overviewContent)\n"
+                        + "    .addTab(\"analytics\", \"Analytics\", analyticsContent)\n"
+                        + "    .addTab(\"reports\", \"Reports\", reportsContent);"));
+
+        HTMLElement line = preview("demo-tabs-preview");
+        line.appendChild(Tabs.create()
+                .variant(TabsVariant.LINE)
+                .addTab("overview", "Overview", raw(textElement("p", "demo-muted", "Line tabs keep the active state subtle and compact.")))
+                .addTab("analytics", "Analytics", raw(textElement("p", "demo-muted", "Use them in dense dashboards or page headers.")))
+                .addTab("reports", "Reports", raw(textElement("p", "demo-muted", "The active tab uses a primary bottom border.")))
+                .element());
+        grid.appendChild(example("Line", line,
+                "Tabs.create()\n"
+                        + "    .variant(TabsVariant.LINE)\n"
+                        + "    .addTab(\"overview\", \"Overview\", overviewContent)\n"
+                        + "    .addTab(\"analytics\", \"Analytics\", analyticsContent);"));
+
+        HTMLElement vertical = preview("demo-tabs-preview");
+        vertical.appendChild(Tabs.create()
+                .orientation(TabsOrientation.VERTICAL)
+                .addTab("account", "Account", raw(textElement("p", "demo-muted", "Manage profile details and public account information.")))
+                .addTab("password", "Password", raw(textElement("p", "demo-muted", "Update credentials and recovery settings.")))
+                .addTab("notifications", "Notifications", raw(textElement("p", "demo-muted", "Choose which product updates should notify you.")))
+                .element());
+        grid.appendChild(example("Vertical", vertical,
+                "Tabs.create()\n"
+                        + "    .orientation(TabsOrientation.VERTICAL)\n"
+                        + "    .addTab(\"account\", \"Account\", accountContent)\n"
+                        + "    .addTab(\"password\", \"Password\", passwordContent);"));
+
+        HTMLElement disabled = preview("demo-tabs-preview");
+        disabled.appendChild(Tabs.create()
+                .addTab("home", "Home", raw(textElement("p", "demo-muted", "Home content is available.")))
+                .addTab("disabled", "Disabled", raw(textElement("p", "demo-muted", "This content cannot be selected while disabled.")), true)
+                .addTab("settings", "Settings", raw(textElement("p", "demo-muted", "Settings stay selectable.")))
+                .element());
+        grid.appendChild(example("Disabled", disabled,
+                "Tabs.create()\n"
+                        + "    .addTab(\"home\", \"Home\", homeContent)\n"
+                        + "    .addTab(\"disabled\", \"Disabled\", disabledContent, true)\n"
+                        + "    .addTab(\"settings\", \"Settings\", settingsContent);"));
+
+        HTMLElement icons = preview("demo-tabs-preview");
+        icons.appendChild(Tabs.create()
+                .addTab("preview", "Preview", LucideIcons.appWindow().variant(IconVariant.MUTED), raw(textElement("p", "demo-muted", "Preview renders the live component output.")))
+                .addTab("code", "Code", LucideIcons.code().variant(IconVariant.MUTED), CodeBlock.create("Tabs.create()\n    .addTab(\"preview\", \"Preview\", icon, previewContent)\n    .addTab(\"code\", \"Code\", codeIcon, codeContent);").language("java"))
+                .element());
+        grid.appendChild(example("Icons", icons,
+                "Tabs.create()\n"
+                        + "    .addTab(\"preview\", \"Preview\", LucideIcons.appWindow(), previewContent)\n"
+                        + "    .addTab(\"code\", \"Code\", LucideIcons.code(), codeContent);"));
     }
 
     private void renderAccordionComponent(HTMLElement grid) {
-        HTMLElement accordions = preview("demo-stack-preview");
-        accordions.appendChild(Accordion.create()
-                .addItem("api", "Java-first API", raw(textElement("p", "demo-muted", "Fluent methods keep component usage natural in GWT applications.")))
-                .addItem("styles", "Tailwind styling", raw(textElement("p", "demo-muted", "Class names stay static and discoverable by the Tailwind build.")))
-                .value("api")
+        HTMLElement basic = preview("demo-stack-preview");
+        basic.appendChild(Accordion.create()
+                .addItem("password", "How do I reset my password?", raw(textElement("p", "demo-muted", "Click Forgot Password on the login page, enter your email address, and we will send you a reset link.")))
+                .addItem("subscription", "Can I change my subscription plan?", raw(textElement("p", "demo-muted", "Yes. You can switch plans from billing settings and the change is applied to your next invoice.")))
+                .addItem("payment", "What payment methods do you accept?", raw(textElement("p", "demo-muted", "We accept major credit cards and invoice-based billing for teams.")))
+                .value("password")
                 .element());
-        grid.appendChild(example("Disclosure list", accordions,
+        grid.appendChild(example("Single item", basic,
                 "Accordion.create()\n"
-                        + "    .addItem(\"api\", \"Java-first API\", apiContent)\n"
-                        + "    .addItem(\"styles\", \"Tailwind styling\", styleContent)\n"
-                        + "    .value(\"api\");"));
+                        + "    .addItem(\"password\", \"How do I reset my password?\", passwordContent)\n"
+                        + "    .addItem(\"subscription\", \"Can I change my subscription plan?\", subscriptionContent)\n"
+                        + "    .value(\"password\");"));
+
+        HTMLElement multiple = preview("demo-stack-preview");
+        multiple.appendChild(Accordion.create()
+                .multiple()
+                .addItem("notifications", "Notification Settings", raw(textElement("p", "demo-muted", "Enable email alerts for account updates or push notifications for mobile devices.")))
+                .addItem("privacy", "Privacy & Security", raw(textElement("p", "demo-muted", "Review active sessions, two-factor settings, and recovery contacts.")))
+                .addItem("billing", "Billing & Subscription", raw(textElement("p", "demo-muted", "Manage invoices, seats, plans, and renewal preferences.")))
+                .value("notifications")
+                .element());
+        grid.appendChild(example("Multiple items", multiple,
+                "Accordion.create()\n"
+                        + "    .multiple()\n"
+                        + "    .addItem(\"notifications\", \"Notification Settings\", notificationsContent)\n"
+                        + "    .addItem(\"privacy\", \"Privacy & Security\", privacyContent)\n"
+                        + "    .value(\"notifications\");"));
+
+        HTMLElement disabled = preview("demo-stack-preview");
+        disabled.appendChild(Accordion.create()
+                .addItem("history", "Can I access my account history?", raw(textElement("p", "demo-muted", "Account history is available from the activity page for all workspace owners.")))
+                .addItem("premium", "Premium feature information", raw(textElement("p", "demo-muted", "This panel is disabled to show unavailable or gated content.")), true)
+                .addItem("email", "How do I update my email address?", raw(textElement("p", "demo-muted", "Open profile settings, change your email, then confirm the verification message.")))
+                .disabled("premium", true)
+                .value("history")
+                .element());
+        grid.appendChild(example("Disabled item", disabled,
+                "Accordion.create()\n"
+                        + "    .addItem(\"history\", \"Can I access my account history?\", historyContent)\n"
+                        + "    .addItem(\"premium\", \"Premium feature information\", premiumContent, true)\n"
+                        + "    .addItem(\"email\", \"How do I update my email address?\", emailContent)\n"
+                        + "    .disabled(\"premium\", true);"));
+
+        HTMLElement card = preview("demo-stack-preview");
+        card.appendChild(Card.create()
+                .add(Card.header()
+                        .add(Card.title("Subscription & Billing"))
+                        .add(Card.description("Common questions about your account, plans, payments, and cancellations.")))
+                .add(Card.content().add(Accordion.create()
+                        .addItem("plans", "What subscription plans do you offer?", raw(textElement("p", "demo-muted", "Starter, Professional, and Enterprise plans include increasing storage limits, API access, and support levels.")))
+                        .addItem("billing", "How does billing work?", raw(textElement("p", "demo-muted", "Billing is charged at the beginning of each cycle and can be canceled anytime.")))
+                        .addItem("cancel", "How do I cancel my subscription?", raw(textElement("p", "demo-muted", "Workspace owners can cancel from billing settings.")))
+                        .value("plans")))
+                .element());
+        grid.appendChild(example("Card wrapper", card,
+                "Card.create()\n"
+                        + "    .add(Card.header()\n"
+                        + "        .add(Card.title(\"Subscription & Billing\"))\n"
+                        + "        .add(Card.description(\"Common questions about your account.\")))\n"
+                        + "    .add(Card.content().add(Accordion.create()\n"
+                        + "        .addItem(\"plans\", \"What subscription plans do you offer?\", plansContent)));"));
     }
 
     private void renderCollapsibleComponent(HTMLElement grid) {
@@ -711,25 +814,106 @@ public final class DemoApp implements EntryPoint {
     }
 
     private void renderItemComponent(HTMLElement grid) {
-        HTMLElement items = preview("demo-stack-preview");
-        items.appendChild(Item.create()
+        HTMLElement iconItems = preview("demo-stack-preview");
+        iconItems.appendChild(Item.create()
                 .media(LucideIcons.gitPullRequest().variant(IconVariant.PRIMARY))
                 .title("Review pull request")
                 .description("Milestone 11 data display components")
                 .action(Badge.create("Open"))
                 .element());
-        items.appendChild(Item.create()
+        iconItems.appendChild(Item.create()
                 .media(LucideIcons.circleCheck().variant(IconVariant.PRIMARY))
                 .title("Maven Verify")
                 .description("All JVM tests passed")
                 .action(StatusIndicator.create("Healthy").variant(StatusIndicatorVariant.SUCCESS))
                 .element());
-        grid.appendChild(example("List rows", items,
+        grid.appendChild(example("Icon rows", iconItems,
                 "Item.create()\n"
                         + "    .media(LucideIcons.gitPullRequest())\n"
                         + "    .title(\"Review pull request\")\n"
                         + "    .description(\"Milestone 11 data display components\")\n"
                         + "    .action(Badge.create(\"Open\"));"));
+
+        HTMLElement teamItems = preview("demo-stack-preview");
+        teamItems.appendChild(Item.create()
+                .media(Avatar.create().size(AvatarSize.SM).fallback("ER"))
+                .title("Evil Rabbit")
+                .description("Last seen 5 months ago")
+                .action(Badge.create("Owner").variant(BadgeVariant.SECONDARY))
+                .element());
+        teamItems.appendChild(Item.create()
+                .media(Avatar.create().size(AvatarSize.SM).fallback("CN"))
+                .title("No Team Members")
+                .description("Invite your team to collaborate on this project.")
+                .action(Button.create("Invite").size(ButtonSize.SM))
+                .element());
+        grid.appendChild(example("Avatar rows", teamItems,
+                "Item.create()\n"
+                        + "    .media(Avatar.create().size(AvatarSize.SM).fallback(\"ER\"))\n"
+                        + "    .title(\"Evil Rabbit\")\n"
+                        + "    .description(\"Last seen 5 months ago\")\n"
+                        + "    .action(Badge.create(\"Owner\"));"));
+
+        HTMLElement coverOne = element("img", "h-10 w-10 rounded-md object-cover");
+        coverOne.setAttribute("src", "https://avatar.vercel.sh/Midnight%20City%20Lights");
+        coverOne.setAttribute("alt", "Midnight City Lights");
+        HTMLElement coverTwo = element("img", "h-10 w-10 rounded-md object-cover");
+        coverTwo.setAttribute("src", "https://avatar.vercel.sh/Coffee%20Shop%20Conversations");
+        coverTwo.setAttribute("alt", "Coffee Shop Conversations");
+        HTMLElement coverThree = element("img", "h-10 w-10 rounded-md object-cover");
+        coverThree.setAttribute("src", "https://avatar.vercel.sh/Digital%20Rain");
+        coverThree.setAttribute("alt", "Digital Rain");
+
+        HTMLElement mediaItems = preview("demo-stack-preview");
+        mediaItems.appendChild(Item.create()
+                .media(raw(coverOne))
+                .title("Midnight City Lights - Electric Nights")
+                .description("Neon Dreams")
+                .action(Kbd.create("3:45"))
+                .element());
+        mediaItems.appendChild(Item.create()
+                .media(raw(coverTwo))
+                .title("Coffee Shop Conversations - Urban Stories")
+                .description("The Morning Brew")
+                .action(Kbd.create("4:05"))
+                .element());
+        mediaItems.appendChild(Item.create()
+                .media(raw(coverThree))
+                .title("Digital Rain - Binary Beats")
+                .description("Cyber Symphony")
+                .action(Kbd.create("3:30"))
+                .element());
+        grid.appendChild(example("Image media", mediaItems,
+                "HTMLElement cover = element(\"img\", \"h-10 w-10 rounded-md object-cover\");\n"
+                        + "cover.setAttribute(\"src\", \"https://avatar.vercel.sh/Midnight%20City%20Lights\");\n\n"
+                        + "Item.create()\n"
+                        + "    .media(raw(cover))\n"
+                        + "    .title(\"Midnight City Lights - Electric Nights\")\n"
+                        + "    .description(\"Neon Dreams\")\n"
+                        + "    .action(Kbd.create(\"3:45\"));"));
+
+        HTMLElement linkItems = preview("demo-stack-preview");
+        linkItems.appendChild(Item.create()
+                .media(LucideIcons.search().variant(IconVariant.MUTED))
+                .title("Visit our documentation")
+                .description("Learn how to get started with GWT Fusion components.")
+                .action(Button.create("").size(ButtonSize.ICON).variant(ButtonVariant.GHOST).icon(LucideIcons.chevronRight()).aria("label", "Open documentation"))
+                .element());
+        linkItems.appendChild(Item.create()
+                .media(LucideIcons.x().variant(IconVariant.MUTED))
+                .title("External resource")
+                .description("Opens in a new tab with security attributes.")
+                .action(Button.create("").size(ButtonSize.ICON).variant(ButtonVariant.GHOST).icon(LucideIcons.chevronRight()).aria("label", "Open resource"))
+                .element());
+        grid.appendChild(example("Navigation rows", linkItems,
+                "Item.create()\n"
+                        + "    .media(LucideIcons.search())\n"
+                        + "    .title(\"Visit our documentation\")\n"
+                        + "    .description(\"Learn how to get started with GWT Fusion components.\")\n"
+                        + "    .action(Button.create(\"\")\n"
+                        + "        .size(ButtonSize.ICON)\n"
+                        + "        .variant(ButtonVariant.GHOST)\n"
+                        + "        .icon(LucideIcons.chevronRight()));"));
     }
 
     private void renderTimelineComponent(HTMLElement grid) {
@@ -1072,23 +1256,135 @@ public final class DemoApp implements EntryPoint {
     }
 
     private void renderContextMenuComponent(HTMLElement grid) {
-        HTMLElement menus = preview("demo-stack-preview");
-        HTMLElement menuStatus = textElement("p", "demo-muted", "Right-click the target.");
-        ContextMenu contextMenu = ContextMenu.create()
+        HTMLElement basic = preview("demo-stack-preview");
+        HTMLElement basicStatus = textElement("p", "demo-muted", "Right-click the target.");
+        HTMLElement basicAction = textElement("p", "demo-muted", "No direct action yet.");
+        ContextMenu basicMenu = ContextMenu.create()
                 .side(OverlaySide.RIGHT)
-                .target(Button.create("Right-click target").variant(ButtonVariant.SECONDARY))
-                .addItem("copy", "Copy")
-                .addItem("paste", "Paste")
-                .addItem("inspect", "Inspect");
-        contextMenu.onValueChange(value -> menuStatus.textContent = "Context menu selected: " + value);
-        menus.appendChild(contextMenu.element());
-        menus.appendChild(menuStatus);
-        grid.appendChild(example("Pointer menu", menus,
+                .target(Button.create("Right-click here").variant(ButtonVariant.SECONDARY))
+                .addItem("profile", "Profile", () -> basicAction.textContent = "Direct action: Profile opened.")
+                .addItem("billing", "Billing")
+                .addItem("team", "Team")
+                .addItem("subscription", "Subscription");
+        basicMenu.onValueChange(value -> basicStatus.textContent = "Context menu selected: " + value);
+        basic.appendChild(basicMenu.element());
+        basic.appendChild(basicStatus);
+        basic.appendChild(basicAction);
+        grid.appendChild(example("Basic", basic,
                 "ContextMenu.create()\n"
                         + "    .side(OverlaySide.RIGHT)\n"
-                        + "    .target(Button.create(\"Right-click target\"))\n"
-                        + "    .addItem(\"copy\", \"Copy\")\n"
+                        + "    .target(Button.create(\"Right-click here\"))\n"
+                        + "    .addItem(\"profile\", \"Profile\", () -> { ... })\n"
+                        + "    .addItem(\"billing\", \"Billing\")\n"
+                        + "    .addItem(\"team\", \"Team\")\n"
+                        + "    .addItem(\"subscription\", \"Subscription\")\n"
                         + "    .onValueChange(value -> { ... });"));
+
+        HTMLElement submenu = preview("demo-stack-preview");
+        HTMLElement submenuStatus = textElement("p", "demo-muted", "Open the submenu with hover, click, or ArrowRight.");
+        ContextMenu submenuMenu = ContextMenu.create()
+                .side(OverlaySide.RIGHT)
+                .target(Button.create("Submenu target").variant(ButtonVariant.SECONDARY))
+                .addItem("back", "Back")
+                .addItem("forward", "Forward")
+                .addSubmenu(ContextMenu.submenu("More tools")
+                        .addItem("save-page", "Save page")
+                        .addShortcutItem("create-shortcut", "Create shortcut", "Cmd+S")
+                        .addDestructiveItem("clear-cache", "Clear cache"))
+                .addItem("reload", "Reload");
+        submenuMenu.onValueChange(value -> submenuStatus.textContent = "Submenu selected: " + value);
+        submenu.appendChild(submenuMenu.element());
+        submenu.appendChild(submenuStatus);
+        grid.appendChild(example("Submenu", submenu,
+                "ContextMenu.create()\n"
+                        + "    .target(Button.create(\"Submenu target\"))\n"
+                        + "    .addItem(\"back\", \"Back\")\n"
+                        + "    .addSubmenu(ContextMenu.submenu(\"More tools\")\n"
+                        + "        .addItem(\"save-page\", \"Save page\")\n"
+                        + "        .addShortcutItem(\"create-shortcut\", \"Create shortcut\", \"Cmd+S\"));"));
+
+        HTMLElement shortcuts = preview("demo-stack-preview");
+        shortcuts.appendChild(ContextMenu.create()
+                .side(OverlaySide.RIGHT)
+                .target(Button.create("Shortcut target").variant(ButtonVariant.SECONDARY))
+                .addShortcutItem("copy", "Copy", "Cmd+C")
+                .addShortcutItem("paste", "Paste", "Cmd+V")
+                .addShortcutItem("reload", "Reload", "Cmd+R")
+                .element());
+        shortcuts.appendChild(textElement("p", "demo-muted", "Shortcut hints are visual metadata; selection still comes through onValueChange."));
+        grid.appendChild(example("Shortcuts", shortcuts,
+                "ContextMenu.create()\n"
+                        + "    .target(Button.create(\"Shortcut target\"))\n"
+                        + "    .addShortcutItem(\"copy\", \"Copy\", \"Cmd+C\")\n"
+                        + "    .addShortcutItem(\"paste\", \"Paste\", \"Cmd+V\");"));
+
+        HTMLElement groups = preview("demo-stack-preview");
+        groups.appendChild(ContextMenu.create()
+                .side(OverlaySide.RIGHT)
+                .target(Button.create("Grouped target").variant(ButtonVariant.SECONDARY))
+                .addLabel("Account")
+                .addItem("profile", "Profile")
+                .addItem("billing", "Billing")
+                .separator()
+                .addLabel("Workspace")
+                .addItem("team", "Team")
+                .addItem("settings", "Settings")
+                .element());
+        grid.appendChild(example("Groups", groups,
+                "ContextMenu.create()\n"
+                        + "    .addLabel(\"Account\")\n"
+                        + "    .addItem(\"profile\", \"Profile\")\n"
+                        + "    .addItem(\"billing\", \"Billing\")\n"
+                        + "    .separator()\n"
+                        + "    .addLabel(\"Workspace\")\n"
+                        + "    .addItem(\"team\", \"Team\");"));
+
+        HTMLElement icons = preview("demo-stack-preview");
+        icons.appendChild(ContextMenu.create()
+                .side(OverlaySide.RIGHT)
+                .target(Button.create("Icon target").variant(ButtonVariant.SECONDARY))
+                .addItem("copy", "Copy", LucideIcons.check().variant(IconVariant.MUTED), "Cmd+C")
+                .addItem("search", "Search", LucideIcons.search().variant(IconVariant.MUTED), "Cmd+F")
+                .addItem("close", "Close", LucideIcons.x().variant(IconVariant.MUTED), "Esc")
+                .element());
+        grid.appendChild(example("Icons", icons,
+                "ContextMenu.create()\n"
+                        + "    .addItem(\"copy\", \"Copy\", LucideIcons.check(), \"Cmd+C\")\n"
+                        + "    .addItem(\"search\", \"Search\", LucideIcons.search(), \"Cmd+F\");"));
+
+        HTMLElement checks = preview("demo-stack-preview");
+        checks.appendChild(ContextMenu.create()
+                .side(OverlaySide.RIGHT)
+                .target(Button.create("Preference target").variant(ButtonVariant.SECONDARY))
+                .addCheckboxItem("bookmarks", "Show bookmarks bar", true)
+                .addCheckboxItem("urls", "Show full URLs", false)
+                .separator()
+                .addRadioItem("density", "comfortable", "Comfortable", true)
+                .addRadioItem("density", "compact", "Compact", false)
+                .element());
+        grid.appendChild(example("Checkboxes and radio", checks,
+                "ContextMenu.create()\n"
+                        + "    .addCheckboxItem(\"bookmarks\", \"Show bookmarks bar\", true)\n"
+                        + "    .addCheckboxItem(\"urls\", \"Show full URLs\", false)\n"
+                        + "    .separator()\n"
+                        + "    .addRadioItem(\"density\", \"comfortable\", \"Comfortable\", true)\n"
+                        + "    .addRadioItem(\"density\", \"compact\", \"Compact\", false);"));
+
+        HTMLElement destructive = preview("demo-stack-preview");
+        destructive.appendChild(ContextMenu.create()
+                .side(OverlaySide.RIGHT)
+                .target(Button.create("Destructive target").variant(ButtonVariant.SECONDARY))
+                .addItem("rename", "Rename")
+                .addItem("share", "Share")
+                .separator()
+                .addDestructiveItem("delete", "Delete")
+                .element());
+        grid.appendChild(example("Destructive", destructive,
+                "ContextMenu.create()\n"
+                        + "    .addItem(\"rename\", \"Rename\")\n"
+                        + "    .addItem(\"share\", \"Share\")\n"
+                        + "    .separator()\n"
+                        + "    .addDestructiveItem(\"delete\", \"Delete\");"));
     }
 
     private void renderSheetComponent(HTMLElement grid) {
@@ -1929,14 +2225,79 @@ public final class DemoApp implements EntryPoint {
                         + "Spinner.create();\n"
                         + "Spinner.create().size(SpinnerSize.LG).label(\"Saving\");"));
 
-        HTMLElement saving = preview();
-        saving.appendChild(Button.create("Saving").disabled(true).icon(LucideIcons.loaderCircle()).element());
-        saving.appendChild(Spinner.create().label("Submitting form").element());
-        grid.appendChild(example("Inline loading", saving,
-                "Button.create(\"Saving\")\n"
+        HTMLElement buttons = preview();
+        buttons.appendChild(loadingButton("Loading...", false).disabled(true).element());
+        buttons.appendChild(loadingButton("Please wait", true).variant(ButtonVariant.OUTLINE).disabled(true).element());
+        buttons.appendChild(Button.create("Processing").disabled(true).icon(LucideIcons.loaderCircle().classes("animate-spin")).element());
+        grid.appendChild(example("Button", buttons,
+                "Button loading = loadingButton(\"Loading...\", false)\n"
+                        + "    .disabled(true);\n\n"
+                        + "Button.create(\"Processing\")\n"
                         + "    .disabled(true)\n"
-                        + "    .icon(LucideIcons.loaderCircle());\n\n"
-                        + "Spinner.create().label(\"Submitting form\");"));
+                        + "    .icon(LucideIcons.loaderCircle().classes(\"animate-spin\"));"));
+
+        HTMLElement badges = preview();
+        badges.appendChild(loadingBadge("Syncing", false).element());
+        badges.appendChild(loadingBadge("Updating", true).variant(BadgeVariant.SECONDARY).element());
+        badges.appendChild(loadingBadge("Processing", false).variant(BadgeVariant.OUTLINE).element());
+        grid.appendChild(example("Badge", badges,
+                "loadingBadge(\"Syncing\", false);\n"
+                        + "loadingBadge(\"Updating\", true).variant(BadgeVariant.SECONDARY);\n"
+                        + "loadingBadge(\"Processing\", false).variant(BadgeVariant.OUTLINE);"));
+
+        HTMLElement inputGroup = preview("demo-stack-preview");
+        InputGroup validating = InputGroup.create()
+                .add(Input.create().placeholder("Validating...").value("team@example.com"));
+        HTMLElement validatingAction = element("span", InputGroup.ADDON_CLASSES + " " + InputGroup.END_ADDON_CLASSES + " gap-2");
+        validatingAction.appendChild(Spinner.create().size(SpinnerSize.SM).label("Validating").element());
+        validatingAction.appendChild(textElement("span", "", "Send"));
+        validating.element().appendChild(validatingAction);
+        inputGroup.appendChild(validating.element());
+        grid.appendChild(example("Input Group", inputGroup,
+                "InputGroup group = InputGroup.create()\n"
+                        + "    .add(Input.create().placeholder(\"Validating...\"));\n"
+                        + "group.element().appendChild(spinnerAddon);"));
+
+        HTMLElement empty = preview("demo-stack-preview");
+        empty.appendChild(EmptyState.create()
+                .title("Processing your request")
+                .description("Please wait while we process your request. Do not refresh the page.")
+                .action(Spinner.create().label("Processing request"))
+                .action(Button.create("Cancel").variant(ButtonVariant.OUTLINE))
+                .element());
+        grid.appendChild(example("Empty", empty,
+                "EmptyState.create()\n"
+                        + "    .title(\"Processing your request\")\n"
+                        + "    .description(\"Please wait while we process your request.\")\n"
+                        + "    .action(Spinner.create().label(\"Processing request\"))\n"
+                        + "    .action(Button.create(\"Cancel\").variant(ButtonVariant.OUTLINE));"));
+    }
+
+    private Button loadingButton(String text, boolean spinnerAtEnd) {
+        Button button = Button.create("");
+        HTMLElement label = textElement("span", "", text);
+        if (spinnerAtEnd) {
+            button.element().appendChild(label);
+            button.element().appendChild(Spinner.create().size(SpinnerSize.SM).element());
+        } else {
+            button.element().appendChild(Spinner.create().size(SpinnerSize.SM).element());
+            button.element().appendChild(label);
+        }
+        return button;
+    }
+
+    private Badge loadingBadge(String text, boolean spinnerAtEnd) {
+        Badge badge = Badge.create("").classes("gap-1");
+        HTMLElement label = textElement("span", "", text);
+        Spinner spinner = Spinner.create().size(SpinnerSize.SM).label(text);
+        if (spinnerAtEnd) {
+            badge.element().appendChild(label);
+            badge.element().appendChild(spinner.element());
+        } else {
+            badge.element().appendChild(spinner.element());
+            badge.element().appendChild(label);
+        }
+        return badge;
     }
 
     private void renderEmptyStateComponent(HTMLElement grid) {

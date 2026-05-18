@@ -69,6 +69,10 @@ class OverlayComponentsTest {
         assertTrue(ContextMenu.MENU_CLASSES.contains("fixed"));
         assertFalse(ContextMenu.MENU_CLASSES.contains("left-1/2"));
         assertTrue(ContextMenu.ITEM_CLASSES.contains("hover:bg-accent"));
+        assertTrue(ContextMenu.LABEL_CLASSES.contains("text-muted-foreground"));
+        assertTrue(ContextMenu.SEPARATOR_CLASSES.contains("bg-border"));
+        assertTrue(ContextMenu.SHORTCUT_CLASSES.contains("ml-auto"));
+        assertTrue(ContextMenu.DESTRUCTIVE_ITEM_CLASSES.contains("text-destructive"));
     }
 
     @Test

@@ -14,7 +14,7 @@ import org.gwtfusion.ui.event.ValueChangeListener;
 public final class Tabs extends BaseComponent<Tabs> {
     public static final String ROOT_CLASSES = "grid gap-2";
     public static final String LIST_CLASSES = "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground";
-    public static final String TRIGGER_CLASSES = "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50";
+    public static final String TRIGGER_CLASSES = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50";
     public static final String TRIGGER_ACTIVE_CLASSES = "bg-background text-foreground shadow";
     public static final String TRIGGER_INACTIVE_CLASSES = "hover:bg-background hover:text-foreground";
     public static final String PANEL_CLASSES = "mt-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
@@ -22,13 +22,15 @@ public final class Tabs extends BaseComponent<Tabs> {
     private final HTMLElement list;
     private final List<Item> items = new ArrayList<>();
     private final List<ValueChangeListener<String>> valueChangeListeners = new ArrayList<>();
+    private TabsOrientation orientation = TabsOrientation.HORIZONTAL;
+    private TabsVariant variant = TabsVariant.DEFAULT;
     private String value;
 
     private Tabs(HTMLElement element) {
         super(element);
-        classes(ROOT_CLASSES);
+        classes(orientation.rootClasses());
         list = (HTMLElement) DomGlobal.document.createElement("div");
-        list.className = LIST_CLASSES;
+        list.className = CssClasses.join(orientation.listClasses(), variant.listClasses());
         list.setAttribute("role", "tablist");
         element.appendChild(list);
     }
@@ -38,14 +40,35 @@ public final class Tabs extends BaseComponent<Tabs> {
     }
 
     public Tabs addTab(String value, String label, UiComponent content) {
+        return addTab(value, label, null, content, false);
+    }
+
+    public Tabs addTab(String value, String label, UiComponent content, boolean disabled) {
+        return addTab(value, label, null, content, disabled);
+    }
+
+    public Tabs addTab(String value, String label, UiComponent icon, UiComponent content) {
+        return addTab(value, label, icon, content, false);
+    }
+
+    public Tabs addTab(String value, String label, UiComponent icon, UiComponent content, boolean disabled) {
         String safeValue = value == null ? "" : value;
         HTMLElement trigger = (HTMLElement) DomGlobal.document.createElement("button");
         trigger.className = TRIGGER_CLASSES;
-        trigger.textContent = label == null ? "" : label;
         trigger.setAttribute("type", "button");
         trigger.setAttribute("role", "tab");
         trigger.setAttribute("id", tabId(safeValue));
         trigger.setAttribute("aria-controls", panelId(safeValue));
+        trigger.setAttribute("aria-disabled", String.valueOf(disabled));
+        if (disabled) {
+            trigger.setAttribute("disabled", "");
+        }
+        if (icon != null) {
+            trigger.appendChild(icon.element());
+        }
+        HTMLElement labelElement = (HTMLElement) DomGlobal.document.createElement("span");
+        labelElement.textContent = label == null ? "" : label;
+        trigger.appendChild(labelElement);
 
         HTMLElement panel = (HTMLElement) DomGlobal.document.createElement("div");
         panel.className = PANEL_CLASSES;
@@ -54,14 +77,18 @@ public final class Tabs extends BaseComponent<Tabs> {
         panel.setAttribute("aria-labelledby", tabId(safeValue));
         panel.appendChild(content.element());
 
-        Item item = new Item(safeValue, trigger, panel);
+        Item item = new Item(safeValue, trigger, panel, disabled);
         items.add(item);
-        trigger.addEventListener("click", event -> select(safeValue, true));
+        trigger.addEventListener("click", event -> {
+            if (!item.disabled) {
+                select(safeValue, true);
+            }
+        });
         trigger.addEventListener("keydown", event -> onKeyDown((KeyboardEvent) event, item));
         list.appendChild(trigger);
         element().appendChild(panel);
 
-        if (items.size() == 1) {
+        if (value == null && !disabled) {
             select(safeValue, false);
         } else {
             applyItemState(item, false);
@@ -71,6 +98,48 @@ public final class Tabs extends BaseComponent<Tabs> {
 
     public Tabs value(String value) {
         select(value, false);
+        return this;
+    }
+
+    public Tabs variant(TabsVariant variant) {
+        removeClasses(this.variant.listClasses(), list);
+        this.variant = variant == null ? TabsVariant.DEFAULT : variant;
+        list.className = CssClasses.join(orientation.listClasses(), this.variant.listClasses());
+        for (Item item : items) {
+            applyItemState(item, item.value.equals(value()));
+        }
+        return this;
+    }
+
+    public Tabs orientation(TabsOrientation orientation) {
+        removeClasses(this.orientation.rootClasses(), element());
+        this.orientation = orientation == null ? TabsOrientation.HORIZONTAL : orientation;
+        classes(this.orientation.rootClasses());
+        list.className = CssClasses.join(this.orientation.listClasses(), variant.listClasses());
+        list.setAttribute("aria-orientation", this.orientation == TabsOrientation.VERTICAL ? "vertical" : "horizontal");
+        return this;
+    }
+
+    public Tabs disabled(String value, boolean disabled) {
+        String safeValue = value == null ? "" : value;
+        for (Item item : items) {
+            if (item.value.equals(safeValue)) {
+                item.disabled = disabled;
+                item.trigger.setAttribute("aria-disabled", String.valueOf(disabled));
+                if (disabled) {
+                    item.trigger.setAttribute("disabled", "");
+                    if (item.value.equals(value())) {
+                        selectFirstEnabled(false);
+                    }
+                } else {
+                    item.trigger.removeAttribute("disabled");
+                    if (this.value == null) {
+                        select(item.value, false);
+                    }
+                }
+                break;
+            }
+        }
         return this;
     }
 
@@ -85,8 +154,17 @@ public final class Tabs extends BaseComponent<Tabs> {
 
     private void select(String nextValue, boolean notify) {
         String previous = value();
-        value = nextValue == null ? "" : nextValue;
+        String safeValue = nextValue == null ? "" : nextValue;
+        Item selected = findItem(safeValue);
+        if (selected == null || selected.disabled) {
+            return;
+        }
+        value = safeValue;
         for (Item item : items) {
+            if (item.value.equals(value) && item.disabled) {
+                value = previous;
+                return;
+            }
             applyItemState(item, item.value.equals(value));
         }
         if (notify && !previous.equals(value)) {
@@ -106,8 +184,10 @@ public final class Tabs extends BaseComponent<Tabs> {
         item.trigger.setAttribute("data-state", active ? "active" : "inactive");
         item.panel.setAttribute("data-state", active ? "active" : "inactive");
 
-        toggleClasses(item.trigger, TRIGGER_ACTIVE_CLASSES, active);
-        toggleClasses(item.trigger, TRIGGER_INACTIVE_CLASSES, !active);
+        toggleClasses(item.trigger, allActiveClasses(), false);
+        toggleClasses(item.trigger, allInactiveClasses(), false);
+        toggleClasses(item.trigger, variant.activeTriggerClasses(), active);
+        toggleClasses(item.trigger, variant.inactiveTriggerClasses(), !active);
 
         if (active) {
             item.panel.removeAttribute("hidden");
@@ -124,23 +204,91 @@ public final class Tabs extends BaseComponent<Tabs> {
         String key = event.key;
         if ("ArrowRight".equals(key) || "ArrowDown".equals(key)) {
             event.preventDefault();
-            focusAndSelect((index + 1) % items.size());
+            focusAndSelect(nextEnabledIndex(index, 1));
         } else if ("ArrowLeft".equals(key) || "ArrowUp".equals(key)) {
             event.preventDefault();
-            focusAndSelect((index - 1 + items.size()) % items.size());
+            focusAndSelect(nextEnabledIndex(index, -1));
         } else if ("Home".equals(key)) {
             event.preventDefault();
-            focusAndSelect(0);
+            focusAndSelect(firstEnabledIndex());
         } else if ("End".equals(key)) {
             event.preventDefault();
-            focusAndSelect(items.size() - 1);
+            focusAndSelect(lastEnabledIndex());
         }
     }
 
     private void focusAndSelect(int index) {
+        if (index < 0) {
+            return;
+        }
         Item item = items.get(index);
         select(item.value, true);
         item.trigger.focus();
+    }
+
+    private void selectFirstEnabled(boolean notify) {
+        int index = firstEnabledIndex();
+        if (index >= 0) {
+            select(items.get(index).value, notify);
+        } else {
+            value = null;
+            clearSelection();
+        }
+    }
+
+    private void clearSelection() {
+        for (Item item : items) {
+            applyItemState(item, false);
+        }
+    }
+
+    private Item findItem(String value) {
+        for (Item item : items) {
+            if (item.value.equals(value)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private int nextEnabledIndex(int index, int direction) {
+        if (items.isEmpty()) {
+            return -1;
+        }
+        int next = index;
+        for (int i = 0; i < items.size(); i++) {
+            next = (next + direction + items.size()) % items.size();
+            if (!items.get(next).disabled) {
+                return next;
+            }
+        }
+        return -1;
+    }
+
+    private int firstEnabledIndex() {
+        for (int i = 0; i < items.size(); i++) {
+            if (!items.get(i).disabled) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int lastEnabledIndex() {
+        for (int i = items.size() - 1; i >= 0; i--) {
+            if (!items.get(i).disabled) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private String allActiveClasses() {
+        return CssClasses.join(TRIGGER_ACTIVE_CLASSES, TabsVariant.LINE.activeTriggerClasses());
+    }
+
+    private String allInactiveClasses() {
+        return CssClasses.join(TRIGGER_INACTIVE_CLASSES, TabsVariant.LINE.inactiveTriggerClasses());
     }
 
     private void toggleClasses(HTMLElement element, String classes, boolean add) {
@@ -150,6 +298,12 @@ public final class Tabs extends BaseComponent<Tabs> {
             } else {
                 element.classList.remove(className);
             }
+        }
+    }
+
+    private void removeClasses(String classes, HTMLElement element) {
+        for (String className : CssClasses.tokens(classes)) {
+            element.classList.remove(className);
         }
     }
 
@@ -165,11 +319,13 @@ public final class Tabs extends BaseComponent<Tabs> {
         private final String value;
         private final HTMLElement trigger;
         private final HTMLElement panel;
+        private boolean disabled;
 
-        private Item(String value, HTMLElement trigger, HTMLElement panel) {
+        private Item(String value, HTMLElement trigger, HTMLElement panel, boolean disabled) {
             this.value = value;
             this.trigger = trigger;
             this.panel = panel;
+            this.disabled = disabled;
         }
     }
 }

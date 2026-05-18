@@ -14,11 +14,12 @@ import org.gwtfusion.ui.event.ValueChangeListener;
 public final class Accordion extends BaseComponent<Accordion> {
     public static final String ROOT_CLASSES = "grid w-full gap-1";
     public static final String ITEM_CLASSES = "border-b";
-    public static final String TRIGGER_CLASSES = "flex w-full items-center justify-between py-4 text-left text-sm font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
+    public static final String TRIGGER_CLASSES = "flex w-full items-center justify-between py-4 text-left text-sm font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
     public static final String CONTENT_CLASSES = "pb-4 text-sm text-muted-foreground";
 
     private final List<Item> items = new ArrayList<>();
     private final List<ValueChangeListener<String>> valueChangeListeners = new ArrayList<>();
+    private boolean multiple;
 
     private Accordion(HTMLElement element) {
         super(element);
@@ -30,6 +31,10 @@ public final class Accordion extends BaseComponent<Accordion> {
     }
 
     public Accordion addItem(String value, String title, UiComponent content) {
+        return addItem(value, title, content, false);
+    }
+
+    public Accordion addItem(String value, String title, UiComponent content, boolean disabled) {
         String safeValue = value == null ? "" : value;
         HTMLElement itemElement = (HTMLElement) DomGlobal.document.createElement("div");
         itemElement.className = ITEM_CLASSES;
@@ -39,13 +44,15 @@ public final class Accordion extends BaseComponent<Accordion> {
         trigger.textContent = title == null ? "" : title;
         trigger.setAttribute("id", triggerId(safeValue));
         trigger.setAttribute("aria-controls", panelId(safeValue));
+        trigger.disabled = disabled;
+        trigger.setAttribute("aria-disabled", String.valueOf(disabled));
         HTMLElement panel = (HTMLElement) DomGlobal.document.createElement("div");
         panel.className = CONTENT_CLASSES;
         panel.setAttribute("id", panelId(safeValue));
         panel.setAttribute("role", "region");
         panel.setAttribute("aria-labelledby", triggerId(safeValue));
         panel.appendChild(content.element());
-        Item item = new Item(safeValue, trigger, panel);
+        Item item = new Item(safeValue, trigger, panel, disabled);
         items.add(item);
         trigger.addEventListener("click", event -> toggle(item));
         trigger.addEventListener("keydown", event -> onKeyDown((KeyboardEvent) event, item));
@@ -53,6 +60,39 @@ public final class Accordion extends BaseComponent<Accordion> {
         itemElement.appendChild(panel);
         element().appendChild(itemElement);
         apply(item, false);
+        return this;
+    }
+
+    public Accordion multiple(boolean multiple) {
+        this.multiple = multiple;
+        if (!multiple) {
+            boolean seenOpen = false;
+            for (Item item : items) {
+                boolean keepOpen = item.open && !seenOpen;
+                apply(item, keepOpen);
+                seenOpen = seenOpen || keepOpen;
+            }
+        }
+        return this;
+    }
+
+    public Accordion multiple() {
+        return multiple(true);
+    }
+
+    public Accordion disabled(String value, boolean disabled) {
+        String safeValue = value == null ? "" : value;
+        for (Item item : items) {
+            if (item.value.equals(safeValue)) {
+                item.disabled = disabled;
+                item.trigger.disabled = disabled;
+                item.trigger.setAttribute("aria-disabled", String.valueOf(disabled));
+                if (disabled) {
+                    apply(item, false);
+                }
+                break;
+            }
+        }
         return this;
     }
 
@@ -79,10 +119,17 @@ public final class Accordion extends BaseComponent<Accordion> {
     }
 
     private void toggle(Item selected) {
+        if (selected.disabled) {
+            return;
+        }
         String previous = value();
         boolean nextOpen = !selected.open;
-        for (Item item : items) {
-            apply(item, item == selected && nextOpen);
+        if (multiple) {
+            apply(selected, nextOpen);
+        } else {
+            for (Item item : items) {
+                apply(item, item == selected && nextOpen);
+            }
         }
         if (!previous.equals(value())) {
             notifyValueChange();
@@ -139,12 +186,14 @@ public final class Accordion extends BaseComponent<Accordion> {
         private final String value;
         private final HTMLButtonElement trigger;
         private final HTMLElement panel;
+        private boolean disabled;
         private boolean open;
 
-        private Item(String value, HTMLButtonElement trigger, HTMLElement panel) {
+        private Item(String value, HTMLButtonElement trigger, HTMLElement panel, boolean disabled) {
             this.value = value;
             this.trigger = trigger;
             this.panel = panel;
+            this.disabled = disabled;
         }
     }
 }
