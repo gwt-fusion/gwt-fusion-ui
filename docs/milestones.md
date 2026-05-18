@@ -165,19 +165,19 @@ This file turns the roadmap into concrete, checkable implementation milestones. 
 
 ## Milestone 10: Feedback Components
 
-- [ ] Implement `Progress` with ARIA progress attributes.
-- [ ] Implement `Skeleton`.
-- [ ] Implement `Spinner`.
-- [ ] Implement `EmptyState`.
-- [ ] Implement `StatusIndicator`.
-- [ ] Implement minimal `ToastManager` with lazy DOM initialization.
-- [ ] Implement `Toast`.
-- [ ] Decide whether `Sonner` is a toast variant, presentation style, or separate higher-level API.
-- [ ] Add loading, empty, success, warning, and error examples to the demo.
-- [ ] Add a demo button that triggers a toast.
-- [ ] Verify dark mode behavior.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile.
+- [x] Implement `Progress` with ARIA progress attributes.
+- [x] Implement `Skeleton`.
+- [x] Implement `Spinner`.
+- [x] Implement `EmptyState`.
+- [x] Implement `StatusIndicator`.
+- [x] Implement minimal `ToastManager` with lazy DOM initialization.
+- [x] Implement `Toast`.
+- [x] Decide whether `Sonner` is a toast variant, presentation style, or separate higher-level API.
+- [x] Add loading, empty, success, warning, and error examples to the demo.
+- [x] Add a demo button that triggers a toast.
+- [x] Verify dark mode behavior.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile.
 
 ## Milestone 11: Data Display Components
 
