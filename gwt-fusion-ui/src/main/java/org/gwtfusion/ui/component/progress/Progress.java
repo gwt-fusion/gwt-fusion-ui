@@ -30,7 +30,7 @@ public final class Progress extends BaseComponent<Progress> {
     }
 
     public Progress max(double max) {
-        this.max = max <= 0 ? 100 : max;
+        this.max = !Double.isFinite(max) || max <= 0 ? 100 : max;
         attr("aria-valuemax", String.valueOf(this.max));
         String currentValue = element().getAttribute("aria-valuenow");
         if (currentValue != null) {
@@ -41,7 +41,7 @@ public final class Progress extends BaseComponent<Progress> {
 
     public Progress value(double value) {
         removeClasses("animate-pulse");
-        double safeValue = clamp(value, 0, max);
+        double safeValue = clamp(Double.isFinite(value) ? value : 0, 0, max);
         attr("aria-valuenow", String.valueOf(safeValue));
         attr("aria-valuetext", percentage(safeValue) + "%");
         indicator.style.setProperty("width", percentage(safeValue) + "%");
@@ -56,10 +56,16 @@ public final class Progress extends BaseComponent<Progress> {
     }
 
     private int percentage(double value) {
+        if (!Double.isFinite(value) || !Double.isFinite(max) || max <= 0) {
+            return 0;
+        }
         return (int) Math.round(value / max * 100);
     }
 
     private static double clamp(double value, double min, double max) {
+        if (!Double.isFinite(value)) {
+            return min;
+        }
         if (value < min) {
             return min;
         }
@@ -71,7 +77,8 @@ public final class Progress extends BaseComponent<Progress> {
 
     private static double toDouble(String value) {
         try {
-            return Double.parseDouble(value);
+            double parsed = Double.parseDouble(value);
+            return Double.isFinite(parsed) ? parsed : 0;
         } catch (NumberFormatException ignored) {
             return 0;
         }

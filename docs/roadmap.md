@@ -140,7 +140,6 @@ Add components for loading, status, and user feedback.
 ### Components
 
 - `Toast`
-- `Sonner`
 - `Progress`
 - `Skeleton`
 - `Spinner`
@@ -150,7 +149,7 @@ Add components for loading, status, and user feedback.
 ### Implementation Notes
 
 - `Toast` likely needs a small `ToastManager`.
-- `Sonner` is treated as `ToastStyle.SONNER`, not as a separate toast system.
+- Toast presentation styles include `ToastStyle.DEFAULT` and `ToastStyle.SONNER`; Sonner is not a separate component or notification system.
 - `ToastManager` must avoid unnecessary static side effects. Initialize DOM containers lazily.
 - `Progress` should expose `value(double)` and ARIA progress attributes.
 - `Skeleton` and `Spinner` should stay CSS-first and minimal.
@@ -442,7 +441,6 @@ The shadcn/ui component list was checked against this roadmap. The following com
 - `InputOtp`
 - `Item`
 - `NativeSelect`
-- `Sonner`
 - `Toggle`
 - `ToggleGroup`
 - `Typography`
@@ -454,6 +452,7 @@ The following shadcn/ui entries are already represented under different names or
 - `Alert Dialog` maps to `AlertDialog`.
 - `Context Menu` maps to `ContextMenu`.
 - `Dropdown Menu` maps to `DropdownMenu`.
+- `Sonner` maps to the toast subsystem via `ToastStyle.SONNER`.
 - `Navigation Menu` maps to `NavigationMenu`.
 - `Radio Group` maps to `RadioGroup`.
 - `Scroll Area` maps to `ScrollArea`.

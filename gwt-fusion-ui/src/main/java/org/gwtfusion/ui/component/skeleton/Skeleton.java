@@ -7,6 +7,8 @@ import org.gwtfusion.ui.BaseComponent;
 public final class Skeleton extends BaseComponent<Skeleton> {
     public static final String BASE_CLASSES = "animate-pulse rounded-md bg-muted";
 
+    private String sizeClasses;
+
     private Skeleton(HTMLElement element) {
         super(element);
         classes(BASE_CLASSES);
@@ -18,6 +20,10 @@ public final class Skeleton extends BaseComponent<Skeleton> {
     }
 
     public Skeleton size(String classes) {
+        if (sizeClasses != null) {
+            removeClasses(sizeClasses);
+        }
+        sizeClasses = classes;
         return classes(classes);
     }
 }
