@@ -14,6 +14,8 @@ import org.gwtfusion.ui.component.alert.AlertVariant;
 import org.gwtfusion.ui.component.alertdialog.AlertDialog;
 import org.gwtfusion.ui.component.accordion.Accordion;
 import org.gwtfusion.ui.component.aspectratio.AspectRatio;
+import org.gwtfusion.ui.component.avatar.Avatar;
+import org.gwtfusion.ui.component.avatar.AvatarSize;
 import org.gwtfusion.ui.component.badge.Badge;
 import org.gwtfusion.ui.component.badge.BadgeVariant;
 import org.gwtfusion.ui.component.breadcrumb.Breadcrumb;
@@ -21,11 +23,15 @@ import org.gwtfusion.ui.component.button.Button;
 import org.gwtfusion.ui.component.buttongroup.ButtonGroup;
 import org.gwtfusion.ui.component.button.ButtonSize;
 import org.gwtfusion.ui.component.button.ButtonVariant;
+import org.gwtfusion.ui.component.calendar.Calendar;
 import org.gwtfusion.ui.component.card.Card;
+import org.gwtfusion.ui.component.carousel.Carousel;
 import org.gwtfusion.ui.component.checkbox.Checkbox;
 import org.gwtfusion.ui.component.code.CodeBlock;
 import org.gwtfusion.ui.component.collapsible.Collapsible;
 import org.gwtfusion.ui.component.contextmenu.ContextMenu;
+import org.gwtfusion.ui.component.datatable.DataTable;
+import org.gwtfusion.ui.component.datepicker.DatePicker;
 import org.gwtfusion.ui.component.dialog.Dialog;
 import org.gwtfusion.ui.component.drawer.Drawer;
 import org.gwtfusion.ui.component.dropdown.DropdownMenu;
@@ -37,6 +43,8 @@ import org.gwtfusion.ui.component.icon.IconSize;
 import org.gwtfusion.ui.component.icon.IconVariant;
 import org.gwtfusion.ui.component.input.Input;
 import org.gwtfusion.ui.component.inputgroup.InputGroup;
+import org.gwtfusion.ui.component.item.Item;
+import org.gwtfusion.ui.component.kbd.Kbd;
 import org.gwtfusion.ui.component.label.Label;
 import org.gwtfusion.ui.component.pagination.Pagination;
 import org.gwtfusion.ui.component.popover.Popover;
@@ -57,7 +65,9 @@ import org.gwtfusion.ui.component.status.StatusIndicator;
 import org.gwtfusion.ui.component.status.StatusIndicatorVariant;
 import org.gwtfusion.ui.component.switcher.Switch;
 import org.gwtfusion.ui.component.tabs.Tabs;
+import org.gwtfusion.ui.component.table.Table;
 import org.gwtfusion.ui.component.textarea.Textarea;
+import org.gwtfusion.ui.component.timeline.Timeline;
 import org.gwtfusion.ui.component.toggle.Toggle;
 import org.gwtfusion.ui.component.toggle.ToggleVariant;
 import org.gwtfusion.ui.component.toast.Toast;
@@ -243,6 +253,16 @@ public final class DemoApp implements EntryPoint {
                 componentDemo("separator", "Layout", "Separator", "Horizontal and vertical visual dividers.", this::renderSeparatorComponent),
                 componentDemo("typography", "Layout", "Typography", "Reusable text styles for headings, body text, and muted copy.", this::renderTypographyComponent),
                 componentDemo("code-block", "Layout", "CodeBlock", "Code snippets with language metadata and consistent styling.", this::renderCodeBlockComponent),
+
+                componentDemo("table", "Data Display", "Table", "Basic table primitives for headers, rows, cells, captions, and empty-state composition.", this::renderTableComponent),
+                componentDemo("data-table", "Data Display", "DataTable", "Small data table wrapper for string data, filtering, and empty states.", this::renderDataTableComponent),
+                componentDemo("avatar", "Data Display", "Avatar", "Identity display with image, fallback text, and size variants.", this::renderAvatarComponent),
+                componentDemo("kbd", "Data Display", "Kbd", "Keyboard shortcut tokens for documentation and command surfaces.", this::renderKbdComponent),
+                componentDemo("item", "Data Display", "Item", "Reusable row primitive for lists, results, and dashboard summaries.", this::renderItemComponent),
+                componentDemo("timeline", "Data Display", "Timeline", "Chronological event display for activity feeds and release notes.", this::renderTimelineComponent),
+                componentDemo("calendar", "Data Display", "Calendar", "Month grid display with selected-day callbacks.", this::renderCalendarComponent),
+                componentDemo("date-picker", "Data Display", "DatePicker", "Popover-backed date selection built on Calendar.", this::renderDatePickerComponent),
+                componentDemo("carousel", "Data Display", "Carousel", "Simple slide display with previous and next controls.", this::renderCarouselComponent),
 
                 componentDemo("input", "Forms", "Input", "Text, email, password, and search fields.", this::renderInputComponent),
                 componentDemo("label", "Forms", "Label", "Accessible labels connected to form controls.", this::renderLabelComponent),
@@ -589,6 +609,202 @@ public final class DemoApp implements EntryPoint {
         grid.appendChild(example("Java snippet", codePreview,
                 "CodeBlock.create(\"Button.create(\\\"Save\\\")...\")\n"
                         + "    .language(\"java\");"));
+    }
+
+    private void renderTableComponent(HTMLElement grid) {
+        HTMLElement tablePreview = preview("demo-stack-preview");
+        tablePreview.appendChild(sampleTable().element());
+        grid.appendChild(example("Project table", tablePreview,
+                "Table.create()\n"
+                        + "    .add(Table.caption(\"Current release work\"))\n"
+                        + "    .add(Table.header().add(Table.row()\n"
+                        + "        .add(Table.head(\"Component\"))\n"
+                        + "        .add(Table.head(\"Status\"))))\n"
+                        + "    .add(Table.body().add(Table.row()\n"
+                        + "        .add(Table.cell(\"Table\"))\n"
+                        + "        .add(Table.cell(\"Ready\"))));"));
+
+        HTMLElement empty = preview("demo-stack-preview");
+        empty.appendChild(Table.create()
+                .add(Table.header().add(Table.row().add(Table.head("Name")).add(Table.head("Owner"))))
+                .add(Table.body().add(Table.row().add(Table.cell(EmptyState.create()
+                        .title("No rows")
+                        .description("Connect a data source or adjust filters.")))))
+                .element());
+        grid.appendChild(example("Empty table composition", empty,
+                "Table.create()\n"
+                        + "    .add(Table.header().add(headerRow))\n"
+                        + "    .add(Table.body().add(Table.row()\n"
+                        + "        .add(Table.cell(EmptyState.create()\n"
+                        + "            .title(\"No rows\")))));"));
+    }
+
+    private void renderDataTableComponent(HTMLElement grid) {
+        String[][] rows = new String[][] {
+                { "Button", "Stable", "Ana" },
+                { "Toast", "Review", "Mika" },
+                { "Table", "Preview", "Sam" }
+        };
+        HTMLElement data = preview("demo-stack-preview");
+        data.appendChild(DataTable.create()
+                .columns("Component", "Status", "Owner")
+                .rows(rows)
+                .sortBy(0, false)
+                .element());
+        grid.appendChild(example("String data", data,
+                "DataTable.create()\n"
+                        + "    .columns(\"Component\", \"Status\", \"Owner\")\n"
+                        + "    .rows(rows)\n"
+                        + "    .sortBy(0, false);"));
+
+        HTMLElement filtered = preview("demo-stack-preview");
+        filtered.appendChild(DataTable.create()
+                .columns("Component", "Status", "Owner")
+                .rows(rows)
+                .filter("toast")
+                .emptyText("No matching components.")
+                .element());
+        filtered.appendChild(Pagination.create().previous("#").page(1, "#", true).page(2, "#", false).next("#").element());
+        grid.appendChild(example("Filtering with pagination", filtered,
+                "DataTable.create()\n"
+                        + "    .columns(\"Component\", \"Status\", \"Owner\")\n"
+                        + "    .rows(rows)\n"
+                        + "    .filter(\"toast\")\n"
+                        + "    .emptyText(\"No matching components.\");\n\n"
+                        + "Pagination.create().page(1, \"#\", true).next(\"#\");"));
+    }
+
+    private void renderAvatarComponent(HTMLElement grid) {
+        HTMLElement avatars = preview();
+        avatars.appendChild(Avatar.create().fallback("AV").size(AvatarSize.SM).element());
+        avatars.appendChild(Avatar.create().fallback("GF").element());
+        avatars.appendChild(Avatar.create().fallback("UI").size(AvatarSize.LG).element());
+        grid.appendChild(example("Fallbacks and sizes", avatars,
+                "Avatar.create().fallback(\"AV\").size(AvatarSize.SM);\n"
+                        + "Avatar.create().fallback(\"GF\");\n"
+                        + "Avatar.create().fallback(\"UI\").size(AvatarSize.LG);"));
+
+        HTMLElement profile = preview("demo-stack-preview");
+        profile.appendChild(Item.create()
+                .media(Avatar.create().fallback("MR"))
+                .title("Mira Rodrigues")
+                .description("Design systems lead")
+                .action(Badge.create("Owner").variant(BadgeVariant.SECONDARY))
+                .element());
+        grid.appendChild(example("Inside Item", profile,
+                "Item.create()\n"
+                        + "    .media(Avatar.create().fallback(\"MR\"))\n"
+                        + "    .title(\"Mira Rodrigues\")\n"
+                        + "    .description(\"Design systems lead\")\n"
+                        + "    .action(Badge.create(\"Owner\"));"));
+    }
+
+    private void renderKbdComponent(HTMLElement grid) {
+        HTMLElement shortcuts = preview();
+        shortcuts.appendChild(Kbd.create("Cmd").element());
+        shortcuts.appendChild(Kbd.create("K").element());
+        shortcuts.appendChild(Kbd.create("Esc").element());
+        grid.appendChild(example("Keyboard tokens", shortcuts,
+                "Kbd.create(\"Cmd\");\n"
+                        + "Kbd.create(\"K\");\n"
+                        + "Kbd.create(\"Esc\");"));
+    }
+
+    private void renderItemComponent(HTMLElement grid) {
+        HTMLElement items = preview("demo-stack-preview");
+        items.appendChild(Item.create()
+                .media(LucideIcons.gitPullRequest().variant(IconVariant.PRIMARY))
+                .title("Review pull request")
+                .description("Milestone 11 data display components")
+                .action(Badge.create("Open"))
+                .element());
+        items.appendChild(Item.create()
+                .media(LucideIcons.circleCheck().variant(IconVariant.PRIMARY))
+                .title("Maven Verify")
+                .description("All JVM tests passed")
+                .action(StatusIndicator.create("Healthy").variant(StatusIndicatorVariant.SUCCESS))
+                .element());
+        grid.appendChild(example("List rows", items,
+                "Item.create()\n"
+                        + "    .media(LucideIcons.gitPullRequest())\n"
+                        + "    .title(\"Review pull request\")\n"
+                        + "    .description(\"Milestone 11 data display components\")\n"
+                        + "    .action(Badge.create(\"Open\"));"));
+    }
+
+    private void renderTimelineComponent(HTMLElement grid) {
+        HTMLElement timeline = preview("demo-stack-preview");
+        timeline.appendChild(Timeline.create()
+                .addItem("Branch created", "Started Milestone 11 data display work.", "09:10")
+                .addItem("Components added", "Table, Avatar, Kbd, Item, Timeline, Calendar, and related primitives.", "09:34")
+                .addItem("Verification", "Maven and demo GWT compile are expected before PR.", "Next")
+                .element());
+        grid.appendChild(example("Activity feed", timeline,
+                "Timeline.create()\n"
+                        + "    .addItem(\"Branch created\", \"Started Milestone 11.\", \"09:10\")\n"
+                        + "    .addItem(\"Components added\", \"Data display primitives.\", \"09:34\");"));
+    }
+
+    private void renderCalendarComponent(HTMLElement grid) {
+        HTMLElement calendars = preview("demo-stack-preview");
+        HTMLElement selected = textElement("p", "demo-muted", "Selected day: 18");
+        Calendar calendar = Calendar.create().month("May 2026").days(31, 4).selectedDay(18);
+        calendar.onDaySelect(day -> selected.textContent = "Selected day: " + day);
+        calendars.appendChild(calendar.element());
+        calendars.appendChild(selected);
+        grid.appendChild(example("Selectable month", calendars,
+                "Calendar calendar = Calendar.create()\n"
+                        + "    .month(\"May 2026\")\n"
+                        + "    .days(31, 4)\n"
+                        + "    .selectedDay(18);\n\n"
+                        + "calendar.onDaySelect(day -> { ... });"));
+    }
+
+    private void renderDatePickerComponent(HTMLElement grid) {
+        HTMLElement datePicker = preview("demo-stack-preview");
+        HTMLElement selected = textElement("p", "demo-muted", "Pick a date to update this text.");
+        DatePicker picker = DatePicker.create().month("May 2026").days(31, 4).selectedDay(18);
+        picker.onDaySelect(day -> selected.textContent = "Selected: May 2026 " + day);
+        datePicker.appendChild(picker.element());
+        datePicker.appendChild(selected);
+        grid.appendChild(example("Popover calendar", datePicker,
+                "DatePicker picker = DatePicker.create()\n"
+                        + "    .month(\"May 2026\")\n"
+                        + "    .days(31, 4)\n"
+                        + "    .selectedDay(18);\n\n"
+                        + "picker.onDaySelect(day -> { ... });"));
+    }
+
+    private void renderCarouselComponent(HTMLElement grid) {
+        HTMLElement carouselPreview = preview("demo-stack-preview");
+        carouselPreview.appendChild(Carousel.create()
+                .addSlide(raw(textElement("div", "demo-muted", "Slide 1: Component APIs stay Java-first.")))
+                .addSlide(raw(textElement("div", "demo-muted", "Slide 2: Tailwind classes remain static.")))
+                .addSlide(raw(textElement("div", "demo-muted", "Slide 3: GWT.runAsync keeps demos focused.")))
+                .element());
+        grid.appendChild(example("Simple carousel", carouselPreview,
+                "Carousel.create()\n"
+                        + "    .addSlide(raw(slideOne))\n"
+                        + "    .addSlide(raw(slideTwo))\n"
+                        + "    .addSlide(raw(slideThree));"));
+    }
+
+    private Table sampleTable() {
+        return Table.create()
+                .add(Table.caption("Current release work"))
+                .add(Table.header().add(Table.row()
+                        .add(Table.head("Component"))
+                        .add(Table.head("Status"))
+                        .add(Table.head("Owner"))))
+                .add(Table.body()
+                        .add(Table.row()
+                                .add(Table.cell("Table"))
+                                .add(Table.cell(StatusIndicator.create("Ready").variant(StatusIndicatorVariant.SUCCESS)))
+                                .add(Table.cell("Ana")))
+                        .add(Table.row()
+                                .add(Table.cell("Calendar"))
+                                .add(Table.cell(StatusIndicator.create("Review").variant(StatusIndicatorVariant.WARNING)))
+                                .add(Table.cell("Mika"))));
     }
 
     private void renderInputComponent(HTMLElement grid) {

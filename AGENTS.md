@@ -55,8 +55,8 @@ This repository contains `gwt-fusion-ui`, a UI component library for GWT 2.13 an
 
 ## Current Status
 
-- Implemented components: `Button`, `Badge`, `Card`, `Alert`, `AlertDialog`, `Input`, `Label`, `Separator`, `Checkbox`, `Switch`, `Textarea`, `RadioGroup`, `FormField`, `NativeSelect`, `InputGroup`, `Slider`, `Tabs`, `CodeBlock`, `Accordion`, `Collapsible`, `AspectRatio`, `ButtonGroup`, `Breadcrumb`, `Pagination`, `ScrollArea`, `Toggle`, `ToggleGroup`, `Typography`, `Icon`, `Tooltip`, `Popover`, `Dialog`, `DropdownMenu`, `ContextMenu`, `HoverCard`, `Sheet`, `Drawer`, `Progress`, `Skeleton`, `Spinner`, `EmptyState`, `StatusIndicator`, `Toast`, `ToastManager`.
+- Implemented components: `Button`, `Badge`, `Card`, `Alert`, `AlertDialog`, `Input`, `Label`, `Separator`, `Checkbox`, `Switch`, `Textarea`, `RadioGroup`, `FormField`, `NativeSelect`, `InputGroup`, `Slider`, `Tabs`, `CodeBlock`, `Accordion`, `Collapsible`, `AspectRatio`, `ButtonGroup`, `Breadcrumb`, `Pagination`, `ScrollArea`, `Toggle`, `ToggleGroup`, `Typography`, `Icon`, `Tooltip`, `Popover`, `Dialog`, `DropdownMenu`, `ContextMenu`, `HoverCard`, `Sheet`, `Drawer`, `Progress`, `Skeleton`, `Spinner`, `EmptyState`, `StatusIndicator`, `Toast`, `ToastManager`, `Table`, `DataTable`, `Avatar`, `Kbd`, `Item`, `Timeline`, `Calendar`, `DatePicker`, `Carousel`.
 - Base classes: `UiComponent`, `BaseComponent`, `CssClasses`, `ThemeManager`.
 - Demo: home page, component view with categorized preview/Java code examples, form foundation examples, layout/navigation examples, overlay examples, icon gallery, events examples, and theme view.
 - Tailwind 3 is configured and executed through `frontend-maven-plugin`.
-- Current working status: Milestone 10 Feedback Components is in progress.
+- Current working status: Milestone 11 Data Display Components is in progress.

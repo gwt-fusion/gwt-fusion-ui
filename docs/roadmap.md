@@ -186,6 +186,7 @@ Support tables, identity display, code examples, and dashboard-style content.
 - `Item` should be a small display primitive for lists, command results, and menus if it proves reusable.
 - `Carousel` should be implemented after keyboard utilities exist.
 - `Chart` should be evaluated carefully because it may require a charting dependency or a lightweight SVG-first implementation.
+- `Chart` remains deferred until an SVG-first strategy or acceptable dependency boundary is chosen.
 - Keep `DataTable` separate from `Table`; sorting, filtering, and pagination should not complicate the basic table component.
 - `CodeBlock` should be useful for the demo, even without syntax highlighting initially.
 - `DatePicker` depends on `Calendar`, `Popover`, and form utilities, so it should come later in this phase.
