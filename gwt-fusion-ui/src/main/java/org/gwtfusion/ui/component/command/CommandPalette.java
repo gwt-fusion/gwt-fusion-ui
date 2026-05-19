@@ -34,6 +34,7 @@ public final class CommandPalette extends BaseComponent<CommandPalette> {
     private HTMLElement trigger;
     private HTMLElement layer;
     private HTMLElement previouslyFocused;
+    private EventListener triggerClickListener;
     private EventListener shortcutListener;
     private ListenerRegistration portal = ListenerRegistration.empty();
     private ListenerRegistration menuSelection = ListenerRegistration.empty();
@@ -56,9 +57,18 @@ public final class CommandPalette extends BaseComponent<CommandPalette> {
         if (trigger == null) {
             return this;
         }
+        if (this.trigger != null) {
+            if (triggerClickListener != null) {
+                this.trigger.removeEventListener("click", triggerClickListener);
+            }
+            if (this.trigger.parentNode != null) {
+                this.trigger.parentNode.removeChild(this.trigger);
+            }
+        }
         this.trigger = trigger.element();
+        triggerClickListener = event -> open(!open);
         Aria.buttonPopup(this.trigger, "dialog", paletteId, open);
-        this.trigger.addEventListener("click", event -> open(!open));
+        this.trigger.addEventListener("click", triggerClickListener);
         element().appendChild(this.trigger);
         return this;
     }
@@ -153,6 +163,20 @@ public final class CommandPalette extends BaseComponent<CommandPalette> {
         return open;
     }
 
+    public void dispose() {
+        shortcutRegistration.remove();
+        shortcutRegistration = ListenerRegistration.empty();
+        shortcutListener = null;
+        menuSelection.remove();
+        menuSelection = ListenerRegistration.empty();
+        unmount(false);
+        if (trigger != null && triggerClickListener != null) {
+            trigger.removeEventListener("click", triggerClickListener);
+        }
+        triggerClickListener = null;
+        open = false;
+    }
+
     public String value() {
         return menu.value();
     }
@@ -172,6 +196,7 @@ public final class CommandPalette extends BaseComponent<CommandPalette> {
 
     private void ensureShortcutListener() {
         shortcutRegistration.remove();
+        shortcutRegistration = ListenerRegistration.empty();
         shortcutListener = this::onDocumentKeyDown;
         DomGlobal.document.addEventListener("keydown", shortcutListener);
         shortcutRegistration = () -> DomGlobal.document.removeEventListener("keydown", shortcutListener);

@@ -218,7 +218,7 @@ Add richer components after the core API and interaction utilities are stable.
 - Avoid locking the API into a specific data-binding framework.
 - Do not model shadcn/ui `Command` as a core required component name because GWT already has `com.google.gwt.user.client.Command` as an action/callback concept.
 - Treat this feature as optional advanced UX for command-palette workflows, not as a foundational GWT UI primitive.
-- Prefer public names such as `CommandPalette`, `CommandMenu`, and `CommandItem` to avoid confusion with GWT `Command`.
+- Prefer public names such as `CommandPalette` and `CommandMenu` to avoid confusion with GWT `Command`.
 - Use `Runnable` for item selection callbacks first; do not introduce `CommandAction` unless callbacks need context later.
 - `CommandPalette` combines direct overlay utilities, a filterable list, keyboard navigation, grouped items, empty state, and item selection callbacks.
 
