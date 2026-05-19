@@ -31,6 +31,7 @@ public final class Combobox extends BaseComponent<Combobox> {
     private final CommandMenu menu = CommandMenu.create();
     private final List<Item> items = new ArrayList<>();
     private final List<ValueChangeListener<String>> valueChangeListeners = new ArrayList<>();
+    private final List<ValueChangeListener<Boolean>> openChangeListeners = new ArrayList<>();
     private final HTMLElement trigger;
 
     private HTMLElement content;
@@ -125,6 +126,7 @@ public final class Combobox extends BaseComponent<Combobox> {
         } else {
             unmount();
         }
+        notifyOpenChange();
         return this;
     }
 
@@ -135,6 +137,11 @@ public final class Combobox extends BaseComponent<Combobox> {
     public ListenerRegistration onValueChange(ValueChangeListener<String> listener) {
         valueChangeListeners.add(listener);
         return () -> valueChangeListeners.remove(listener);
+    }
+
+    public ListenerRegistration onOpenChange(ValueChangeListener<Boolean> listener) {
+        openChangeListeners.add(listener);
+        return () -> openChangeListeners.remove(listener);
     }
 
     private void mount() {
@@ -178,6 +185,12 @@ public final class Combobox extends BaseComponent<Combobox> {
             for (ValueChangeListener<String> listener : new ArrayList<>(valueChangeListeners)) {
                 listener.onValueChange(value);
             }
+        }
+    }
+
+    private void notifyOpenChange() {
+        for (ValueChangeListener<Boolean> listener : new ArrayList<>(openChangeListeners)) {
+            listener.onValueChange(open);
         }
     }
 

@@ -39,6 +39,7 @@ public final class ContextMenu extends BaseComponent<ContextMenu> {
     private final List<HTMLElement> submenuItemElements = new ArrayList<>();
     private final List<Item> submenuFocusableItems = new ArrayList<>();
     private final List<ValueChangeListener<String>> valueChangeListeners = new ArrayList<>();
+    private final List<ValueChangeListener<Boolean>> openChangeListeners = new ArrayList<>();
     private HTMLElement menu;
     private HTMLElement submenu;
     private ListenerRegistration cleanup = ListenerRegistration.empty();
@@ -184,6 +185,7 @@ public final class ContextMenu extends BaseComponent<ContextMenu> {
         } else {
             unmount();
         }
+        notifyOpenChange();
         return this;
     }
 
@@ -198,6 +200,11 @@ public final class ContextMenu extends BaseComponent<ContextMenu> {
     public ListenerRegistration onValueChange(ValueChangeListener<String> listener) {
         valueChangeListeners.add(listener);
         return () -> valueChangeListeners.remove(listener);
+    }
+
+    public ListenerRegistration onOpenChange(ValueChangeListener<Boolean> listener) {
+        openChangeListeners.add(listener);
+        return () -> openChangeListeners.remove(listener);
     }
 
     private void mount() {
@@ -244,6 +251,12 @@ public final class ContextMenu extends BaseComponent<ContextMenu> {
             for (ValueChangeListener<String> listener : new ArrayList<>(valueChangeListeners)) {
                 listener.onValueChange(value);
             }
+        }
+    }
+
+    private void notifyOpenChange() {
+        for (ValueChangeListener<Boolean> listener : new ArrayList<>(openChangeListeners)) {
+            listener.onValueChange(open);
         }
     }
 

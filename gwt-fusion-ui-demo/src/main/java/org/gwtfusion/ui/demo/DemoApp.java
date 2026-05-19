@@ -2092,6 +2092,126 @@ public final class DemoApp implements EntryPoint {
                         + "alignment.onValueChange(value -> {\n"
                         + "    // value is the selected item key\n"
                         + "});"));
+
+        HTMLElement selectionEvents = preview("demo-stack-preview");
+        Combobox owner = Combobox.create()
+                .placeholder("Assign owner")
+                .searchPlaceholder("Search teammates...")
+                .item("mira", "Mira Rodrigues")
+                .item("sam", "Sam Carter")
+                .item("lee", "Lee Nguyen");
+        HTMLElement ownerValue = textElement("p", "demo-muted", "Owner: not assigned");
+        HTMLElement ownerOpen = textElement("p", "demo-muted", "Owner list: closed");
+        owner.onValueChange(value -> ownerValue.textContent = "Owner: " + value);
+        owner.onOpenChange(open -> ownerOpen.textContent = "Owner list: " + (open ? "open" : "closed"));
+
+        MultiSelect labels = MultiSelect.create()
+                .placeholder("Add labels")
+                .item("bug", "Bug")
+                .item("feature", "Feature")
+                .item("docs", "Documentation")
+                .item("blocked", "Blocked");
+        HTMLElement labelsValue = textElement("p", "demo-muted", "Labels: none");
+        HTMLElement labelsOpen = textElement("p", "demo-muted", "Label list: closed");
+        labels.onValueChange(values -> labelsValue.textContent = "Labels: " + (values.isEmpty() ? "none" : values.toString()));
+        labels.onOpenChange(open -> labelsOpen.textContent = "Label list: " + (open ? "open" : "closed"));
+
+        Autocomplete customer = Autocomplete.create()
+                .placeholder("Search customer")
+                .item("acme", "Acme Corp", "enterprise", null)
+                .item("northwind", "Northwind", "trial", null)
+                .item("globex", "Globex", "renewal", null);
+        HTMLElement customerValue = textElement("p", "demo-muted", "Customer: no suggestion selected");
+        HTMLElement customerOpen = textElement("p", "demo-muted", "Suggestions: closed");
+        customer.onValueChange(value -> customerValue.textContent = "Customer: " + value);
+        customer.onOpenChange(open -> customerOpen.textContent = "Suggestions: " + (open ? "open" : "closed"));
+
+        selectionEvents.appendChild(owner.element());
+        selectionEvents.appendChild(ownerValue);
+        selectionEvents.appendChild(ownerOpen);
+        selectionEvents.appendChild(labels.element());
+        selectionEvents.appendChild(labelsValue);
+        selectionEvents.appendChild(labelsOpen);
+        selectionEvents.appendChild(customer.element());
+        selectionEvents.appendChild(customerValue);
+        selectionEvents.appendChild(customerOpen);
+        grid.appendChild(example("Selection and open-state events", selectionEvents,
+                "Combobox owner = Combobox.create()\n"
+                        + "    .placeholder(\"Assign owner\")\n"
+                        + "    .item(\"mira\", \"Mira Rodrigues\")\n"
+                        + "    .item(\"sam\", \"Sam Carter\");\n\n"
+                        + "owner.onValueChange(value -> {\n"
+                        + "    // update application state with selected key\n"
+                        + "});\n"
+                        + "owner.onOpenChange(open -> {\n"
+                        + "    // show loading, telemetry, or helper UI\n"
+                        + "});\n\n"
+                        + "MultiSelect labels = MultiSelect.create()\n"
+                        + "    .item(\"bug\", \"Bug\")\n"
+                        + "    .item(\"feature\", \"Feature\");\n"
+                        + "labels.onValueChange(values -> {\n"
+                        + "    // values is a defensive copy\n"
+                        + "});\n"
+                        + "labels.onOpenChange(open -> { ... });\n\n"
+                        + "Autocomplete customer = Autocomplete.create()\n"
+                        + "    .item(\"acme\", \"Acme Corp\", \"enterprise\", null);\n"
+                        + "customer.onValueChange(value -> { ... });\n"
+                        + "customer.onOpenChange(open -> { ... });"));
+
+        HTMLElement overlayEvents = preview("demo-stack-preview");
+        HTMLElement overlayStatus = textElement("p", "demo-muted", "Overlay status: idle");
+        Popover inspector = Popover.create()
+                .trigger(Button.create("Inspect task").variant(ButtonVariant.OUTLINE))
+                .content(raw(textElement("p", "demo-muted", "Applications often use open events to start lazy reads or analytics spans.")));
+        inspector.onOpenChange(open -> overlayStatus.textContent = "Popover: " + (open ? "opened" : "closed"));
+
+        HTMLElement menuStatus = textElement("p", "demo-muted", "Menu action: none");
+        DropdownMenu actions = DropdownMenu.create()
+                .trigger(Button.create("Task actions").variant(ButtonVariant.SECONDARY))
+                .addItem("duplicate", "Duplicate")
+                .addItem("archive", "Archive")
+                .addItem("delete", "Delete");
+        actions.onOpenChange(open -> overlayStatus.textContent = "Action menu: " + (open ? "opened" : "closed"));
+        actions.onValueChange(value -> menuStatus.textContent = "Menu action: " + value);
+
+        HTMLElement commandAction = textElement("p", "demo-muted", "Command action: none");
+        HTMLElement commandValue = textElement("p", "demo-muted", "Command value: none");
+        CommandPalette palette = CommandPalette.create()
+                .trigger(Button.create("Open command palette"))
+                .title("Task commands")
+                .description("Pick a command to update application state.")
+                .item("assign", "Assign to me", () -> commandAction.textContent = "Command action: assigned to me")
+                .item("copy-link", "Copy task link", () -> commandAction.textContent = "Command action: copied task link")
+                .item("close", "Close task", () -> commandAction.textContent = "Command action: closed task");
+        palette.onOpenChange(open -> overlayStatus.textContent = "Command palette: " + (open ? "opened" : "closed"));
+        palette.onValueChange(value -> commandValue.textContent = "Command value: " + value);
+
+        overlayEvents.appendChild(inspector.element());
+        overlayEvents.appendChild(actions.element());
+        overlayEvents.appendChild(palette.element());
+        overlayEvents.appendChild(overlayStatus);
+        overlayEvents.appendChild(menuStatus);
+        overlayEvents.appendChild(commandAction);
+        overlayEvents.appendChild(commandValue);
+        grid.appendChild(example("Overlay lifecycle and command actions", overlayEvents,
+                "Popover inspector = Popover.create()\n"
+                        + "    .trigger(Button.create(\"Inspect task\"))\n"
+                        + "    .content(raw(content));\n"
+                        + "inspector.onOpenChange(open -> {\n"
+                        + "    // start or stop lazy work tied to visibility\n"
+                        + "});\n\n"
+                        + "DropdownMenu actions = DropdownMenu.create()\n"
+                        + "    .trigger(Button.create(\"Task actions\"))\n"
+                        + "    .addItem(\"archive\", \"Archive\");\n"
+                        + "actions.onOpenChange(open -> { ... });\n"
+                        + "actions.onValueChange(value -> {\n"
+                        + "    // route selected action by key\n"
+                        + "});\n\n"
+                        + "CommandPalette palette = CommandPalette.create()\n"
+                        + "    .trigger(Button.create(\"Open command palette\"))\n"
+                        + "    .item(\"assign\", \"Assign to me\", () -> assignToMe());\n"
+                        + "palette.onOpenChange(open -> { ... });\n"
+                        + "palette.onValueChange(value -> { ... });"));
     }
 
     private void renderOverlays(HTMLElement grid) {
