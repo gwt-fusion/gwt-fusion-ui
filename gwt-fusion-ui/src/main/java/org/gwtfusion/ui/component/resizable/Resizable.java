@@ -4,6 +4,7 @@ import elemental2.dom.DOMRect;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.EventListener;
 import elemental2.dom.HTMLElement;
+import elemental2.dom.KeyboardEvent;
 import elemental2.dom.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public final class Resizable extends BaseComponent<Resizable> {
     public static final String ROOT_CLASSES = "flex min-h-48 w-full overflow-hidden rounded-lg border border-border bg-background text-sm text-foreground";
     public static final String PANE_CLASSES = "min-w-0 min-h-0 overflow-auto p-4";
     public static final String HANDLE_BASE_CLASSES = "shrink-0 bg-border transition-colors hover:bg-ring focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
+    public static final double KEYBOARD_STEP = 5;
 
     private final HTMLElement firstPane;
     private final HTMLElement secondPane;
@@ -37,6 +39,7 @@ public final class Resizable extends BaseComponent<Resizable> {
         handle.setAttribute("type", "button");
         handle.setAttribute("aria-label", "Resize panels");
         handle.addEventListener("mousedown", event -> startDrag((MouseEvent) event));
+        handle.addEventListener("keydown", event -> onHandleKeyDown((KeyboardEvent) event));
         element().appendChild(firstPane);
         element().appendChild(handle);
         element().appendChild(secondPane);
@@ -126,6 +129,33 @@ public final class Resizable extends BaseComponent<Resizable> {
         } else {
             next = ((event.clientY - rect.top) / rect.height) * 100;
         }
+        resizeTo(next);
+    }
+
+    private void onHandleKeyDown(KeyboardEvent event) {
+        String key = event.key;
+        if ("Home".equals(key)) {
+            handleKeyResize(event, 10);
+        } else if ("End".equals(key)) {
+            handleKeyResize(event, 90);
+        } else if (orientation == ResizableOrientation.HORIZONTAL && "ArrowLeft".equals(key)) {
+            handleKeyResize(event, firstSize - KEYBOARD_STEP);
+        } else if (orientation == ResizableOrientation.HORIZONTAL && "ArrowRight".equals(key)) {
+            handleKeyResize(event, firstSize + KEYBOARD_STEP);
+        } else if (orientation == ResizableOrientation.VERTICAL && "ArrowUp".equals(key)) {
+            handleKeyResize(event, firstSize - KEYBOARD_STEP);
+        } else if (orientation == ResizableOrientation.VERTICAL && "ArrowDown".equals(key)) {
+            handleKeyResize(event, firstSize + KEYBOARD_STEP);
+        }
+    }
+
+    private void handleKeyResize(KeyboardEvent event, double next) {
+        event.preventDefault();
+        event.stopPropagation();
+        resizeTo(next);
+    }
+
+    private void resizeTo(double next) {
         firstSize = clamp(next);
         applySizes();
         for (ValueChangeListener<Double> listener : new ArrayList<>(valueChangeListeners)) {
