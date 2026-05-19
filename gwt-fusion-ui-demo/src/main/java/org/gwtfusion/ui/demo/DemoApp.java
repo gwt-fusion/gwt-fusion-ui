@@ -103,7 +103,8 @@ public final class DemoApp implements EntryPoint {
     private static final int ICON_GALLERY_LIMIT = 120;
 
     private HTMLElement content;
-    private HTMLElement componentTabs;
+    private Tabs mainNavigation;
+    private CommandMenu componentMenu;
     private HTMLElement componentPanel;
     private String selectedComponentId;
 
@@ -117,7 +118,6 @@ public final class DemoApp implements EntryPoint {
         final String title;
         final String description;
         final ComponentRenderer renderer;
-        HTMLElement tab;
 
         ComponentDemo(String id, String category, String title, String description, ComponentRenderer renderer) {
             this.id = id;
@@ -140,21 +140,47 @@ public final class DemoApp implements EntryPoint {
         HTMLElement shell = element("div", "demo-shell");
         HTMLElement header = element("header", "demo-header");
         header.appendChild(textElement("div", "demo-brand", "GWT Fusion UI"));
+        header.appendChild(mainNavigation().element());
         header.appendChild(Button.create("Toggle theme").variant(ButtonVariant.OUTLINE).onClick(event -> toggleTheme()).element());
         shell.appendChild(header);
 
         HTMLElement layout = element("div", "demo-layout");
-        HTMLElement nav = element("nav", "demo-nav");
-        nav.appendChild(Button.create("Home").variant(ButtonVariant.GHOST).onClick(event -> renderHome()).element());
-        nav.appendChild(Button.create("Components").variant(ButtonVariant.GHOST).onClick(event -> renderComponentsAsync()).element());
-        nav.appendChild(Button.create("Icons").variant(ButtonVariant.GHOST).onClick(event -> renderIconsAsync()).element());
-        nav.appendChild(Button.create("Theme").variant(ButtonVariant.GHOST).onClick(event -> renderTheme()).element());
-        layout.appendChild(nav);
-
         content = element("section", "demo-content");
         layout.appendChild(content);
         shell.appendChild(layout);
         return shell;
+    }
+
+    private Tabs mainNavigation() {
+        mainNavigation = Tabs.create()
+                .variant(TabsVariant.LINE)
+                .classes("demo-top-nav")
+                .addTab("home", "Home", navigationPanel())
+                .addTab("components", "Components", navigationPanel())
+                .addTab("icons", "Icons", navigationPanel())
+                .addTab("theme", "Theme", navigationPanel());
+        mainNavigation.onValueChange(value -> {
+            if ("components".equals(value)) {
+                renderComponentsAsync();
+            } else if ("icons".equals(value)) {
+                renderIconsAsync();
+            } else if ("theme".equals(value)) {
+                renderTheme();
+            } else {
+                renderHome();
+            }
+        });
+        return mainNavigation;
+    }
+
+    private UiComponent navigationPanel() {
+        return raw(element("span", "demo-top-nav-panel"));
+    }
+
+    private void selectMainNavigation(String value) {
+        if (mainNavigation != null && !mainNavigation.value().equals(value)) {
+            mainNavigation.value(value);
+        }
     }
 
     private void toggleTheme() {
@@ -162,6 +188,7 @@ public final class DemoApp implements EntryPoint {
     }
 
     private void renderHome() {
+        selectMainNavigation("home");
         clearContent();
         HTMLElement hero = element("div", "demo-hero");
         hero.appendChild(textElement("h1", "", "GWT UI components with Tailwind DNA"));
@@ -178,6 +205,7 @@ public final class DemoApp implements EntryPoint {
     }
 
     private void renderIconsAsync() {
+        selectMainNavigation("icons");
         clearContent();
         content.appendChild(textElement("p", "demo-muted", "Loading the Lucide icon gallery through GWT.runAsync keeps the full icon catalog out of the initial demo path."));
         GWT.runAsync(new RunAsyncCallback() {
@@ -194,38 +222,33 @@ public final class DemoApp implements EntryPoint {
     }
 
     private void renderComponents() {
+        selectMainNavigation("components");
         clearContent();
         content.appendChild(textElement("h1", "", "Components"));
-        content.appendChild(textElement("p", "demo-muted", "Pick one component from the vertical tabs. The selected component examples are loaded through GWT.runAsync, so the demo only renders the area the visitor is currently viewing."));
+        content.appendChild(textElement("p", "demo-muted", "Search or pick one component from the grouped list to explore usage examples, states, variants, and Java snippets."));
 
         ComponentDemo[] demos = componentDemos();
         HTMLElement browser = element("div", "demo-component-browser");
-        componentTabs = element("nav", "demo-component-tabs");
-        componentTabs.setAttribute("aria-label", "Components");
-        componentTabs.setAttribute("role", "tablist");
-        componentTabs.setAttribute("aria-orientation", "vertical");
+        componentMenu = CommandMenu.create()
+                .classes("demo-component-tabs")
+                .placeholder("Search components...")
+                .emptyText("No matching components.");
 
         String previousCategory = "";
         for (ComponentDemo demo : demos) {
             if (!demo.category.equals(previousCategory)) {
-                componentTabs.appendChild(textElement("div", "demo-component-tab-group", demo.category));
+                componentMenu.group(demo.category);
                 previousCategory = demo.category;
             }
-            HTMLElement tab = element("button", "demo-component-tab");
-            tab.setAttribute("type", "button");
-            tab.setAttribute("role", "tab");
-            tab.setAttribute("aria-controls", "component-panel");
-            tab.textContent = demo.title;
-            tab.addEventListener("click", event -> selectComponent(demos, demo));
-            demo.tab = tab;
-            componentTabs.appendChild(tab);
+            componentMenu.item(demo.id, demo.title, null, "", demo.category + " " + demo.description, null);
         }
+        componentMenu.onItemSelect(value -> selectComponent(demos, componentDemoById(demos, value)));
 
         componentPanel = element("section", "demo-component-panel");
         componentPanel.setAttribute("id", "component-panel");
         componentPanel.setAttribute("role", "tabpanel");
 
-        browser.appendChild(componentTabs);
+        browser.appendChild(componentMenu.element());
         browser.appendChild(componentPanel);
         content.appendChild(browser);
 
@@ -318,14 +341,12 @@ public final class DemoApp implements EntryPoint {
     }
 
     private void selectComponent(ComponentDemo[] demos, ComponentDemo selected) {
+        if (selected == null) {
+            return;
+        }
         selectedComponentId = selected.id;
-        for (ComponentDemo demo : demos) {
-            boolean active = demo.id.equals(selected.id);
-            if (demo.tab != null) {
-                demo.tab.className = active ? "demo-component-tab is-active" : "demo-component-tab";
-                demo.tab.setAttribute("aria-selected", active ? "true" : "false");
-                demo.tab.setAttribute("tabindex", active ? "0" : "-1");
-            }
+        if (componentMenu != null && !componentMenu.value().equals(selected.id)) {
+            componentMenu.value(selected.id);
         }
 
         clear(componentPanel);
@@ -347,6 +368,15 @@ public final class DemoApp implements EntryPoint {
                 componentPanel.appendChild(section);
             }
         });
+    }
+
+    private ComponentDemo componentDemoById(ComponentDemo[] demos, String id) {
+        for (ComponentDemo demo : demos) {
+            if (demo.id.equals(id)) {
+                return demo;
+            }
+        }
+        return null;
     }
 
     private void renderButtonComponent(HTMLElement grid) {
@@ -2685,6 +2715,7 @@ public final class DemoApp implements EntryPoint {
     }
 
     private void renderTheme() {
+        selectMainNavigation("theme");
         clearContent();
         content.appendChild(textElement("h1", "", "Theme"));
         content.appendChild(textElement("p", "demo-muted", "Themes are controlled through CSS variables and the root .dark class. ThemeManager.setMode(...) is the Java API for switching modes."));
