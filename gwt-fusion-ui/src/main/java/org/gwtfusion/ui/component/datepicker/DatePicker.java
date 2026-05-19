@@ -57,7 +57,20 @@ public final class DatePicker extends BaseComponent<DatePicker> {
         return this;
     }
 
+    public DatePicker open(boolean open) {
+        popover.open(open);
+        return this;
+    }
+
+    public boolean open() {
+        return popover.open();
+    }
+
     public ListenerRegistration onDaySelect(ValueChangeListener<Integer> listener) {
         return calendar.onDaySelect(listener);
+    }
+
+    public ListenerRegistration onOpenChange(ValueChangeListener<Boolean> listener) {
+        return popover.onOpenChange(listener);
     }
 }

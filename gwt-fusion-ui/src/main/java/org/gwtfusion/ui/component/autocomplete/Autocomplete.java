@@ -28,6 +28,7 @@ public final class Autocomplete extends BaseComponent<Autocomplete> {
     private final List<Item> visibleItems = new ArrayList<>();
     private final List<HTMLElement> visibleElements = new ArrayList<>();
     private final List<ValueChangeListener<String>> valueChangeListeners = new ArrayList<>();
+    private final List<ValueChangeListener<Boolean>> openChangeListeners = new ArrayList<>();
 
     private String emptyText = "No suggestions found.";
     private String value = "";
@@ -42,13 +43,13 @@ public final class Autocomplete extends BaseComponent<Autocomplete> {
         input.type = "search";
         input.setAttribute("aria-autocomplete", "list");
         input.addEventListener("input", event -> {
-            open = true;
-            render();
+            if (open) {
+                render();
+            } else {
+                open(true);
+            }
         });
-        input.addEventListener("focus", event -> {
-            open = true;
-            render();
-        });
+        input.addEventListener("focus", event -> open(true));
         input.addEventListener("keydown", event -> onKeyDown((KeyboardEvent) event));
         element().appendChild(input);
 
@@ -107,9 +108,28 @@ public final class Autocomplete extends BaseComponent<Autocomplete> {
         return value;
     }
 
+    public Autocomplete open(boolean open) {
+        if (this.open == open) {
+            return this;
+        }
+        this.open = open;
+        render();
+        notifyOpenChange();
+        return this;
+    }
+
+    public boolean open() {
+        return open;
+    }
+
     public ListenerRegistration onValueChange(ValueChangeListener<String> listener) {
         valueChangeListeners.add(listener);
         return () -> valueChangeListeners.remove(listener);
+    }
+
+    public ListenerRegistration onOpenChange(ValueChangeListener<Boolean> listener) {
+        openChangeListeners.add(listener);
+        return () -> openChangeListeners.remove(listener);
     }
 
     private void render() {
@@ -167,8 +187,7 @@ public final class Autocomplete extends BaseComponent<Autocomplete> {
         int next = Keyboard.indexForKey(event.key, activeIndex, visibleItems.size(), true);
         if (Keyboard.isEscape(event.key)) {
             event.preventDefault();
-            open = false;
-            render();
+            open(false);
         } else if (next != activeIndex) {
             event.preventDefault();
             activeIndex = next;
@@ -189,7 +208,7 @@ public final class Autocomplete extends BaseComponent<Autocomplete> {
         String previous = value;
         value = item.value;
         input.value = item.label;
-        open = false;
+        open(false);
         if (item.onSelect != null) {
             item.onSelect.run();
         }
@@ -198,7 +217,12 @@ public final class Autocomplete extends BaseComponent<Autocomplete> {
                 listener.onValueChange(value);
             }
         }
-        render();
+    }
+
+    private void notifyOpenChange() {
+        for (ValueChangeListener<Boolean> listener : new ArrayList<>(openChangeListeners)) {
+            listener.onValueChange(open);
+        }
     }
 
     private void applyActiveState() {

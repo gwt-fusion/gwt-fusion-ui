@@ -3,6 +3,8 @@ package org.gwtfusion.ui.component.collapsible;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLButtonElement;
 import elemental2.dom.HTMLElement;
+import java.util.ArrayList;
+import java.util.List;
 import org.gwtfusion.ui.BaseComponent;
 import org.gwtfusion.ui.UiComponent;
 import org.gwtfusion.ui.event.ListenerRegistration;
@@ -15,7 +17,8 @@ public final class Collapsible extends BaseComponent<Collapsible> {
 
     private final HTMLButtonElement trigger;
     private final HTMLElement content;
-    private boolean open;
+    private final List<ValueChangeListener<Boolean>> openChangeListeners = new ArrayList<>();
+    private boolean open = true;
 
     private Collapsible(HTMLElement element) {
         super(element);
@@ -46,6 +49,9 @@ public final class Collapsible extends BaseComponent<Collapsible> {
     }
 
     public Collapsible open(boolean open) {
+        if (this.open == open) {
+            return this;
+        }
         this.open = open;
         trigger.setAttribute("aria-expanded", String.valueOf(open));
         data("state", open ? "open" : "closed");
@@ -55,6 +61,7 @@ public final class Collapsible extends BaseComponent<Collapsible> {
         } else {
             content.setAttribute("hidden", "");
         }
+        notifyOpenChange();
         return this;
     }
 
@@ -63,6 +70,13 @@ public final class Collapsible extends BaseComponent<Collapsible> {
     }
 
     public ListenerRegistration onOpenChange(ValueChangeListener<Boolean> listener) {
-        return listen("click", event -> listener.onValueChange(open));
+        openChangeListeners.add(listener);
+        return () -> openChangeListeners.remove(listener);
+    }
+
+    private void notifyOpenChange() {
+        for (ValueChangeListener<Boolean> listener : new ArrayList<>(openChangeListeners)) {
+            listener.onValueChange(open);
+        }
     }
 }

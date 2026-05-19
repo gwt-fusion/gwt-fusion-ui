@@ -36,6 +36,7 @@ public final class MultiSelect extends BaseComponent<MultiSelect> {
     private final List<HTMLElement> itemElements = new ArrayList<>();
     private final List<Item> focusableItems = new ArrayList<>();
     private final List<ValueChangeListener<List<String>>> valueChangeListeners = new ArrayList<>();
+    private final List<ValueChangeListener<Boolean>> openChangeListeners = new ArrayList<>();
     private final List<String> values = new ArrayList<>();
 
     private HTMLElement content;
@@ -118,6 +119,7 @@ public final class MultiSelect extends BaseComponent<MultiSelect> {
         } else {
             unmount();
         }
+        notifyOpenChange();
         return this;
     }
 
@@ -128,6 +130,11 @@ public final class MultiSelect extends BaseComponent<MultiSelect> {
     public ListenerRegistration onValueChange(ValueChangeListener<List<String>> listener) {
         valueChangeListeners.add(listener);
         return () -> valueChangeListeners.remove(listener);
+    }
+
+    public ListenerRegistration onOpenChange(ValueChangeListener<Boolean> listener) {
+        openChangeListeners.add(listener);
+        return () -> openChangeListeners.remove(listener);
     }
 
     private void mount() {
@@ -226,6 +233,12 @@ public final class MultiSelect extends BaseComponent<MultiSelect> {
         renderItems();
         for (ValueChangeListener<List<String>> listener : new ArrayList<>(valueChangeListeners)) {
             listener.onValueChange(values());
+        }
+    }
+
+    private void notifyOpenChange() {
+        for (ValueChangeListener<Boolean> listener : new ArrayList<>(openChangeListeners)) {
+            listener.onValueChange(open);
         }
     }
 
