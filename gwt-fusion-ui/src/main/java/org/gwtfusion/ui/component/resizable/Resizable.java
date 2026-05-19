@@ -35,8 +35,8 @@ public final class Resizable extends BaseComponent<Resizable> {
         firstPane.className = PANE_CLASSES;
         secondPane = (HTMLElement) DomGlobal.document.createElement("div");
         secondPane.className = PANE_CLASSES;
-        handle = (HTMLElement) DomGlobal.document.createElement("button");
-        handle.setAttribute("type", "button");
+        handle = (HTMLElement) DomGlobal.document.createElement("div");
+        handle.setAttribute("tabindex", "0");
         handle.setAttribute("aria-label", "Resize panels");
         handle.addEventListener("mousedown", event -> startDrag((MouseEvent) event));
         handle.addEventListener("keydown", event -> onHandleKeyDown((KeyboardEvent) event));
@@ -84,8 +84,16 @@ public final class Resizable extends BaseComponent<Resizable> {
     }
 
     public ListenerRegistration onValueChange(ValueChangeListener<Double> listener) {
+        if (listener == null) {
+            return ListenerRegistration.empty();
+        }
         valueChangeListeners.add(listener);
         return () -> valueChangeListeners.remove(listener);
+    }
+
+    /** Removes any document-level drag listeners. Call when disposing or detaching the component. */
+    public void cleanup() {
+        dragCleanup.remove();
     }
 
     private void applyOrientation() {
