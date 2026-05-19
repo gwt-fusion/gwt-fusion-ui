@@ -3,6 +3,7 @@ package org.gwtfusion.ui.component.combobox;
 import elemental2.dom.DOMRect;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.Event;
+import elemental2.dom.EventListener;
 import elemental2.dom.EventTarget;
 import elemental2.dom.HTMLElement;
 import elemental2.dom.KeyboardEvent;
@@ -163,7 +164,13 @@ public final class Combobox extends BaseComponent<Combobox> {
                 open(false);
             }
         });
-        cleanup = ListenerRegistration.combine(outside, portal);
+        EventListener reposition = event -> positionAtTrigger();
+        DomGlobal.window.addEventListener("scroll", reposition, true);
+        DomGlobal.window.addEventListener("resize", reposition);
+        cleanup = ListenerRegistration.combine(outside, portal, () -> {
+            DomGlobal.window.removeEventListener("scroll", reposition, true);
+            DomGlobal.window.removeEventListener("resize", reposition);
+        });
         Aria.buttonPopup(trigger, "listbox", contentId, true);
         menu.focusInput();
     }
