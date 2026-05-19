@@ -1,6 +1,7 @@
 package org.gwtfusion.ui.component.contextmenu;
 
 import elemental2.dom.DomGlobal;
+import elemental2.dom.EventListener;
 import elemental2.dom.HTMLElement;
 import elemental2.dom.KeyboardEvent;
 import elemental2.dom.MouseEvent;
@@ -222,7 +223,14 @@ public final class ContextMenu extends BaseComponent<ContextMenu> {
         menu.addEventListener("keydown", event -> onKeyDown((KeyboardEvent) event));
         ListenerRegistration portal = Portal.appendToBody(menu);
         positionAtPointer();
-        cleanup = ListenerRegistration.combine(OutsideClick.listen(menu, event -> open(false)), portal);
+        String previousOverflow = DomGlobal.document.body.style.overflow;
+        DomGlobal.document.body.style.overflow = "hidden";
+        EventListener closeOnResize = event -> open(false);
+        DomGlobal.window.addEventListener("resize", closeOnResize);
+        cleanup = ListenerRegistration.combine(OutsideClick.listen(menu, event -> open(false)), portal, () -> {
+            DomGlobal.window.removeEventListener("resize", closeOnResize);
+            DomGlobal.document.body.style.overflow = previousOverflow;
+        });
         focusItem(0);
     }
 
