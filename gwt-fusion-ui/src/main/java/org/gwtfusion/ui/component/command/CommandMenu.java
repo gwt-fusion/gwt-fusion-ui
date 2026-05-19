@@ -192,7 +192,7 @@ public final class CommandMenu extends BaseComponent<CommandMenu> {
             if (!matches(item.value, item.label, item.keywords, query)) {
                 continue;
             }
-            if (!same(lastGroup, item.group)) {
+            if (groupElement == null || !same(lastGroup, item.group)) {
                 groupElement = (HTMLElement) DomGlobal.document.createElement("div");
                 groupElement.className = GROUP_CLASSES;
                 if (!item.group.isEmpty()) {

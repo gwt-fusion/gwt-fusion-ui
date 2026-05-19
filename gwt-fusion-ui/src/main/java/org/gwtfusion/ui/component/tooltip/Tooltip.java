@@ -1,6 +1,7 @@
 package org.gwtfusion.ui.component.tooltip;
 
 import elemental2.dom.DomGlobal;
+import elemental2.dom.EventListener;
 import elemental2.dom.HTMLElement;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public final class Tooltip extends BaseComponent<Tooltip> {
     private final List<ValueChangeListener<Boolean>> openChangeListeners = new ArrayList<>();
     private HTMLElement trigger;
     private HTMLElement tooltip;
-    private ListenerRegistration portal = ListenerRegistration.empty();
+    private ListenerRegistration cleanup = ListenerRegistration.empty();
     private String text = "";
     private OverlaySide side = OverlaySide.TOP;
     private boolean open;
@@ -94,7 +95,14 @@ public final class Tooltip extends BaseComponent<Tooltip> {
         arrow.className = ARROW_CLASSES + " " + arrowClasses();
         arrow.setAttribute("aria-hidden", "true");
         tooltip.appendChild(arrow);
-        portal = Portal.appendToBody(tooltip);
+        ListenerRegistration portal = Portal.appendToBody(tooltip);
+        EventListener reposition = event -> positionAtTrigger();
+        DomGlobal.window.addEventListener("scroll", reposition, true);
+        DomGlobal.window.addEventListener("resize", reposition);
+        cleanup = ListenerRegistration.combine(portal, () -> {
+            DomGlobal.window.removeEventListener("scroll", reposition, true);
+            DomGlobal.window.removeEventListener("resize", reposition);
+        });
         positionAtTrigger();
     }
 
@@ -112,8 +120,8 @@ public final class Tooltip extends BaseComponent<Tooltip> {
     }
 
     private void unmount() {
-        portal.remove();
-        portal = ListenerRegistration.empty();
+        cleanup.remove();
+        cleanup = ListenerRegistration.empty();
         tooltip = null;
     }
 
