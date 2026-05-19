@@ -59,18 +59,20 @@ Slider.create()
 | | | |
 |---|---|---|
 | `Accordion` | `Alert` | `AlertDialog` |
-| `AspectRatio` | `Avatar` | `Badge` |
-| `Breadcrumb` | `Button` | `ButtonGroup` |
-| `Calendar` | `Card` | `Carousel` |
-| `Checkbox` | `CodeBlock` | `Collapsible` |
-| `ContextMenu` | `DataTable` | `DatePicker` |
-| `Dialog` | `Drawer` | `DropdownMenu` |
-| `EmptyState` | `FormDescription` | `FormField` |
-| `FormLabel` | `FormMessage` | `HoverCard` |
-| `Icon` | `Input` | `InputGroup` |
-| `Item` | `Kbd` | `Label` |
-| `NativeSelect` | `Pagination` | `Popover` |
-| `Progress` | `RadioGroup` | `ScrollArea` |
+| `AspectRatio` | `Autocomplete` | `Avatar` |
+| `Badge` | `Breadcrumb` | `Button` |
+| `ButtonGroup` | `Calendar` | `Card` |
+| `Carousel` | `Checkbox` | `CodeBlock` |
+| `Collapsible` | `Combobox` | `CommandMenu` |
+| `CommandPalette` | `ContextMenu` | `DataTable` |
+| `DatePicker` | `Dialog` | `Drawer` |
+| `DropdownMenu` | `EmptyState` | `FormDescription` |
+| `FormField` | `FormLabel` | `FormMessage` |
+| `HoverCard` | `Icon` | `Input` |
+| `InputGroup` | `Item` | `Kbd` |
+| `Label` | `MultiSelect` | `NativeSelect` |
+| `Pagination` | `Popover` | `Progress` |
+| `RadioGroup` | `Resizable` | `ScrollArea` |
 | `Separator` | `Sheet` | `Skeleton` |
 | `Slider` | `Spinner` | `StatusIndicator` |
 | `Switch` | `Table` | `Tabs` |

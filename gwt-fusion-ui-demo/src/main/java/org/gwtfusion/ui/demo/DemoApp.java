@@ -14,6 +14,7 @@ import org.gwtfusion.ui.component.alert.AlertVariant;
 import org.gwtfusion.ui.component.alertdialog.AlertDialog;
 import org.gwtfusion.ui.component.accordion.Accordion;
 import org.gwtfusion.ui.component.aspectratio.AspectRatio;
+import org.gwtfusion.ui.component.autocomplete.Autocomplete;
 import org.gwtfusion.ui.component.avatar.Avatar;
 import org.gwtfusion.ui.component.avatar.AvatarSize;
 import org.gwtfusion.ui.component.badge.Badge;
@@ -29,6 +30,9 @@ import org.gwtfusion.ui.component.carousel.Carousel;
 import org.gwtfusion.ui.component.checkbox.Checkbox;
 import org.gwtfusion.ui.component.code.CodeBlock;
 import org.gwtfusion.ui.component.collapsible.Collapsible;
+import org.gwtfusion.ui.component.command.CommandMenu;
+import org.gwtfusion.ui.component.command.CommandPalette;
+import org.gwtfusion.ui.component.combobox.Combobox;
 import org.gwtfusion.ui.component.contextmenu.ContextMenu;
 import org.gwtfusion.ui.component.datatable.DataTable;
 import org.gwtfusion.ui.component.datepicker.DatePicker;
@@ -46,11 +50,14 @@ import org.gwtfusion.ui.component.inputgroup.InputGroup;
 import org.gwtfusion.ui.component.item.Item;
 import org.gwtfusion.ui.component.kbd.Kbd;
 import org.gwtfusion.ui.component.label.Label;
+import org.gwtfusion.ui.component.multiselect.MultiSelect;
 import org.gwtfusion.ui.component.pagination.Pagination;
 import org.gwtfusion.ui.component.popover.Popover;
 import org.gwtfusion.ui.component.progress.Progress;
 import org.gwtfusion.ui.component.radio.RadioGroup;
 import org.gwtfusion.ui.component.radio.RadioGroupOrientation;
+import org.gwtfusion.ui.component.resizable.Resizable;
+import org.gwtfusion.ui.component.resizable.ResizableOrientation;
 import org.gwtfusion.ui.component.scrollarea.ScrollArea;
 import org.gwtfusion.ui.component.select.NativeSelect;
 import org.gwtfusion.ui.component.separator.Separator;
@@ -276,6 +283,13 @@ public final class DemoApp implements EntryPoint {
                 componentDemo("input-group", "Forms", "InputGroup", "Input composition with leading and trailing adornments.", this::renderInputGroupComponent),
                 componentDemo("slider", "Forms", "Slider", "Range input with live and committed value listeners.", this::renderSliderComponent),
                 componentDemo("form-field", "Forms", "FormField", "Label, control, description, and validation message composition.", this::renderFormFieldComponent),
+
+                componentDemo("command-menu", "Advanced UX", "CommandMenu", "Filterable command list primitive with groups, shortcuts, empty state, and keyboard navigation.", this::renderCommandMenuComponent),
+                componentDemo("command-palette", "Advanced UX", "CommandPalette", "Keyboard-first quick actions in a dialog-style overlay without using GWT Command callbacks.", this::renderCommandPaletteComponent),
+                componentDemo("combobox", "Advanced UX", "Combobox", "Searchable single selection with a command-menu style option list.", this::renderComboboxComponent),
+                componentDemo("autocomplete", "Advanced UX", "Autocomplete", "Text input suggestions with simple contains filtering and value callbacks.", this::renderAutocompleteComponent),
+                componentDemo("multi-select", "Advanced UX", "MultiSelect", "Multiple option selection with visible selected-count feedback.", this::renderMultiSelectComponent),
+                componentDemo("resizable", "Advanced UX", "Resizable", "Two-panel resizable layout primitive for dense application screens.", this::renderResizableComponent),
 
                 componentDemo("dialog", "Overlays", "Dialog", "Modal focused tasks with Escape, backdrop close, and focus return.", this::renderDialogComponent),
                 componentDemo("alert-dialog", "Overlays", "AlertDialog", "Destructive or high-risk confirmation dialog pattern.", this::renderAlertDialogComponent),
@@ -1141,6 +1155,126 @@ public final class DemoApp implements EntryPoint {
                         + "    .label(\"Validation state\")\n"
                         + "    .control(Input.create().value(\"A\").invalid(true))\n"
                         + "    .message(\"Name must contain at least 2 characters.\");"));
+    }
+
+    private void renderCommandMenuComponent(HTMLElement grid) {
+        CommandMenu menu = CommandMenu.create()
+                .placeholder("Type a command or search...")
+                .group("Suggestions")
+                .item("calendar", "Calendar", LucideIcons.calendar(), "", "date schedule", null)
+                .item("search", "Search documentation", LucideIcons.search(), "", "docs help", null)
+                .item("calculator", "Calculator", LucideIcons.calculator(), "", "math", null)
+                .separator()
+                .group("Settings")
+                .item("profile", "Profile", LucideIcons.user(), "⌘P", null)
+                .item("billing", "Billing", LucideIcons.creditCard(), "⌘B", null)
+                .disabledItem("sync", "Sync unavailable");
+        grid.appendChild(example("Grouped commands", menu,
+                "CommandMenu.create()\n"
+                        + "    .placeholder(\"Type a command or search...\")\n"
+                        + "    .group(\"Suggestions\")\n"
+                        + "    .item(\"calendar\", \"Calendar\", LucideIcons.calendar(), null)\n"
+                        + "    .separator()\n"
+                        + "    .group(\"Settings\")\n"
+                        + "    .item(\"profile\", \"Profile\", LucideIcons.user(), \"⌘P\", null)\n"
+                        + "    .disabledItem(\"sync\", \"Sync unavailable\");"));
+    }
+
+    private void renderCommandPaletteComponent(HTMLElement grid) {
+        ToastManager toastManager = ToastManager.create();
+        HTMLElement palettes = preview();
+        palettes.appendChild(CommandPalette.create()
+                .trigger(Button.create("Open command palette"))
+                .defaultShortcut()
+                .placeholder("Search actions...")
+                .group("Project")
+                .item("new-file", "New file", LucideIcons.filePlus(), "⌘N", () -> toastManager.show(Toast.create().title("New file selected")))
+                .item("search", "Search project", LucideIcons.search(), "⌘K", () -> toastManager.show(Toast.create().title("Search selected")))
+                .group("Account")
+                .item("settings", "Settings", LucideIcons.settings(), "⌘,", () -> toastManager.show(Toast.create().title("Settings selected")))
+                .disabledItem("archive", "Archive project")
+                .element());
+        grid.appendChild(example("Quick actions", palettes,
+                "CommandPalette.create()\n"
+                        + "    .trigger(Button.create(\"Open command palette\"))\n"
+                        + "    .defaultShortcut()\n"
+                        + "    .group(\"Project\")\n"
+                        + "    .item(\"new-file\", \"New file\", LucideIcons.filePlus(), \"⌘N\", () -> createFile());"));
+    }
+
+    private void renderComboboxComponent(HTMLElement grid) {
+        HTMLElement combos = preview();
+        combos.appendChild(Combobox.create()
+                .placeholder("Select framework")
+                .item("gwt", "GWT")
+                .item("j2cl", "J2CL")
+                .item("elemental2", "Elemental2")
+                .disabledItem("legacy", "Legacy widgets")
+                .element());
+        grid.appendChild(example("Searchable select", combos,
+                "Combobox.create()\n"
+                        + "    .placeholder(\"Select framework\")\n"
+                        + "    .item(\"gwt\", \"GWT\")\n"
+                        + "    .item(\"j2cl\", \"J2CL\")\n"
+                        + "    .disabledItem(\"legacy\", \"Legacy widgets\");"));
+    }
+
+    private void renderAutocompleteComponent(HTMLElement grid) {
+        HTMLElement suggestions = preview();
+        suggestions.appendChild(Autocomplete.create()
+                .placeholder("Search components...")
+                .item("command-menu", "CommandMenu", "commands search quick actions", null)
+                .item("command-palette", "CommandPalette", "overlay keyboard shortcut", null)
+                .item("combobox", "Combobox", "select search", null)
+                .item("multi-select", "MultiSelect", "multiple values", null)
+                .disabledItem("select", "Rich Select later")
+                .element());
+        grid.appendChild(example("Suggestions", suggestions,
+                "Autocomplete.create()\n"
+                        + "    .placeholder(\"Search components...\")\n"
+                        + "    .item(\"command-menu\", \"CommandMenu\", \"commands search\", null)\n"
+                        + "    .disabledItem(\"select\", \"Rich Select later\");"));
+    }
+
+    private void renderMultiSelectComponent(HTMLElement grid) {
+        HTMLElement selects = preview();
+        selects.appendChild(MultiSelect.create()
+                .placeholder("Select roles")
+                .item("admin", "Admin")
+                .item("editor", "Editor")
+                .item("viewer", "Viewer")
+                .disabledItem("owner", "Owner")
+                .selected("editor", true)
+                .element());
+        grid.appendChild(example("Multiple values", selects,
+                "MultiSelect.create()\n"
+                        + "    .placeholder(\"Select roles\")\n"
+                        + "    .item(\"admin\", \"Admin\")\n"
+                        + "    .item(\"editor\", \"Editor\")\n"
+                        + "    .selected(\"editor\", true);"));
+    }
+
+    private void renderResizableComponent(HTMLElement grid) {
+        HTMLElement panels = preview("demo-resizable-preview");
+        panels.appendChild(Resizable.create()
+                .defaultSize(35)
+                .first(raw(textElement("p", "demo-muted", "Navigation or file tree")))
+                .second(raw(textElement("p", "demo-muted", "Main content area")))
+                .element());
+        panels.appendChild(Resizable.create()
+                .orientation(ResizableOrientation.VERTICAL)
+                .defaultSize(45)
+                .first(raw(textElement("p", "demo-muted", "Preview")))
+                .second(raw(textElement("p", "demo-muted", "Details")))
+                .element());
+        grid.appendChild(example("Resizable panels", panels,
+                "Resizable.create()\n"
+                        + "    .defaultSize(35)\n"
+                        + "    .first(navigation)\n"
+                        + "    .second(content);\n\n"
+                        + "Resizable.create()\n"
+                        + "    .orientation(ResizableOrientation.VERTICAL)\n"
+                        + "    .defaultSize(45);"));
     }
 
     private void renderDialogComponent(HTMLElement grid) {

@@ -250,6 +250,16 @@ pre {
   grid-template-columns: 1fr;
 }
 
+.demo-resizable-preview {
+  align-items: stretch;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.demo-resizable-preview > div {
+  min-height: 10rem;
+}
+
 .demo-icon-gallery-controls {
   display: grid;
   gap: .75rem;

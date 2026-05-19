@@ -200,22 +200,33 @@ This file turns the roadmap into concrete, checkable implementation milestones. 
 
 ## Milestone 12: Advanced UX Components
 
-- [ ] Decide whether `CommandPalette` is needed for the first public release or should remain optional advanced UX.
-- [ ] Document the distinction between GWT `Command` callbacks and the shadcn-inspired command-palette UI pattern.
-- [ ] Avoid a public UI component named only `Command` to prevent confusion with `com.google.gwt.user.client.Command`.
-- [ ] Implement `CommandMenu` as the reusable filterable list primitive if command-palette UX is needed.
-- [ ] Implement `CommandPalette` using `CommandMenu` and overlay utilities.
-- [ ] Define `CommandItem` and `CommandAction` naming if callbacks need a dedicated API.
-- [ ] Implement `Combobox`.
-- [ ] Implement `MultiSelect`.
-- [ ] Implement `Autocomplete`.
-- [ ] Implement `Resizable`.
-- [ ] Reuse overlay, keyboard, and focus utilities consistently.
-- [ ] Add examples with filtering and empty results.
-- [ ] Add keyboard-first workflow examples to the demo.
-- [ ] Document how Java values map to rendered options.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile.
+- [x] Treat `CommandPalette` as the first advanced UX slice for keyboard-first quick actions.
+- [x] Document the distinction between GWT `Command` callbacks and the shadcn-inspired command-palette UI pattern.
+- [x] Avoid a public UI component named only `Command` to prevent confusion with `com.google.gwt.user.client.Command`.
+- [x] Use `Runnable` for item selection callbacks first; do not introduce `CommandAction` unless callbacks need context later.
+- [x] Split the milestone conceptually into `CommandMenu`/`CommandPalette` first, then `Combobox`, `Autocomplete`, `MultiSelect`, and `Resizable`.
+- [x] Implement `CommandPalette` with direct overlay utilities instead of the current `Dialog`, because `Dialog` always renders dialog actions.
+- [x] Support optional keyboard shortcuts with both exact shortcuts and a default `Meta+K`/`Ctrl+K` convenience.
+- [x] Start with a simple case-insensitive contains filter across value, label, and keywords; defer fuzzy search.
+- [x] Hide groups with no visible matching items and show the empty state when no items match.
+- [x] Show disabled items but exclude them from focus and selection.
+- [x] Keep `CommandMenu` open after selection and let parent components decide whether to close.
+- [x] Close `CommandPalette` automatically after a successful item selection.
+- [x] Support both global `onValueChange(...)` and direct per-item `Runnable` callbacks.
+- [x] Use input/listbox/option ARIA semantics rather than copying cmdk internals directly.
+- [x] Implement `CommandMenu` as the reusable filterable list primitive for command-palette UX.
+- [x] Implement `CommandPalette` using `CommandMenu` and overlay utilities.
+- [x] Keep command entries as an internal item model without exposing a top-level `Command` component.
+- [x] Implement `Combobox`.
+- [x] Implement `MultiSelect`.
+- [x] Implement `Autocomplete`.
+- [x] Implement `Resizable`.
+- [x] Reuse overlay, keyboard, and focus utilities consistently.
+- [x] Add examples with filtering and empty results.
+- [x] Add keyboard-first workflow examples to the demo.
+- [x] Document how Java values map to rendered options.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile.
 
 ## Milestone 13: Direction, RTL, And Theming Depth
 

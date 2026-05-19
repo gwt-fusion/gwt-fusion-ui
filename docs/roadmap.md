@@ -203,12 +203,12 @@ Add richer components after the core API and interaction utilities are stable.
 
 ### Components
 
-- `CommandPalette`
-- `CommandMenu`
-- `Combobox`
-- `MultiSelect`
-- `Autocomplete`
-- `Resizable`
+- `CommandPalette` - implemented in Milestone 12.
+- `CommandMenu` - implemented in Milestone 12.
+- `Combobox` - implemented in Milestone 12.
+- `MultiSelect` - implemented in Milestone 12.
+- `Autocomplete` - implemented in Milestone 12.
+- `Resizable` - implemented in Milestone 12.
 
 ### Implementation Notes
 
@@ -218,8 +218,9 @@ Add richer components after the core API and interaction utilities are stable.
 - Avoid locking the API into a specific data-binding framework.
 - Do not model shadcn/ui `Command` as a core required component name because GWT already has `com.google.gwt.user.client.Command` as an action/callback concept.
 - Treat this feature as optional advanced UX for command-palette workflows, not as a foundational GWT UI primitive.
-- Prefer public names such as `CommandPalette`, `CommandMenu`, `CommandItem`, and `CommandAction` to avoid confusion with GWT `Command`.
-- `CommandPalette` should combine a dialog or popover, a filterable list, keyboard navigation, grouped items, empty state, and item selection callbacks.
+- Prefer public names such as `CommandPalette`, `CommandMenu`, and `CommandItem` to avoid confusion with GWT `Command`.
+- Use `Runnable` for item selection callbacks first; do not introduce `CommandAction` unless callbacks need context later.
+- `CommandPalette` combines direct overlay utilities, a filterable list, keyboard navigation, grouped items, empty state, and item selection callbacks.
 
 ### Demo Requirements
 
