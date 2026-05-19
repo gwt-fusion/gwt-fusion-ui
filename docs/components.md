@@ -7,6 +7,7 @@
 - Card
 - Alert
 - AlertDialog
+- Autocomplete
 - Input
 - Label
 - Separator
@@ -25,6 +26,9 @@
 - CodeBlock
 - Accordion
 - Collapsible
+- Combobox
+- CommandMenu
+- CommandPalette
 - AspectRatio
 - ButtonGroup
 - Breadcrumb
@@ -58,6 +62,8 @@
 - Calendar
 - DatePicker
 - Carousel
+- MultiSelect
+- Resizable
 
 ## Next Candidates
 
