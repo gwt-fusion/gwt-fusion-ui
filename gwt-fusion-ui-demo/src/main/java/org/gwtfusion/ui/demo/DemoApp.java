@@ -8,6 +8,9 @@ import elemental2.dom.HTMLElement;
 import elemental2.dom.HTMLInputElement;
 import elemental2.dom.KeyboardEvent;
 import org.gwtfusion.icons.lucide.LucideIcons;
+import org.gwtfusion.router.HistoryStrategy;
+import org.gwtfusion.router.Route;
+import org.gwtfusion.router.Router;
 import org.gwtfusion.ui.UiComponent;
 import org.gwtfusion.ui.component.alert.Alert;
 import org.gwtfusion.ui.component.alert.AlertVariant;
@@ -107,6 +110,7 @@ public final class DemoApp implements EntryPoint {
     private CommandMenu componentMenu;
     private HTMLElement componentPanel;
     private String selectedComponentId;
+    private Router router;
 
     private interface ComponentRenderer {
         void render(HTMLElement grid);
@@ -133,7 +137,43 @@ public final class DemoApp implements EntryPoint {
         ThemeManager.apply();
         HTMLElement app = (HTMLElement) DomGlobal.document.getElementById("app");
         app.appendChild(shell());
-        renderHome();
+        setupRouter();
+        router.attach(content);
+    }
+
+    private void setupRouter() {
+        router = Router.create(HistoryStrategy.hash())
+                .routes(
+                        Route.of("/", context -> {
+                            renderHome();
+                            return null;
+                        }),
+                        Route.of("/components", context -> {
+                            selectedComponentId = null;
+                            renderComponentsAsync();
+                            return null;
+                        }),
+                        Route.of("/components/:id", context -> {
+                            selectedComponentId = context.params().get("id");
+                            renderComponentsAsync();
+                            return null;
+                        }),
+                        Route.of("/icons", context -> {
+                            renderIconsAsync();
+                            return null;
+                        }),
+                        Route.of("/theme", context -> {
+                            renderTheme();
+                            return null;
+                        }),
+                        Route.of("/router", context -> {
+                            renderRouter();
+                            return null;
+                        }))
+                .notFound(context -> {
+                    renderNotFound();
+                    return null;
+                });
     }
 
     private HTMLElement shell() {
@@ -158,16 +198,19 @@ public final class DemoApp implements EntryPoint {
                 .addTab("home", "Home", navigationPanel())
                 .addTab("components", "Components", navigationPanel())
                 .addTab("icons", "Icons", navigationPanel())
-                .addTab("theme", "Theme", navigationPanel());
+                .addTab("theme", "Theme", navigationPanel())
+                .addTab("router", "Router", navigationPanel());
         mainNavigation.onValueChange(value -> {
             if ("components".equals(value)) {
-                renderComponentsAsync();
+                router.navigate("/components");
             } else if ("icons".equals(value)) {
-                renderIconsAsync();
+                router.navigate("/icons");
             } else if ("theme".equals(value)) {
-                renderTheme();
+                router.navigate("/theme");
+            } else if ("router".equals(value)) {
+                router.navigate("/router");
             } else {
-                renderHome();
+                router.navigate("/");
             }
         });
         return mainNavigation;
@@ -242,7 +285,7 @@ public final class DemoApp implements EntryPoint {
             }
             componentMenu.item(demo.id, demo.title, null, "", demo.category + " " + demo.description, null);
         }
-        componentMenu.onItemSelect(value -> selectComponent(demos, componentDemoById(demos, value)));
+        componentMenu.onItemSelect(value -> router.navigate("/components/" + value));
 
         componentPanel = element("section", "demo-component-panel");
         componentPanel.setAttribute("id", "component-panel");
@@ -368,6 +411,38 @@ public final class DemoApp implements EntryPoint {
                 componentPanel.appendChild(section);
             }
         });
+    }
+
+    private void renderRouter() {
+        selectMainNavigation("router");
+        clearContent();
+        content.appendChild(textElement("h1", "", "Router"));
+        content.appendChild(textElement("p", "demo-muted", "gwt-fusion-router is a standalone module for DOM-based GWT and J2CL applications. This demo uses Hash history so direct links work on static hosting, but the same routes can run with Browser or Memory history."));
+
+        HTMLElement strategies = preview("demo-stack-preview");
+        strategies.appendChild(textElement("p", "demo-muted", "Current demo route: " + router.location().asPath()));
+        strategies.appendChild(Button.create("Open Button route")
+                .variant(ButtonVariant.OUTLINE)
+                .onClick(event -> router.navigate("/components/button"))
+                .element());
+        strategies.appendChild(Button.create("Open Theme route")
+                .variant(ButtonVariant.OUTLINE)
+                .onClick(event -> router.navigate("/theme"))
+                .element());
+        content.appendChild(example("History strategies", strategies,
+                "Router router = Router.create(HistoryStrategy.hash())\n"
+                        + "    .route(\"/\", context -> homeElement())\n"
+                        + "    .route(\"/components/:id\", context -> componentElement(context.params().get(\"id\")));\n\n"
+                        + "router.navigate(\"/components/button\");\n"
+                        + "String href = router.href(\"/components/button\");"));
+    }
+
+    private void renderNotFound() {
+        selectMainNavigation("home");
+        clearContent();
+        content.appendChild(textElement("h1", "", "Page not found"));
+        content.appendChild(textElement("p", "demo-muted", "The requested route does not exist in the demo."));
+        content.appendChild(Button.create("Go home").onClick(event -> router.navigate("/")).element());
     }
 
     private ComponentDemo componentDemoById(ComponentDemo[] demos, String id) {

@@ -13,6 +13,7 @@
 
   <modules>
     <module>gwt-fusion-ui</module>
+    <module>gwt-fusion-router</module>
     <module>gwt-fusion-icons-lucide</module>
     <module>gwt-fusion-ui-demo</module>
   </modules>
