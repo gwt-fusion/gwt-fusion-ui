@@ -1,10 +1,11 @@
 # GWT Fusion
 
-GWT Fusion is a Maven multi-module project for a GWT 2.13 and J2CL-compatible UI component library.
+GWT Fusion is a Maven multi-module project for GWT 2.13 and J2CL-compatible UI components, icons, and routing utilities.
 
 ## Modules
 
 - `gwt-fusion-ui`: Component library under `org.gwtfusion.ui`.
+- `gwt-fusion-router`: Standalone client router under `org.gwtfusion.router`.
 - `gwt-fusion-icons-lucide`: Optional Lucide icon module, separate from the core UI.
 - `gwt-fusion-ui-demo`: Example web application with visual component demos and Java code samples.
 
@@ -54,6 +55,16 @@ Slider.create()
     });
 ```
 
+Client routing:
+
+```java
+Router router = Router.create(HistoryStrategy.hash())
+    .route("/", context -> homeElement())
+    .route("/components/:id", context -> componentElement(context.params().get("id")));
+
+router.navigate("/components/button");
+```
+
 ## Current Components
 
 | | | |
@@ -95,5 +106,6 @@ Further API details:
 - `docs/icons.md`
 - `docs/icon-modules.md`
 - `docs/overlays.md`
+- `docs/router.md`
 
 Development rules are in `AGENTS.md`.

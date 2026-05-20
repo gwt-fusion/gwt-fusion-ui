@@ -2,17 +2,19 @@
 
 ## Project Goal
 
-This repository contains `gwt-fusion-ui`, a UI component library for GWT 2.13 and J2CL-compatible applications. The components are inspired by shadcn, use Tailwind CSS as their styling foundation, and provide a Java-idiomatic API with enums, `ThemeManager`, and fluent component methods.
+This repository contains GWT Fusion, a set of GWT 2.13 and J2CL-compatible UI, icon, and routing modules. The UI components are inspired by shadcn, use Tailwind CSS as their styling foundation, and provide a Java-idiomatic API with enums, `ThemeManager`, and fluent component methods.
 
 ## Module
 
 - `gwt-fusion-ui`: Reusable component library under the `org.gwtfusion.ui` package.
+- `gwt-fusion-router`: Standalone client router under the `org.gwtfusion.router` package.
 - `gwt-fusion-icons-lucide`: Optional Lucide icon module under `org.gwtfusion.icons.lucide`.
 - `gwt-fusion-ui-demo`: GWT demo website with visual component examples and code snippets.
 
 ## Architecture Rules
 
 - Components remain DOM-based and use `elemental2.dom`.
+- Router remains independent from `gwt-fusion-ui` and renders `HTMLElement` values.
 - Do not build new components on classic GWT widgets such as `com.google.gwt.user.client.ui.Widget`.
 - Do not introduce GWT-RPC dependencies.
 - Do not use `GWT.create()` as a core mechanism.
@@ -57,6 +59,7 @@ This repository contains `gwt-fusion-ui`, a UI component library for GWT 2.13 an
 
 - Implemented components: `Button`, `Badge`, `Card`, `Alert`, `AlertDialog`, `Input`, `Label`, `Separator`, `Checkbox`, `Switch`, `Textarea`, `RadioGroup`, `FormField`, `NativeSelect`, `InputGroup`, `Slider`, `Tabs`, `CodeBlock`, `Accordion`, `Collapsible`, `AspectRatio`, `ButtonGroup`, `Breadcrumb`, `Pagination`, `ScrollArea`, `Toggle`, `ToggleGroup`, `Typography`, `Icon`, `Tooltip`, `Popover`, `Dialog`, `DropdownMenu`, `ContextMenu`, `HoverCard`, `Sheet`, `Drawer`, `Progress`, `Skeleton`, `Spinner`, `EmptyState`, `StatusIndicator`, `Toast`, `ToastManager`, `Table`, `DataTable`, `Avatar`, `Kbd`, `Item`, `Timeline`, `Calendar`, `DatePicker`, `Carousel`, `CommandMenu`, `CommandPalette`, `Combobox`, `Autocomplete`, `MultiSelect`, `Resizable`.
 - Base classes: `UiComponent`, `BaseComponent`, `CssClasses`, `ThemeManager`.
-- Demo: home page, component view with categorized preview/Java code examples, form foundation examples, layout/navigation examples, overlay examples, icon gallery, events examples, and theme view.
+- Router: standalone Hash, Browser, and Memory history strategies with static, `:param`, and `*` splat route matching.
+- Demo: home page, routed component view with categorized preview/Java code examples, form foundation examples, layout/navigation examples, overlay examples, icon gallery, events examples, router examples, and theme view.
 - Tailwind 3 is configured and executed through `frontend-maven-plugin`.
 - Current working status: Milestone 12 Advanced UX Components is complete.
