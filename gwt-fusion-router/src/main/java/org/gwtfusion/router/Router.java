@@ -59,13 +59,11 @@ public final class Router {
     public void navigate(String path) {
         RouteLocation next = RouteLocation.parse(path);
         history.push(next);
-        render(next, false);
     }
 
     public void replace(String path) {
         RouteLocation next = RouteLocation.parse(path);
         history.replace(next);
-        render(next, false);
     }
 
     public String href(String path) {

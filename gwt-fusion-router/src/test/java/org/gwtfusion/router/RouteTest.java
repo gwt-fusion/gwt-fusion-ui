@@ -1,6 +1,7 @@
 package org.gwtfusion.router;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -29,5 +30,10 @@ class RouteTest {
 
         assertNotNull(match);
         assertEquals("router/history", match.params().get("*"));
+    }
+
+    @Test
+    void rejectsNonFinalSplat() {
+        assertThrows(IllegalArgumentException.class, () -> Route.of("/docs/*/history", context -> null));
     }
 }

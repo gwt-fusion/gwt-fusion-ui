@@ -9,6 +9,7 @@ public final class Route {
 
     public Route(String path, RouteRenderer renderer) {
         this.path = RouteLocation.normalizePath(path);
+        validateSegments(pathSegments(this.path));
         this.renderer = renderer;
     }
 
@@ -61,6 +62,14 @@ public final class Route {
             return new String[0];
         }
         return normalized.substring(1).split("/");
+    }
+
+    private static void validateSegments(String[] segments) {
+        for (int i = 0; i < segments.length; i++) {
+            if ("*".equals(segments[i]) && i != segments.length - 1) {
+                throw new IllegalArgumentException("Wildcard route segment must be the final segment.");
+            }
+        }
     }
 
     private static String join(String[] values, int offset) {
