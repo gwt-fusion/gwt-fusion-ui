@@ -210,11 +210,15 @@ public final class CommandMenu extends BaseComponent<CommandMenu> {
             if (!item.disabled) {
                 visibleItems.add(item);
                 visibleElements.add(itemElement);
-                if (activeIndex < 0) {
-                    activeIndex = 0;
+                if (item.value.equals(value)) {
+                    activeIndex = visibleItems.size() - 1;
                 }
             }
             previousWasVisibleItem = true;
+        }
+
+        if (activeIndex < 0 && value.isEmpty() && !visibleItems.isEmpty()) {
+            activeIndex = 0;
         }
 
         if (!renderedItem) {
