@@ -5,11 +5,45 @@
 
   <groupId>org.gwtfusion</groupId>
   <artifactId>gwt-fusion</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
 
   <name>GWT Fusion</name>
-  <description>GWT/J2CL compatible UI components inspired by shadcn and styled with Tailwind CSS.</description>
+  <description>GWT 2.13 and J2CL-compatible UI, icon, and routing modules.</description>
+  <url>https://github.com/gwt-fusion/gwt-fusion-ui</url>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/license/mit</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>nbartels</id>
+      <name>Norbert Bartels</name>
+      <email>n.bartels@phpmonkeys.de</email>
+      <url>http://www.phpmonkeys.de</url>
+      <roles>
+        <role>maintainer</role>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Berlin</timezone>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/gwt-fusion/gwt-fusion-ui.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:gwt-fusion/gwt-fusion-ui.git</developerConnection>
+    <url>https://github.com/gwt-fusion/gwt-fusion-ui</url>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/gwt-fusion/gwt-fusion-ui/issues</url>
+  </issueManagement>
 
   <modules>
     <module>gwt-fusion-ui</module>
@@ -78,6 +112,73 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>central-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.3.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.8.0</version>
+            <configuration>
+              <doclint>none</doclint>
+              <source>${maven.compiler.release}</source>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.7</version>
+            <configuration>
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
+            </configuration>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.8.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>j2cl-compat</id>
       <properties>
