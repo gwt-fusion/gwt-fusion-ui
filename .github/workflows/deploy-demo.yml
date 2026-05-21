@@ -42,9 +42,12 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p site
-          for demo_dir in gwt-fusion-ui-demo/target/gwt-fusion-ui-demo-*; do
-            [ -d "$demo_dir" ] && break
-          done
+          demo_dirs=(gwt-fusion-ui-demo/target/gwt-fusion-ui-demo-*)
+          if [ ${#demo_dirs[@]} -ne 1 ] || [ ! -d "${demo_dirs[0]}" ]; then
+            printf 'Expected exactly one demo directory matching gwt-fusion-ui-demo/target/gwt-fusion-ui-demo-*, found %s.\n' "${#demo_dirs[@]}" >&2
+            exit 1
+          fi
+          demo_dir="${demo_dirs[0]}"
           cp -R "$demo_dir"/* site/
           mkdir -p site/gwt-fusion-ui
           cp gwt-fusion-ui/target/generated-resources/META-INF/resources/gwt-fusion-ui/gwt-fusion-ui.css site/gwt-fusion-ui/gwt-fusion-ui.css
