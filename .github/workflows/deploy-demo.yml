@@ -42,9 +42,13 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p site
-          demo_dirs=(gwt-fusion-ui-demo/target/gwt-fusion-ui-demo-*)
+          demo_matches=(gwt-fusion-ui-demo/target/gwt-fusion-ui-demo-*)
+          demo_dirs=()
+          for demo_match in "${demo_matches[@]}"; do
+            [ -d "$demo_match" ] && demo_dirs+=("$demo_match")
+          done
           if [ ${#demo_dirs[@]} -ne 1 ] || [ ! -d "${demo_dirs[0]}" ]; then
-            printf 'Expected exactly one demo directory matching gwt-fusion-ui-demo/target/gwt-fusion-ui-demo-*, found %s.\n' "${#demo_dirs[@]}" >&2
+            printf 'Expected exactly one demo directory matching gwt-fusion-ui-demo/target/gwt-fusion-ui-demo-*, found %s directories.\n' "${#demo_dirs[@]}" >&2
             exit 1
           fi
           demo_dir="${demo_dirs[0]}"
