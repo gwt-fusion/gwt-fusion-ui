@@ -48,11 +48,24 @@ public enum Direction {
 
     private static String scriptSubtag(String[] parts) {
         for (String part : parts) {
-            if (part.length() == 4) {
+            if (isScriptSubtag(part)) {
                 return part;
             }
         }
         return "";
+    }
+
+    private static boolean isScriptSubtag(String part) {
+        if (part.length() != 4) {
+            return false;
+        }
+        for (int i = 0; i < part.length(); i++) {
+            char character = part.charAt(i);
+            if ((character < 'a' || character > 'z') && (character < 'A' || character > 'Z')) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static boolean isRtlLanguage(String language) {

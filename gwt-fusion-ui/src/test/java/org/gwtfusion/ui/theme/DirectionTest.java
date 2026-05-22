@@ -20,5 +20,7 @@ class DirectionTest {
         assertEquals(Direction.RTL, Direction.fromLanguageTag("he-IL"));
         assertEquals(Direction.RTL, Direction.fromLanguageTag("az-Arab"));
         assertEquals(Direction.LTR, Direction.fromLanguageTag("az-Latn"));
+        assertEquals(Direction.RTL, Direction.fromLanguageTag("az-1234-Arab"));
+        assertEquals(Direction.RTL, Direction.fromLanguageTag("az-a1b2-Arab"));
     }
 }

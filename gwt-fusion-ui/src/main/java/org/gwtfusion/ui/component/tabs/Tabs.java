@@ -218,10 +218,19 @@ public final class Tabs extends BaseComponent<Tabs> {
     }
 
     private int directionForKey(String key) {
-        if (Keyboard.ARROW_DOWN.equals(key) || (Keyboard.ARROW_RIGHT.equals(key) && !DirectionManager.isRtl()) || (Keyboard.ARROW_LEFT.equals(key) && DirectionManager.isRtl())) {
+        if (orientation == TabsOrientation.VERTICAL) {
+            if (Keyboard.ARROW_DOWN.equals(key)) {
+                return 1;
+            }
+            if (Keyboard.ARROW_UP.equals(key)) {
+                return -1;
+            }
+            return 0;
+        }
+        if ((Keyboard.ARROW_RIGHT.equals(key) && !DirectionManager.isRtl()) || (Keyboard.ARROW_LEFT.equals(key) && DirectionManager.isRtl())) {
             return 1;
         }
-        if (Keyboard.ARROW_UP.equals(key) || (Keyboard.ARROW_LEFT.equals(key) && !DirectionManager.isRtl()) || (Keyboard.ARROW_RIGHT.equals(key) && DirectionManager.isRtl())) {
+        if ((Keyboard.ARROW_LEFT.equals(key) && !DirectionManager.isRtl()) || (Keyboard.ARROW_RIGHT.equals(key) && DirectionManager.isRtl())) {
             return -1;
         }
         return 0;
