@@ -23,7 +23,7 @@ import org.gwtfusion.ui.overlay.Portal;
 
 public final class Popover extends BaseComponent<Popover> {
     public static final String ROOT_CLASSES = "inline-flex";
-    public static final String CONTENT_CLASSES = "fixed z-50 grid w-72 gap-3 rounded-md border border-border bg-background p-4 text-sm text-foreground shadow-lg";
+    public static final String CONTENT_CLASSES = "fixed z-50 grid w-72 gap-3 rounded-md border border-border bg-popover p-4 text-sm text-popover-foreground shadow-lg";
     public static final int OFFSET = 4;
 
     private final IdGenerator ids = IdGenerator.create("popover");

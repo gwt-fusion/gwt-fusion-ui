@@ -20,7 +20,7 @@ import org.gwtfusion.ui.overlay.Portal;
 
 public final class ContextMenu extends BaseComponent<ContextMenu> {
     public static final String ROOT_CLASSES = "inline-flex";
-    public static final String MENU_CLASSES = "fixed z-50 grid min-w-40 gap-1 rounded-md border border-border bg-background p-1 text-sm text-foreground shadow-lg";
+    public static final String MENU_CLASSES = "fixed z-50 grid min-w-40 gap-1 rounded-md border border-border bg-popover p-1 text-sm text-popover-foreground shadow-lg";
     public static final String ITEM_CLASSES = "flex w-full items-center gap-2 rounded px-2 py-1.5 text-left hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
     public static final String LABEL_CLASSES = "px-2 py-1.5 text-xs font-medium text-muted-foreground";
     public static final String SEPARATOR_CLASSES = "-mx-1 my-1 h-px bg-border";

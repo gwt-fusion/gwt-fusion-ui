@@ -34,6 +34,8 @@ class OverlayComponentsTest {
     @Test
     void floatingOverlayClassesExposeRoleSpecificPresentation() {
         assertTrue(Popover.CONTENT_CLASSES.contains("border-border"));
+        assertTrue(Popover.CONTENT_CLASSES.contains("bg-popover"));
+        assertTrue(Popover.CONTENT_CLASSES.contains("text-popover-foreground"));
         assertTrue(Popover.CONTENT_CLASSES.contains("fixed"));
         assertFalse(Popover.CONTENT_CLASSES.contains("left-1/2"));
         assertFalse(Popover.CONTENT_CLASSES.contains("-translate-x-1/2"));
@@ -65,6 +67,7 @@ class OverlayComponentsTest {
     @Test
     void menuClassesExposeKeyboardFocusableItems() {
         assertTrue(DropdownMenu.MENU_CLASSES.contains("fixed"));
+        assertTrue(DropdownMenu.MENU_CLASSES.contains("bg-popover"));
         assertTrue(DropdownMenu.MENU_CLASSES.contains("min-w-40"));
         assertFalse(DropdownMenu.MENU_CLASSES.contains("left-1/2"));
         assertFalse(DropdownMenu.MENU_CLASSES.contains("-translate-x-1/2"));

@@ -3,6 +3,10 @@ package org.gwtfusion.ui.theme;
 public final class ThemeTokens {
     public static final String BACKGROUND = "background";
     public static final String FOREGROUND = "foreground";
+    public static final String CARD = "card";
+    public static final String CARD_FOREGROUND = "card-foreground";
+    public static final String POPOVER = "popover";
+    public static final String POPOVER_FOREGROUND = "popover-foreground";
     public static final String PRIMARY = "primary";
     public static final String PRIMARY_FOREGROUND = "primary-foreground";
     public static final String SECONDARY = "secondary";

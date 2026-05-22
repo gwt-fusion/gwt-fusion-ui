@@ -2814,6 +2814,19 @@ public final class DemoApp implements EntryPoint {
                         + "        : ThemeMode.DARK\n"
                         + ");"));
 
+        HTMLElement iconThemePreview = preview();
+        iconThemePreview.appendChild(LucideIcons.check().variant(IconVariant.PRIMARY).ariaLabel("Primary status").element());
+        iconThemePreview.appendChild(LucideIcons.search().variant(IconVariant.MUTED).ariaLabel("Muted search").element());
+        iconThemePreview.appendChild(LucideIcons.x().variant(IconVariant.DESTRUCTIVE).ariaLabel("Destructive state").element());
+        iconThemePreview.appendChild(textElement("p", "demo-muted", "Icon variants use currentColor with theme token classes, so they follow light and dark mode automatically."));
+        content.appendChild(example("Theme-aware icons", iconThemePreview,
+                "LucideIcons.check()\n"
+                        + "    .variant(IconVariant.PRIMARY)\n"
+                        + "    .ariaLabel(\"Primary status\");\n\n"
+                        + "LucideIcons.search()\n"
+                        + "    .variant(IconVariant.MUTED)\n"
+                        + "    .ariaLabel(\"Muted search\");"));
+
         HTMLElement directionControls = preview();
         directionControls.appendChild(textElement("p", "demo-muted", "Current direction: " + DirectionManager.direction().name()));
         directionControls.appendChild(ButtonGroup.create()

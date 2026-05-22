@@ -6,9 +6,11 @@ import org.gwtfusion.ui.BaseComponent;
 import org.gwtfusion.ui.UiComponent;
 
 public final class Card extends BaseComponent<Card> {
+    public static final String ROOT_CLASSES = "rounded-lg border bg-card text-card-foreground shadow-sm";
+
     private Card(HTMLElement element) {
         super(element);
-        classes("rounded-lg border bg-background text-foreground shadow-sm");
+        classes(ROOT_CLASSES);
     }
 
     public static Card create() {

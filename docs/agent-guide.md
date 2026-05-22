@@ -82,6 +82,10 @@ DirectionManager.set(Direction.RTL);
 
 Use logical `START` and `END` sides for overlays and sheets when placement should follow LTR/RTL. Keep physical `LEFT` and `RIGHT` when the edge should not change.
 
+## Theme Tokens
+
+Use token-backed Tailwind classes for themed surfaces instead of hard-coded colors. Cards should use `bg-card text-card-foreground`; floating surfaces such as popovers and menus should use `bg-popover text-popover-foreground`.
+
 ## Icons
 
 ```java
@@ -89,6 +93,8 @@ Button.create("Search")
     .variant(ButtonVariant.OUTLINE)
     .icon(LucideIcons.search());
 ```
+
+Icon variants use `currentColor` and theme token classes, so `IconVariant.PRIMARY`, `IconVariant.MUTED`, and `IconVariant.DESTRUCTIVE` follow light and dark mode automatically.
 
 ## Router
 
