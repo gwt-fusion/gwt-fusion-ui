@@ -54,6 +54,9 @@ jobs:
           demo_dir="${demo_dirs[0]}"
           cp -R "$demo_dir"/* site/
           mkdir -p site/gwt-fusion-ui
+          mkdir -p site/docs
+          cp llms.txt site/llms.txt
+          cp docs/agent-guide.md docs/components-index.json site/docs/
           cp gwt-fusion-ui/target/generated-resources/META-INF/resources/gwt-fusion-ui/gwt-fusion-ui.css site/gwt-fusion-ui/gwt-fusion-ui.css
           rm -rf site/WEB-INF site/META-INF
           printf 'demo.gwtfusion.org\n' > site/CNAME

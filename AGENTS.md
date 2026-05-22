@@ -53,6 +53,7 @@ This repository contains GWT Fusion, a set of GWT 2.13 and J2CL-compatible UI, i
 - Set accessibility attributes directly in the component when they belong to the semantic contract.
 - New interactive components should expose semantic listeners such as `onValueChange`, `onCheckedChange`, `onPressedChange`, or `onOpenChange` when appropriate, returning `ListenerRegistration` for removal.
 - Keep API examples in the demo current.
+- When adding, renaming, moving, or removing a component, update the agent-facing files in the same change: `llms.txt`, `docs/agent-guide.md`, and `docs/components-index.json`.
 - Do not over-abstract Tailwind classes. Small enums are better than complex builders.
 
 ## Current Status

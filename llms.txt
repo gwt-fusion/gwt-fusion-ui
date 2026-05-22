@@ -1,0 +1,29 @@
+# GWT Fusion
+
+GWT Fusion provides GWT 2.13 and J2CL-compatible UI components, Lucide icons, and a standalone client router.
+
+Start here when using this project with coding agents:
+
+- `docs/agent-guide.md`: Rules and examples for generating GWT Fusion application code.
+- `docs/components-index.json`: Canonical machine-readable component and module catalog.
+- `docs/components.md`: Human-facing component documentation.
+- `docs/events.md`: Listener and event conventions.
+- `docs/icons.md`: Icon component usage.
+- `docs/icon-modules.md`: Lucide icon module usage.
+- `docs/router.md`: Standalone router usage.
+
+Core packages:
+
+- `org.gwtfusion.ui`: UI component base types and theme APIs.
+- `org.gwtfusion.ui.component.*`: UI components.
+- `org.gwtfusion.icons.lucide`: Lucide icon factories.
+- `org.gwtfusion.router`: Standalone router.
+
+Important rules for generated code:
+
+- Use DOM-based `elemental2.dom` APIs with GWT Fusion components.
+- Do not use classic GWT widgets such as `com.google.gwt.user.client.ui.Widget`.
+- Prefer component factories such as `Button.create(...)`, `Card.create()`, and `Router.create(...)`.
+- Prefer enum variants and sizes instead of ad-hoc strings.
+- Use semantic listeners such as `onValueChange`, `onCheckedChange`, `onOpenChange`, and `onItemSelect`.
+- Do not construct dynamic Tailwind class names such as `"bg-" + color`.
