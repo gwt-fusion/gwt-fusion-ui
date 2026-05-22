@@ -468,15 +468,16 @@ public final class ContextMenu extends BaseComponent<ContextMenu> {
         if (menu == null) {
             return;
         }
+        OverlaySide resolvedSide = side.resolve();
         double left;
         double top;
-        if (side == OverlaySide.RIGHT) {
+        if (resolvedSide == OverlaySide.RIGHT) {
             left = clientX + OFFSET;
             top = clientY;
-        } else if (side == OverlaySide.TOP) {
+        } else if (resolvedSide == OverlaySide.TOP) {
             left = clientX;
             top = clientY - menu.offsetHeight - OFFSET;
-        } else if (side == OverlaySide.LEFT) {
+        } else if (resolvedSide == OverlaySide.LEFT) {
             left = clientX - menu.offsetWidth - OFFSET;
             top = clientY;
         } else {

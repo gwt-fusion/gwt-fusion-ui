@@ -99,6 +99,8 @@ import org.gwtfusion.ui.overlay.OutsideClick;
 import org.gwtfusion.ui.overlay.OverlayLayer;
 import org.gwtfusion.ui.overlay.OverlaySide;
 import org.gwtfusion.ui.overlay.Portal;
+import org.gwtfusion.ui.theme.Direction;
+import org.gwtfusion.ui.theme.DirectionManager;
 import org.gwtfusion.ui.theme.ThemeManager;
 import org.gwtfusion.ui.theme.ThemeMode;
 
@@ -135,6 +137,7 @@ public final class DemoApp implements EntryPoint {
     @Override
     public void onModuleLoad() {
         ThemeManager.apply();
+        DirectionManager.applyDetected();
         HTMLElement app = (HTMLElement) DomGlobal.document.getElementById("app");
         app.appendChild(shell());
         setupRouter();
@@ -2793,7 +2796,7 @@ public final class DemoApp implements EntryPoint {
         selectMainNavigation("theme");
         clearContent();
         content.appendChild(textElement("h1", "", "Theme"));
-        content.appendChild(textElement("p", "demo-muted", "Themes are controlled through CSS variables and the root .dark class. ThemeManager.setMode(...) is the Java API for switching modes."));
+        content.appendChild(textElement("p", "demo-muted", "Themes are controlled through CSS variables and the root .dark class. Direction is controlled separately through the root dir attribute."));
         boolean dark = ThemeManager.mode() == ThemeMode.DARK;
         HTMLElement themeControls = preview();
         themeControls.appendChild(textElement("p", "demo-muted", "Current mode: " + ThemeManager.mode().name()));
@@ -2810,6 +2813,66 @@ public final class DemoApp implements EntryPoint {
                         + "        ? ThemeMode.LIGHT\n"
                         + "        : ThemeMode.DARK\n"
                         + ");"));
+
+        HTMLElement directionControls = preview();
+        directionControls.appendChild(textElement("p", "demo-muted", "Current direction: " + DirectionManager.direction().name()));
+        directionControls.appendChild(ButtonGroup.create()
+                .add(Button.create("Auto").variant(ButtonVariant.OUTLINE).onClick(event -> {
+                    DirectionManager.applyDetected();
+                    renderTheme();
+                }))
+                .add(Button.create("LTR").variant(ButtonVariant.OUTLINE).onClick(event -> {
+                    DirectionManager.set(Direction.LTR);
+                    renderTheme();
+                }))
+                .add(Button.create("RTL").variant(ButtonVariant.OUTLINE).onClick(event -> {
+                    DirectionManager.set(Direction.RTL);
+                    renderTheme();
+                }))
+                .element());
+        content.appendChild(example("DirectionManager", directionControls,
+                "DirectionManager.applyDetected();\n"
+                        + "DirectionManager.set(Direction.RTL);"));
+
+        content.appendChild(example("RTL preview", directionPreview(),
+                "DirectionManager.set(Direction.RTL);\n"
+                        + "Sheet.create().side(SheetSide.START);\n"
+                        + "Popover.create().side(OverlaySide.START);"));
+    }
+
+    private HTMLElement directionPreview() {
+        HTMLElement preview = preview();
+        preview.setAttribute("dir", "rtl");
+        preview.appendChild(Breadcrumb.create()
+                .link("Home", "#")
+                .link("Components", "#")
+                .current("Direction")
+                .element());
+        preview.appendChild(Input.create().placeholder("Search in RTL layout...").element());
+        preview.appendChild(Button.create("Primary action").element());
+        preview.appendChild(Pagination.create()
+                .previous("#")
+                .page(1, "#", false)
+                .page(2, "#", true)
+                .next("#")
+                .element());
+        preview.appendChild(Tabs.create()
+                .addTab("overview", "Overview", raw(textElement("p", "demo-muted", "Arrow keys follow the active document direction.")))
+                .addTab("settings", "Settings", raw(textElement("p", "demo-muted", "Logical start/end sides resolve from dir.")))
+                .element());
+        preview.appendChild(Popover.create()
+                .side(OverlaySide.START)
+                .trigger(Button.create("Popover START").variant(ButtonVariant.OUTLINE))
+                .content(raw(textElement("p", "demo-muted", "START opens on the right in RTL.")))
+                .element());
+        preview.appendChild(Sheet.create()
+                .side(SheetSide.START)
+                .trigger(Button.create("Sheet START").variant(ButtonVariant.OUTLINE))
+                .title("Logical sheet")
+                .description("START resolves against the current root dir.")
+                .content(raw(textElement("p", "demo-muted", "Use LTR/RTL controls above to change the root direction.")))
+                .element());
+        return preview;
     }
 
     private HTMLElement example(String title, UiComponent component, String code) {

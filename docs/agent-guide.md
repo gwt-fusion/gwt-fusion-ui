@@ -30,6 +30,8 @@ import org.gwtfusion.ui.UiComponent;
 import org.gwtfusion.ui.component.button.Button;
 import org.gwtfusion.ui.component.button.ButtonVariant;
 import org.gwtfusion.ui.component.card.Card;
+import org.gwtfusion.ui.theme.Direction;
+import org.gwtfusion.ui.theme.DirectionManager;
 ```
 
 ## Basic Component Usage
@@ -68,6 +70,17 @@ Slider.create()
 ```
 
 Store `ListenerRegistration` values when listeners need to be removed later.
+
+## Direction And RTL
+
+Direction is separate from theme mode. Use `DirectionManager` to set or detect the root document `dir` attribute explicitly:
+
+```java
+DirectionManager.applyDetected();
+DirectionManager.set(Direction.RTL);
+```
+
+Use logical `START` and `END` sides for overlays and sheets when placement should follow LTR/RTL. Keep physical `LEFT` and `RIGHT` when the edge should not change.
 
 ## Icons
 

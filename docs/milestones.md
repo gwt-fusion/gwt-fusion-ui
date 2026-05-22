@@ -230,11 +230,11 @@ This file turns the roadmap into concrete, checkable implementation milestones. 
 
 ## Milestone 13: Direction, RTL, And Theming Depth
 
-- [ ] Decide how `Direction` and RTL support should be represented in Java.
-- [ ] Decide whether direction belongs in `ThemeManager`, a new `DirectionManager`, or document-level utilities.
-- [ ] Add `dir` support for components that need directional behavior.
-- [ ] Audit components for left/right Tailwind classes that may need logical alternatives.
-- [ ] Add RTL examples to the demo.
+- [x] Decide how `Direction` and RTL support should be represented in Java.
+- [x] Decide whether direction belongs in `ThemeManager`, a new `DirectionManager`, or document-level utilities.
+- [x] Add `dir` support for components that need directional behavior.
+- [x] Audit components for left/right Tailwind classes that may need logical alternatives.
+- [x] Add RTL examples to the demo.
 - [ ] Expand theme token coverage if needed.
 - [ ] Add theme-aware icon examples once icons exist.
 - [ ] Verify light and dark mode for all implemented components.

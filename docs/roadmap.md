@@ -473,7 +473,7 @@ The following shadcn/ui entries are already implemented in this repository and t
 
 The following entry should be handled as infrastructure rather than a normal component:
 
-- `Direction`: track as RTL/direction support in theme or document-level utilities.
+- `Direction`: implemented as direction infrastructure through `DirectionManager` rather than a normal component.
 
 ## Open Architecture Points
 
@@ -484,7 +484,7 @@ The following entry should be handled as infrastructure rather than a normal com
 - Decide whether Tailwind safelist entries should remain manual or be generated from component enums.
 - Decide how strict the J2CL compatibility checks should become in Maven.
 - Decide whether browser-based tests should use GWT tests, Playwright, or a later J2CL-compatible setup.
-- Decide how `Direction` and RTL support should be represented in Java and CSS.
+- Continue hardening RTL coverage as new components add keyboard or placement behavior.
 
 ## Definition Of Done For New Components
 
