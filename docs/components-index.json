@@ -25,7 +25,8 @@
     "Prefer component factory methods and fluent APIs.",
     "Prefer enum variants and sizes.",
     "Use semantic listeners such as onValueChange, onOpenChange, onCheckedChange, and onItemSelect.",
-    "Do not build dynamic Tailwind class names."
+    "Do not build dynamic Tailwind class names.",
+    "Use DirectionManager for document direction and logical START/END overlay sides when placement should follow LTR/RTL."
   ],
   "components": [
     { "name": "Accordion", "category": "Layout", "package": "org.gwtfusion.ui.component.accordion", "factory": "Accordion.create()", "example": "Accordion.create()" },
@@ -90,6 +91,7 @@
   ],
   "nonComponentApis": [
     { "name": "ThemeManager", "package": "org.gwtfusion.ui.theme", "example": "ThemeManager.setMode(ThemeMode.DARK)" },
+    { "name": "DirectionManager", "package": "org.gwtfusion.ui.theme", "example": "DirectionManager.set(Direction.RTL)" },
     { "name": "LucideIcons", "package": "org.gwtfusion.icons.lucide", "example": "LucideIcons.search()" },
     { "name": "Router", "package": "org.gwtfusion.router", "example": "Router.create(HistoryStrategy.hash()).route(\"/\", context -> homeElement())" }
   ]

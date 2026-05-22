@@ -10,6 +10,8 @@ import org.gwtfusion.ui.UiComponent;
 import org.gwtfusion.ui.css.CssClasses;
 import org.gwtfusion.ui.event.ListenerRegistration;
 import org.gwtfusion.ui.event.ValueChangeListener;
+import org.gwtfusion.ui.overlay.Keyboard;
+import org.gwtfusion.ui.theme.DirectionManager;
 
 public final class Tabs extends BaseComponent<Tabs> {
     public static final String ROOT_CLASSES = "grid gap-2";
@@ -202,19 +204,27 @@ public final class Tabs extends BaseComponent<Tabs> {
             return;
         }
         String key = event.key;
-        if ("ArrowRight".equals(key) || "ArrowDown".equals(key)) {
+        int direction = directionForKey(key);
+        if (direction != 0) {
             event.preventDefault();
-            focusAndSelect(nextEnabledIndex(index, 1));
-        } else if ("ArrowLeft".equals(key) || "ArrowUp".equals(key)) {
-            event.preventDefault();
-            focusAndSelect(nextEnabledIndex(index, -1));
-        } else if ("Home".equals(key)) {
+            focusAndSelect(nextEnabledIndex(index, direction));
+        } else if (Keyboard.HOME.equals(key)) {
             event.preventDefault();
             focusAndSelect(firstEnabledIndex());
-        } else if ("End".equals(key)) {
+        } else if (Keyboard.END.equals(key)) {
             event.preventDefault();
             focusAndSelect(lastEnabledIndex());
         }
+    }
+
+    private int directionForKey(String key) {
+        if (Keyboard.ARROW_DOWN.equals(key) || (Keyboard.ARROW_RIGHT.equals(key) && !DirectionManager.isRtl()) || (Keyboard.ARROW_LEFT.equals(key) && DirectionManager.isRtl())) {
+            return 1;
+        }
+        if (Keyboard.ARROW_UP.equals(key) || (Keyboard.ARROW_LEFT.equals(key) && !DirectionManager.isRtl()) || (Keyboard.ARROW_RIGHT.equals(key) && DirectionManager.isRtl())) {
+            return -1;
+        }
+        return 0;
     }
 
     private void focusAndSelect(int index) {

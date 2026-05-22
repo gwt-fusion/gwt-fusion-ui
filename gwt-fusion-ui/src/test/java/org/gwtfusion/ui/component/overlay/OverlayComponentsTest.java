@@ -14,6 +14,7 @@ import org.gwtfusion.ui.component.sheet.Sheet;
 import org.gwtfusion.ui.component.sheet.SheetSide;
 import org.gwtfusion.ui.component.tooltip.Tooltip;
 import org.gwtfusion.ui.overlay.OverlaySide;
+import org.gwtfusion.ui.theme.Direction;
 import org.junit.jupiter.api.Test;
 
 class OverlayComponentsTest {
@@ -57,6 +58,8 @@ class OverlayComponentsTest {
         assertTrue(hasOverlaySide(OverlaySide.RIGHT));
         assertTrue(hasOverlaySide(OverlaySide.BOTTOM));
         assertTrue(hasOverlaySide(OverlaySide.LEFT));
+        assertTrue(hasOverlaySide(OverlaySide.START));
+        assertTrue(hasOverlaySide(OverlaySide.END));
     }
 
     @Test
@@ -82,6 +85,10 @@ class OverlayComponentsTest {
         assertTrue(SheetSide.RIGHT.classes().contains("right-0"));
         assertTrue(SheetSide.BOTTOM.classes().contains("bottom-0"));
         assertTrue(SheetSide.LEFT.classes().contains("left-0"));
+        assertTrue(SheetSide.START.classes(Direction.LTR).contains("left-0"));
+        assertTrue(SheetSide.START.classes(Direction.RTL).contains("right-0"));
+        assertTrue(SheetSide.END.classes(Direction.LTR).contains("right-0"));
+        assertTrue(SheetSide.END.classes(Direction.RTL).contains("left-0"));
     }
 
     @Test

@@ -107,13 +107,14 @@ public final class Tooltip extends BaseComponent<Tooltip> {
     }
 
     private String arrowClasses() {
-        if (side == OverlaySide.RIGHT) {
+        OverlaySide resolvedSide = side.resolve();
+        if (resolvedSide == OverlaySide.RIGHT) {
             return "-left-1 top-1/2 -translate-y-1/2";
         }
-        if (side == OverlaySide.BOTTOM) {
+        if (resolvedSide == OverlaySide.BOTTOM) {
             return "-top-1 left-1/2 -translate-x-1/2";
         }
-        if (side == OverlaySide.LEFT) {
+        if (resolvedSide == OverlaySide.LEFT) {
             return "-right-1 top-1/2 -translate-y-1/2";
         }
         return "-bottom-1 left-1/2 -translate-x-1/2";
@@ -136,15 +137,16 @@ public final class Tooltip extends BaseComponent<Tooltip> {
             return;
         }
         elemental2.dom.DOMRect rect = trigger.getBoundingClientRect();
+        OverlaySide resolvedSide = side.resolve();
         double left;
         double top;
-        if (side == OverlaySide.RIGHT) {
+        if (resolvedSide == OverlaySide.RIGHT) {
             left = rect.right + OFFSET;
             top = rect.top + (rect.height - tooltip.offsetHeight) / 2;
-        } else if (side == OverlaySide.BOTTOM) {
+        } else if (resolvedSide == OverlaySide.BOTTOM) {
             left = rect.left + (rect.width - tooltip.offsetWidth) / 2;
             top = rect.bottom + OFFSET;
-        } else if (side == OverlaySide.LEFT) {
+        } else if (resolvedSide == OverlaySide.LEFT) {
             left = rect.left - tooltip.offsetWidth - OFFSET;
             top = rect.top + (rect.height - tooltip.offsetHeight) / 2;
         } else {

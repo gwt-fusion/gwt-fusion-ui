@@ -53,6 +53,10 @@ public final class Keyboard {
     }
 
     public static int indexForKey(String key, int current, int size, boolean vertical) {
+        return indexForKey(key, current, size, vertical, false);
+    }
+
+    public static int indexForKey(String key, int current, int size, boolean vertical, boolean rtl) {
         if (size <= 0) {
             return -1;
         }
@@ -62,10 +66,10 @@ public final class Keyboard {
         if (END.equals(key)) {
             return size - 1;
         }
-        if (ARROW_DOWN.equals(key) || (!vertical && ARROW_RIGHT.equals(key))) {
+        if (ARROW_DOWN.equals(key) || (!vertical && ARROW_RIGHT.equals(key) && !rtl) || (!vertical && ARROW_LEFT.equals(key) && rtl)) {
             return nextIndex(current, size);
         }
-        if (ARROW_UP.equals(key) || (!vertical && ARROW_LEFT.equals(key))) {
+        if (ARROW_UP.equals(key) || (!vertical && ARROW_LEFT.equals(key) && !rtl) || (!vertical && ARROW_RIGHT.equals(key) && rtl)) {
             return previousIndex(current, size);
         }
         return normalize(current, size);

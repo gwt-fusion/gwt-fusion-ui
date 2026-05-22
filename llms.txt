@@ -27,3 +27,4 @@ Important rules for generated code:
 - Prefer enum variants and sizes instead of ad-hoc strings.
 - Use semantic listeners such as `onValueChange`, `onCheckedChange`, `onOpenChange`, and `onItemSelect`.
 - Do not construct dynamic Tailwind class names such as `"bg-" + color`.
+- Use `DirectionManager` for root `dir` handling and logical `START`/`END` sides when placement should follow LTR/RTL.

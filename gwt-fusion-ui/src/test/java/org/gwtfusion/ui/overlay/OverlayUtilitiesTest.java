@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.gwtfusion.ui.theme.Direction;
 import org.junit.jupiter.api.Test;
 
 class OverlayUtilitiesTest {
@@ -55,6 +56,16 @@ class OverlayUtilitiesTest {
         assertEquals(2, Keyboard.indexForKey(Keyboard.ARROW_RIGHT, 1, 4, false));
         assertEquals(0, Keyboard.indexForKey(Keyboard.ARROW_LEFT, 1, 4, false));
         assertEquals(1, Keyboard.indexForKey(Keyboard.ARROW_RIGHT, 1, 4, true));
+        assertEquals(0, Keyboard.indexForKey(Keyboard.ARROW_RIGHT, 1, 4, false, true));
+        assertEquals(2, Keyboard.indexForKey(Keyboard.ARROW_LEFT, 1, 4, false, true));
+    }
+
+    @Test
+    void overlaySidesResolveLogicalEdges() {
+        assertEquals(OverlaySide.LEFT, OverlaySide.START.resolve(Direction.LTR));
+        assertEquals(OverlaySide.RIGHT, OverlaySide.START.resolve(Direction.RTL));
+        assertEquals(OverlaySide.RIGHT, OverlaySide.END.resolve(Direction.LTR));
+        assertEquals(OverlaySide.LEFT, OverlaySide.END.resolve(Direction.RTL));
     }
 
     @Test

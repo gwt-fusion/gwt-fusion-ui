@@ -213,15 +213,16 @@ public final class DropdownMenu extends BaseComponent<DropdownMenu> {
             return;
         }
         elemental2.dom.DOMRect rect = trigger.getBoundingClientRect();
+        OverlaySide resolvedSide = side.resolve();
         double left;
         double top;
-        if (side == OverlaySide.RIGHT) {
+        if (resolvedSide == OverlaySide.RIGHT) {
             left = rect.right + OFFSET;
             top = rect.top;
-        } else if (side == OverlaySide.TOP) {
+        } else if (resolvedSide == OverlaySide.TOP) {
             left = rect.left;
             top = rect.top - menu.offsetHeight - OFFSET;
-        } else if (side == OverlaySide.LEFT) {
+        } else if (resolvedSide == OverlaySide.LEFT) {
             left = rect.left - menu.offsetWidth - OFFSET;
             top = rect.top;
         } else {
