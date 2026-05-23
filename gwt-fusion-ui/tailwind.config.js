@@ -4,7 +4,7 @@ const componentClasses = [
   'transition-colors', 'transition-transform', 'focus-visible:outline-none', 'focus-visible:ring-0', 'focus-visible:ring-1',
   'focus-visible:ring-ring', 'focus-within:ring-1', 'focus-within:ring-ring', 'disabled:pointer-events-none', 'disabled:opacity-50',
   'disabled:cursor-not-allowed', 'cursor-pointer', 'pointer-events-none',
-  'bg-primary', 'bg-accent', 'text-primary-foreground', 'text-accent-foreground', 'hover:bg-primary/90',
+  'bg-primary', 'bg-accent', 'bg-card', 'bg-popover', 'text-primary-foreground', 'text-accent-foreground', 'text-card-foreground', 'text-popover-foreground', 'hover:bg-primary/90',
   'bg-destructive', 'text-destructive-foreground', 'hover:bg-destructive/90',
   'border', 'border-0', 'border-2', 'border-input', 'border-primary', 'border-destructive', 'border-border', 'border-r', 'border-l', 'bg-background', 'hover:bg-accent', 'hover:text-accent-foreground',
   'bg-secondary', 'text-secondary-foreground', 'hover:bg-secondary/80',
@@ -38,6 +38,14 @@ module.exports = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))'
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))'
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))'

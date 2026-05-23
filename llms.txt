@@ -28,3 +28,4 @@ Important rules for generated code:
 - Use semantic listeners such as `onValueChange`, `onCheckedChange`, `onOpenChange`, and `onItemSelect`.
 - Do not construct dynamic Tailwind class names such as `"bg-" + color`.
 - Use `DirectionManager` for root `dir` handling and logical `START`/`END` sides when placement should follow LTR/RTL.
+- Use token-backed themed surfaces such as `bg-card text-card-foreground` and `bg-popover text-popover-foreground`.

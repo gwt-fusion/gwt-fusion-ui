@@ -235,11 +235,11 @@ This file turns the roadmap into concrete, checkable implementation milestones. 
 - [x] Add `dir` support for components that need directional behavior.
 - [x] Audit components for left/right Tailwind classes that may need logical alternatives.
 - [x] Add RTL examples to the demo.
-- [ ] Expand theme token coverage if needed.
-- [ ] Add theme-aware icon examples once icons exist.
+- [x] Expand theme token coverage if needed.
+- [x] Add theme-aware icon examples once icons exist.
 - [ ] Verify light and dark mode for all implemented components.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile.
 
 ## Milestone 14: Build, Tests, And Release Readiness
 
