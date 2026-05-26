@@ -63,4 +63,4 @@ This repository contains GWT Fusion, a set of GWT 2.13 and J2CL-compatible UI, i
 - Router: standalone Hash, Browser, and Memory history strategies with static, `:param`, and `*` splat route matching.
 - Demo: home page, routed component view with categorized preview/Java code examples, form foundation examples, layout/navigation examples, overlay examples, icon gallery, events examples, router examples, and theme view.
 - Tailwind 3 is configured and executed through `frontend-maven-plugin`.
-- Current working status: Milestone 12 Advanced UX Components is complete.
+- Current working status: Milestone 14 Build, Tests, And Release Readiness is complete.

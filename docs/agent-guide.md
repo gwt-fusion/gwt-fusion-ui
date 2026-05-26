@@ -8,6 +8,7 @@ This guide is for coding agents that generate application code using GWT Fusion.
 - Use `docs/components-index.json` as the canonical machine-readable catalog.
 - Use `docs/snippets` if snippet files are added later.
 - Use `docs/router.md` for standalone routing examples.
+- Use `docs/release-readiness.md` for build, compatibility, test, artifact, and deployment checks.
 
 ## Rules
 

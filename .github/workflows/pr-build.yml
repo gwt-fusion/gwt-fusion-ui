@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  maven-verify:
-    name: Maven Verify
+  release-readiness:
+    name: Release Readiness
     runs-on: ubuntu-latest
 
     steps:
@@ -28,5 +28,11 @@ jobs:
           java-version: 17
           cache: maven
 
-      - name: Build artifacts
+      - name: Maven verify
         run: mvn -Dskip.tailwind=true verify
+
+      - name: Build UI CSS
+        run: mvn -pl gwt-fusion-ui generate-resources
+
+      - name: Compile demo
+        run: mvn -Pdemo -pl gwt-fusion-ui-demo -am -Dskip.tailwind=true package

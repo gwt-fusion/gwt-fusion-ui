@@ -243,20 +243,20 @@ This file turns the roadmap into concrete, checkable implementation milestones. 
 
 ## Milestone 14: Build, Tests, And Release Readiness
 
-- [ ] Decide how strict J2CL compatibility checks should become in Maven.
-- [ ] Add or document a J2CL compatibility profile.
-- [ ] Decide browser-test strategy: GWT tests, Playwright, or later J2CL-compatible setup.
-- [ ] Add browser/demo smoke tests if feasible.
-- [ ] Review Tailwind safelist strategy.
-- [ ] Decide whether Tailwind safelist entries should be generated from component enums.
-- [ ] Ensure every component has demo examples.
-- [ ] Ensure every component has at least enum/class mapping or pure Java state tests.
-- [ ] Ensure license and attribution files exist for bundled assets.
-- [ ] Review generated artifacts and `.gitignore` rules.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify `mvn -pl gwt-fusion-ui generate-resources`.
-- [ ] Verify `mvn -Pdemo -pl gwt-fusion-ui-demo -am -Dskip.tailwind=true package`.
-- [ ] Verify GitHub Pages deployment workflow.
+- [x] Decide how strict J2CL compatibility checks should become in Maven.
+- [x] Add or document a J2CL compatibility profile.
+- [x] Decide browser-test strategy: GWT tests, Playwright, or later J2CL-compatible setup.
+- [x] Add browser/demo smoke tests if feasible.
+- [x] Review Tailwind safelist strategy.
+- [x] Decide whether Tailwind safelist entries should be generated from component enums.
+- [x] Ensure every component has demo examples.
+- [x] Ensure every component has at least enum/class mapping or pure Java state tests.
+- [x] Ensure license and attribution files exist for bundled assets.
+- [x] Review generated artifacts and `.gitignore` rules.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify `mvn -pl gwt-fusion-ui generate-resources`.
+- [x] Verify `mvn -Pdemo -pl gwt-fusion-ui-demo -am -Dskip.tailwind=true package`.
+- [x] Verify GitHub Pages deployment workflow.
 
 ## Milestone 15: Additional Icon Packs
 
