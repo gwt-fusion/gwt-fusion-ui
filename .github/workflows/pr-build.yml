@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  release-readiness:
-    name: Release Readiness
+  maven-verify:
+    name: Maven Verify
     runs-on: ubuntu-latest
 
     steps:
