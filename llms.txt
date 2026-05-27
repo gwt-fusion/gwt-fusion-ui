@@ -11,6 +11,7 @@ Start here when using this project with coding agents:
 - `docs/icons.md`: Icon component usage.
 - `docs/icon-modules.md`: Lucide icon module usage.
 - `docs/router.md`: Standalone router usage.
+- `docs/release-readiness.md`: Build, compatibility, test, artifact, and deployment checks.
 
 Core packages:
 

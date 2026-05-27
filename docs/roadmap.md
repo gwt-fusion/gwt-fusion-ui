@@ -481,9 +481,9 @@ The following entry should be handled as infrastructure rather than a normal com
 - Decide how component IDs are generated for ARIA relationships.
 - Decide how controlled and uncontrolled component state should be represented in Java.
 - Decide whether demo code snippets stay as strings or move into reusable example descriptors.
-- Decide whether Tailwind safelist entries should remain manual or be generated from component enums.
-- Decide how strict the J2CL compatibility checks should become in Maven.
-- Decide whether browser-based tests should use GWT tests, Playwright, or a later J2CL-compatible setup.
+- Keep Tailwind safelist entries manual until component class coverage becomes too large to maintain safely.
+- Use JVM tests plus demo GWT compile as the current Maven compatibility gate; add stricter J2CL compiler integration only when it is stable in CI.
+- Treat Playwright as deferred browser coverage; use demo GWT compile and GitHub Pages deployment as the current smoke gates.
 - Continue hardening RTL coverage as new components add keyboard or placement behavior.
 
 ## Definition Of Done For New Components
