@@ -59,3 +59,21 @@ Checked-in generated source is allowed only when it is intentional source distri
 ## GitHub Pages Deployment
 
 The deploy workflow builds UI CSS, compiles the GWT demo, copies agent docs, publishes the generated CSS, removes server-only metadata, and deploys through GitHub Pages. Treat this as the deployment smoke test for `main`.
+
+## Maven Central Publishing
+
+The checked-in Maven version stays at `0.0.0-SNAPSHOT`. Release publishing is done manually from `.github/workflows/publish-central.yml` with a required `version` input.
+
+The workflow always checks out the current `main` branch, validates that the requested release version does not start with `v` and does not end in `SNAPSHOT`, rewrites the Maven reactor version only inside the workflow workspace, publishes the release artifacts to Central Portal, and then creates a lightweight Git tag named `v<version>` on the `main` commit that was published.
+
+Example release input:
+
+```text
+0.1.0
+```
+
+Expected tag:
+
+```text
+v0.1.0
+```

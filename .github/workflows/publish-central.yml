@@ -2,9 +2,14 @@ name: Publish Central
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: Release version to publish, without the v tag prefix.
+        required: true
+        type: string
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   publish:
@@ -15,7 +20,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          ref: main
+          fetch-depth: 0
+
+      - name: Validate release version
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          if ! printf '%s' "$RELEASE_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z]+)*$'; then
+            printf 'Release version must look like 1.2.3 and must not include the v tag prefix: %s\n' "$RELEASE_VERSION" >&2
+            exit 1
+          fi
+          if printf '%s' "$RELEASE_VERSION" | grep -Eq '(^v|SNAPSHOT$)'; then
+            printf 'Release version must not start with v or end with SNAPSHOT: %s\n' "$RELEASE_VERSION" >&2
+            exit 1
+          fi
+          if git rev-parse "refs/tags/v$RELEASE_VERSION" >/dev/null 2>&1; then
+            printf 'Tag already exists: v%s\n' "$RELEASE_VERSION" >&2
+            exit 1
+          fi
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -28,9 +51,21 @@ jobs:
           server-password: CENTRAL_PASSWORD
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
 
+      - name: Set release version
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: mvn -B org.codehaus.mojo:versions-maven-plugin:2.16.2:set -DnewVersion="$RELEASE_VERSION" -DprocessAllModules=true -DgenerateBackupPoms=false
+
       - name: Publish to Central Portal
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: mvn -B -Pcentral-release -pl gwt-fusion-ui,gwt-fusion-router,gwt-fusion-icons-lucide -am deploy
+
+      - name: Create release tag
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          git tag "v$RELEASE_VERSION"
+          git push origin "v$RELEASE_VERSION"

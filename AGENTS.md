@@ -39,6 +39,7 @@ This repository contains GWT Fusion, a set of GWT 2.13 and J2CL-compatible UI, i
 - Full CSS build: `mvn -pl gwt-fusion-ui generate-resources`.
 - Demo GWT compile is prepared through the `demo` profile in the demo `package`: `mvn -Pdemo -pl gwt-fusion-ui-demo -am -Dskip.tailwind=true package`.
 - GitHub Pages deployment is prepared through `.github/workflows/deploy-demo.yml` and builds the demo website.
+- Central publishing is manual through `.github/workflows/publish-central.yml`; provide a release version input without the `v` prefix and the workflow tags `main` as `v<version>` after publishing.
 
 ## Tests
 
