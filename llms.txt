@@ -1,6 +1,6 @@
 # GWT Fusion
 
-GWT Fusion provides GWT 2.13 and J2CL-compatible UI components, Lucide icons, and a standalone client router.
+GWT Fusion provides GWT 2.13 and J2CL-compatible UI components, optional generated icon modules, and a standalone client router.
 
 Start here when using this project with coding agents:
 
@@ -9,7 +9,7 @@ Start here when using this project with coding agents:
 - `docs/components.md`: Human-facing component documentation.
 - `docs/events.md`: Listener and event conventions.
 - `docs/icons.md`: Icon component usage.
-- `docs/icon-modules.md`: Lucide icon module usage.
+- `docs/icon-modules.md`: Optional icon module usage.
 - `docs/router.md`: Standalone router usage.
 - `docs/release-readiness.md`: Build, compatibility, test, artifact, and deployment checks.
 
@@ -18,6 +18,7 @@ Core packages:
 - `org.gwtfusion.ui`: UI component base types and theme APIs.
 - `org.gwtfusion.ui.component.*`: UI components.
 - `org.gwtfusion.icons.lucide`: Lucide icon factories.
+- `org.gwtfusion.icons.tabler`: Tabler outline icon factories.
 - `org.gwtfusion.router`: Standalone router.
 
 Important rules for generated code:

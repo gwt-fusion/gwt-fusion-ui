@@ -14,6 +14,11 @@
       "purpose": "Generated Lucide icon factories for use with the UI Icon APIs."
     },
     {
+      "artifactId": "gwt-fusion-icons-tabler",
+      "rootPackage": "org.gwtfusion.icons.tabler",
+      "purpose": "Generated Tabler outline icon factories for use with the UI Icon APIs."
+    },
+    {
       "artifactId": "gwt-fusion-router",
       "rootPackage": "org.gwtfusion.router",
       "purpose": "Standalone client router that renders HTMLElement values."
@@ -95,6 +100,7 @@
     { "name": "ThemeTokens", "package": "org.gwtfusion.ui.theme", "example": "ThemeTokens.CARD" },
     { "name": "DirectionManager", "package": "org.gwtfusion.ui.theme", "example": "DirectionManager.set(Direction.RTL)" },
     { "name": "LucideIcons", "package": "org.gwtfusion.icons.lucide", "example": "LucideIcons.search()" },
+    { "name": "TablerIcons", "package": "org.gwtfusion.icons.tabler", "example": "TablerIcons.settings()" },
     { "name": "Router", "package": "org.gwtfusion.router", "example": "Router.create(HistoryStrategy.hash()).route(\"/\", context -> homeElement())" }
   ]
 }

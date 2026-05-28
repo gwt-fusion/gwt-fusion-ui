@@ -3,6 +3,7 @@
   <inherits name="com.google.gwt.user.User"/>
   <inherits name="org.gwtfusion.ui.GwtFusionUi"/>
   <inherits name="org.gwtfusion.icons.lucide.GwtFusionLucide"/>
+  <inherits name="org.gwtfusion.icons.tabler.GwtFusionTabler"/>
   <inherits name="org.gwtfusion.router.GwtFusionRouter"/>
   <entry-point class="org.gwtfusion.ui.demo.DemoApp"/>
   <source path=""/>
