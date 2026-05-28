@@ -9,7 +9,11 @@ final class TablerIconsC2 {
     }
 
     static String[] names() {
-        return NAMES.clone();
+        String[] names = new String[NAMES.length];
+        for (int i = 0; i < NAMES.length; i++) {
+            names[i] = NAMES[i];
+        }
+        return names;
     }
 
     static Icon icon(String name) {

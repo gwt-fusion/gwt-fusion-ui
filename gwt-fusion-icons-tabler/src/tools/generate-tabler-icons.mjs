@@ -132,7 +132,7 @@ for (const group of groups) {
     const names = chunkIcons.map(icon => `"${javaString(icon.name)}"`).join(', ');
     const lookup = chunkIcons.map(icon => `        if ("${javaString(icon.name)}".equals(name)) {\n            return ${icon.method}();\n        }`).join('\n');
     const methods = chunkIcons.map(icon => `    static Icon ${icon.method}() {\n        return ${iconExpression(icon)};\n    }`).join('\n\n');
-    const source = `package ${packageName};\n\nimport org.gwtfusion.ui.component.icon.Icon;\n\nfinal class ${className} {\n    private static final String[] NAMES = {${names}};\n\n    private ${className}() {\n    }\n\n    static String[] names() {\n        return NAMES.clone();\n    }\n\n    static Icon icon(String name) {\n${lookup}\n        return null;\n    }\n\n${methods}\n}\n`;
+    const source = `package ${packageName};\n\nimport org.gwtfusion.ui.component.icon.Icon;\n\nfinal class ${className} {\n    private static final String[] NAMES = {${names}};\n\n    private ${className}() {\n    }\n\n    static String[] names() {\n        String[] names = new String[NAMES.length];\n        for (int i = 0; i < NAMES.length; i++) {\n            names[i] = NAMES[i];\n        }\n        return names;\n    }\n\n    static Icon icon(String name) {\n${lookup}\n        return null;\n    }\n\n${methods}\n}\n`;
     fs.writeFileSync(path.join(outputDir, `${className}.java`), source);
   });
 }
