@@ -260,29 +260,64 @@ This file turns the roadmap into concrete, checkable implementation milestones. 
 
 ## Milestone 15: Additional Icon Packs
 
+Milestone 15 is split into four focused PR-sized sub-milestones. All additional icon packs should be complete generated Java icon sets, checked in as source, distributed as independent optional Maven modules, and kept free of icon fonts, runtime SVG downloads, global CSS, heavy static initialization, and implicit global registration.
+
+### Milestone 15.1: Tabler Icons
+
 - [ ] Add Maven module `gwt-fusion-icons-tabler`.
-- [ ] Include Tabler attribution and license files.
+- [ ] Use package `org.gwtfusion.icons.tabler` and GWT module `org.gwtfusion.icons.tabler.GwtFusionTabler`.
+- [ ] Include the complete Tabler icon set as generated checked-in Java source.
+- [ ] Include Tabler attribution and license files in the module resources.
 - [ ] Implement `TablerIconProvider`.
 - [ ] Implement `TablerIcons` static factory API.
-- [ ] Add a minimal set of commonly used Tabler icons.
+- [ ] Expose `TablerIcons.names()`, `TablerIcons.icon(String)`, and `TablerIcons.provider()`.
+- [ ] Keep Tabler independent from Lucide, Heroicons, and Phosphor modules.
+- [ ] Add JVM tests for provider behavior, icon count, known icons, and unknown icon handling.
+- [ ] Add a small Tabler example to the demo Icons page.
+- [ ] Verify the Tabler module build through Maven.
+
+### Milestone 15.2: Heroicons
+
 - [ ] Add Maven module `gwt-fusion-icons-heroicons`.
-- [ ] Include Heroicons attribution and license files.
-- [ ] Decide how Heroicons outline, solid, and mini variants should be represented.
+- [ ] Use package `org.gwtfusion.icons.heroicons` and GWT module `org.gwtfusion.icons.heroicons.GwtFusionHeroicons`.
+- [ ] Include the complete Heroicons set for `OUTLINE`, `SOLID`, `MINI`, and `MICRO` styles as generated checked-in Java source.
+- [ ] Include Heroicons attribution and license files in the module resources.
+- [ ] Implement `HeroIconStyle` with `OUTLINE`, `SOLID`, `MINI`, and `MICRO`.
 - [ ] Implement `HeroIconProvider`.
-- [ ] Implement `HeroIcons` static factory API.
-- [ ] Add a minimal set of commonly used Heroicons.
+- [ ] Implement `HeroIcons` static factory API with `OUTLINE` as the default style.
+- [ ] Expose `HeroIcons.names(HeroIconStyle)`, `HeroIcons.icon(String, HeroIconStyle)`, and `HeroIcons.provider(HeroIconStyle)`.
+- [ ] Keep Heroicons independent from Lucide, Tabler, and Phosphor modules.
+- [ ] Add JVM tests for styles, provider behavior, icon counts, known icons, and unknown icon handling.
+- [ ] Add Heroicons style comparison examples to the demo Icons page.
+- [ ] Verify the Heroicons module build through Maven.
+
+### Milestone 15.3: Phosphor Icons
+
 - [ ] Add Maven module `gwt-fusion-icons-phosphor`.
-- [ ] Include Phosphor attribution and license files.
-- [ ] Decide how Phosphor weights such as thin, light, regular, bold, fill, and duotone should be represented.
+- [ ] Use package `org.gwtfusion.icons.phosphor` and GWT module `org.gwtfusion.icons.phosphor.GwtFusionPhosphor`.
+- [ ] Include the complete Phosphor icon set for `THIN`, `LIGHT`, `REGULAR`, `BOLD`, `FILL`, and `DUOTONE` weights as generated checked-in Java source.
+- [ ] Include Phosphor attribution and license files in the module resources.
+- [ ] Implement `PhosphorWeight` with `THIN`, `LIGHT`, `REGULAR`, `BOLD`, `FILL`, and `DUOTONE`.
 - [ ] Implement `PhosphorIconProvider`.
-- [ ] Implement `PhosphorIcons` static factory API.
-- [ ] Add a minimal set of commonly used Phosphor icons.
-- [ ] Ensure each icon pack remains independently usable without pulling in the other icon modules.
+- [ ] Implement `PhosphorIcons` static factory API with `REGULAR` as the default weight.
+- [ ] Expose `PhosphorIcons.names(PhosphorWeight)`, `PhosphorIcons.icon(String, PhosphorWeight)`, and `PhosphorIcons.provider(PhosphorWeight)`.
+- [ ] Keep Phosphor independent from Lucide, Tabler, and Heroicons modules.
+- [ ] Add JVM tests for weights, provider behavior, icon counts, known icons, and unknown icon handling.
+- [ ] Add Phosphor weight comparison examples to the demo Icons page.
+- [ ] Verify the Phosphor module build through Maven.
+
+### Milestone 15.4: Multi-Pack Demo, Docs, And Final Hardening
+
+- [ ] Add demo examples that show switching between Lucide, Tabler, Heroicons, and Phosphor.
+- [ ] Add an `IconRegistry` example with independently registered providers for all icon packs.
+- [ ] Update `docs/icon-modules.md` with all implemented icon modules, style/weight APIs, GWT module names, and dependency examples.
+- [ ] Update `docs/icons.md` with multi-pack usage guidance.
+- [ ] Update `docs/components-index.json` non-component APIs with the new icon factories.
+- [ ] Update `llms.txt` and `docs/agent-guide.md` for agent discovery.
 - [ ] Ensure each icon module contains only its own icon assets and metadata.
-- [ ] Ensure each icon module avoids global CSS, icon fonts, heavy static initialization, and implicit global registration.
-- [ ] Add demo examples that show switching between independently imported icon packs.
-- [ ] Verify each icon module build through Maven.
-- [ ] Verify demo can use multiple icon modules together.
+- [ ] Ensure no proprietary, paid, or pro icon assets are bundled.
+- [ ] Verify all icon modules build through Maven.
+- [ ] Verify the demo can use multiple icon modules together.
 - [ ] Verify `mvn -Dskip.tailwind=true verify`.
 - [ ] Verify demo GWT compile.
 
