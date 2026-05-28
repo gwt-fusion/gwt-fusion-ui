@@ -25,4 +25,12 @@ class TablerIconsTest {
         assertFalse(new TablerIconProvider().supports("unknown"));
         assertNull(TablerIcons.icon("unknown"));
     }
+
+    @Test
+    void generatedNameChunksReturnDefensiveCopies() {
+        String[] names = TablerIconsC5.names();
+        names[0] = "mutated";
+
+        assertEquals("cursor-text", TablerIconsC5.names()[0]);
+    }
 }

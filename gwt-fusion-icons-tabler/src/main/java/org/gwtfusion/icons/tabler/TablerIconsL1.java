@@ -9,7 +9,7 @@ final class TablerIconsL1 {
     }
 
     static String[] names() {
-        return NAMES;
+        return NAMES.clone();
     }
 
     static Icon icon(String name) {
