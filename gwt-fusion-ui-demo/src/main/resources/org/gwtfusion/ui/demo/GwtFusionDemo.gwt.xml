@@ -5,6 +5,7 @@
   <inherits name="org.gwtfusion.icons.lucide.GwtFusionLucide"/>
   <inherits name="org.gwtfusion.icons.tabler.GwtFusionTabler"/>
   <inherits name="org.gwtfusion.icons.heroicons.GwtFusionHeroicons"/>
+  <inherits name="org.gwtfusion.icons.phosphor.GwtFusionPhosphor"/>
   <inherits name="org.gwtfusion.router.GwtFusionRouter"/>
   <entry-point class="org.gwtfusion.ui.demo.DemoApp"/>
   <source path=""/>
