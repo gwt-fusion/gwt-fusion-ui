@@ -264,17 +264,17 @@ Milestone 15 is split into four focused PR-sized sub-milestones. All additional 
 
 ### Milestone 15.1: Tabler Icons
 
-- [ ] Add Maven module `gwt-fusion-icons-tabler`.
-- [ ] Use package `org.gwtfusion.icons.tabler` and GWT module `org.gwtfusion.icons.tabler.GwtFusionTabler`.
-- [ ] Include the complete Tabler icon set as generated checked-in Java source.
-- [ ] Include Tabler attribution and license files in the module resources.
-- [ ] Implement `TablerIconProvider`.
-- [ ] Implement `TablerIcons` static factory API.
-- [ ] Expose `TablerIcons.names()`, `TablerIcons.icon(String)`, and `TablerIcons.provider()`.
-- [ ] Keep Tabler independent from Lucide, Heroicons, and Phosphor modules.
-- [ ] Add JVM tests for provider behavior, icon count, known icons, and unknown icon handling.
-- [ ] Add a small Tabler example to the demo Icons page.
-- [ ] Verify the Tabler module build through Maven.
+- [x] Add Maven module `gwt-fusion-icons-tabler`.
+- [x] Use package `org.gwtfusion.icons.tabler` and GWT module `org.gwtfusion.icons.tabler.GwtFusionTabler`.
+- [x] Include the complete Tabler icon set as generated checked-in Java source.
+- [x] Include Tabler attribution and license files in the module resources.
+- [x] Implement `TablerIconProvider`.
+- [x] Implement `TablerIcons` static factory API.
+- [x] Expose `TablerIcons.names()`, `TablerIcons.icon(String)`, and `TablerIcons.provider()`.
+- [x] Keep Tabler independent from Lucide, Heroicons, and Phosphor modules.
+- [x] Add JVM tests for provider behavior, icon count, known icons, and unknown icon handling.
+- [x] Add a small Tabler example to the demo Icons page.
+- [x] Verify the Tabler module build through Maven.
 
 ### Milestone 15.2: Heroicons
 

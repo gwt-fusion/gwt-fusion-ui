@@ -8,6 +8,7 @@ import elemental2.dom.HTMLElement;
 import elemental2.dom.HTMLInputElement;
 import elemental2.dom.KeyboardEvent;
 import org.gwtfusion.icons.lucide.LucideIcons;
+import org.gwtfusion.icons.tabler.TablerIcons;
 import org.gwtfusion.router.HistoryStrategy;
 import org.gwtfusion.router.Route;
 import org.gwtfusion.router.Router;
@@ -1819,21 +1820,39 @@ public final class DemoApp implements EntryPoint {
                         + "    .icon(LucideIcons.x())\n"
                         + "    .aria(\"label\", \"Close\");"));
 
+        HTMLElement tablerPreview = preview();
+        tablerPreview.appendChild(TablerIcons.search().variant(IconVariant.PRIMARY).ariaLabel("Search").element());
+        tablerPreview.appendChild(TablerIcons.settings().variant(IconVariant.MUTED).ariaLabel("Settings").element());
+        tablerPreview.appendChild(TablerIcons.x().variant(IconVariant.DESTRUCTIVE).ariaLabel("Close").element());
+        grid.appendChild(example("Tabler icons", tablerPreview,
+                "TablerIcons.search()\n"
+                        + "    .variant(IconVariant.PRIMARY)\n"
+                        + "    .ariaLabel(\"Search\");\n\n"
+                        + "TablerIcons.settings()\n"
+                        + "    .variant(IconVariant.MUTED)\n"
+                        + "    .ariaLabel(\"Settings\");"));
+
         HTMLElement registryPreview = preview("demo-stack-preview");
-        IconRegistry registry = IconRegistry.create().register("lucide", LucideIcons.provider());
+        IconRegistry registry = IconRegistry.create()
+                .register("lucide", LucideIcons.provider())
+                .register("tabler", TablerIcons.provider());
         registryPreview.appendChild(registry.icon("lucide", "search").ariaLabel("Search").element());
+        registryPreview.appendChild(registry.icon("tabler", "settings").ariaLabel("Settings").element());
         registryPreview.appendChild(textElement("p", "demo-muted", "IconRegistry keeps providers explicit and avoids global icon registration."));
         grid.appendChild(example("IconRegistry", registryPreview,
                 "IconRegistry registry = IconRegistry.create()\n"
-                        + "    .register(\"lucide\", LucideIcons.provider());\n\n"
+                        + "    .register(\"lucide\", LucideIcons.provider())\n"
+                        + "    .register(\"tabler\", TablerIcons.provider());\n\n"
                         + "registry.icon(\"lucide\", \"search\")\n"
-                        + "    .ariaLabel(\"Search\");"));
+                        + "    .ariaLabel(\"Search\");\n\n"
+                        + "registry.icon(\"tabler\", \"settings\")\n"
+                        + "    .ariaLabel(\"Settings\");"));
     }
 
     private void renderIconsPage() {
         clearContent();
         content.appendChild(textElement("h1", "", "Icons"));
-        content.appendChild(textElement("p", "demo-muted", "The Lucide module is separate from the core UI module and exposes 1960 generated SVG icons. The gallery initially renders a limited slice; use search to narrow the catalog."));
+        content.appendChild(textElement("p", "demo-muted", "Lucide and Tabler are separate optional modules from the core UI module. Lucide exposes 1960 generated SVG icons and Tabler exposes 5093 generated outline icons. The gallery initially renders a limited Lucide slice; use search to narrow the catalog."));
 
         HTMLElement usage = componentSection("icon-usage", "Icon Usage", "Standalone icons, Button composition, and explicit provider registration.");
         HTMLElement usageGrid = examplesGrid();

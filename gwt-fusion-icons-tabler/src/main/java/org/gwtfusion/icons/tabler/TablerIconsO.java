@@ -1,0 +1,263 @@
+package org.gwtfusion.icons.tabler;
+
+import org.gwtfusion.ui.component.icon.Icon;
+
+final class TablerIconsO {
+    private static final String[] NAMES = {"object-scan", "octagon", "octagon-minus", "octagon-minus-2", "octagon-off", "octagon-plus", "octagon-plus-2", "octahedron", "octahedron-off", "octahedron-plus", "old", "olympic-torch", "olympics", "olympics-off", "om", "omega", "option", "outbound", "outlet", "oval", "oval-vertical", "overline"};
+
+    private TablerIconsO() {
+    }
+
+    static String[] names() {
+        String[] names = new String[NAMES.length];
+        for (int i = 0; i < NAMES.length; i++) {
+            names[i] = NAMES[i];
+        }
+        return names;
+    }
+
+    static Icon icon(String name) {
+        if ("object-scan".equals(name)) {
+            return objectScan();
+        }
+        if ("octagon".equals(name)) {
+            return octagon();
+        }
+        if ("octagon-minus".equals(name)) {
+            return octagonMinus();
+        }
+        if ("octagon-minus-2".equals(name)) {
+            return octagonMinusN2();
+        }
+        if ("octagon-off".equals(name)) {
+            return octagonOff();
+        }
+        if ("octagon-plus".equals(name)) {
+            return octagonPlus();
+        }
+        if ("octagon-plus-2".equals(name)) {
+            return octagonPlusN2();
+        }
+        if ("octahedron".equals(name)) {
+            return octahedron();
+        }
+        if ("octahedron-off".equals(name)) {
+            return octahedronOff();
+        }
+        if ("octahedron-plus".equals(name)) {
+            return octahedronPlus();
+        }
+        if ("old".equals(name)) {
+            return old();
+        }
+        if ("olympic-torch".equals(name)) {
+            return olympicTorch();
+        }
+        if ("olympics".equals(name)) {
+            return olympics();
+        }
+        if ("olympics-off".equals(name)) {
+            return olympicsOff();
+        }
+        if ("om".equals(name)) {
+            return om();
+        }
+        if ("omega".equals(name)) {
+            return omega();
+        }
+        if ("option".equals(name)) {
+            return option();
+        }
+        if ("outbound".equals(name)) {
+            return outbound();
+        }
+        if ("outlet".equals(name)) {
+            return outlet();
+        }
+        if ("oval".equals(name)) {
+            return oval();
+        }
+        if ("oval-vertical".equals(name)) {
+            return ovalVertical();
+        }
+        if ("overline".equals(name)) {
+            return overline();
+        }
+        return null;
+    }
+
+    static Icon objectScan() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M8 10a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2v-4")
+                .element("path", "d", "M3 7v-2a2 2 0 0 1 2 -2h2")
+                .element("path", "d", "M3 17v2a2 2 0 0 0 2 2h2")
+                .element("path", "d", "M17 3h2a2 2 0 0 1 2 2v2")
+                .element("path", "d", "M17 21h2a2 2 0 0 0 2 -2v-2");
+    }
+
+    static Icon octagon() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M12.802 2.165l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-2.389 5.575c-.206 .48 -.589 .863 -1.07 1.07l-5.574 2.388c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0");
+    }
+
+    static Icon octagonMinus() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M12.802 2.165l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-2.389 5.575c-.206 .48 -.589 .863 -1.07 1.07l-5.574 2.388c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0")
+                .element("path", "d", "M9 12h6");
+    }
+
+    static Icon octagonMinusN2() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M13.039 21.734l-.237 .101c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-.94 2.196")
+                .element("path", "d", "M16 19h6");
+    }
+
+    static Icon octagonOff() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M19.027 19.002a2.03 2.03 0 0 1 -.65 .444l-5.575 2.39a2.04 2.04 0 0 1 -1.604 0l-5.575 -2.39a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.103 -.24 .25 -.457 .433 -.639m2.689 -1.31l3.522 -1.51a2.036 2.036 0 0 1 1.604 0l5.575 2.39c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-1.509 3.522")
+                .element("path", "d", "M3 3l18 18");
+    }
+
+    static Icon octagonPlus() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M12.802 2.165l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-2.389 5.575c-.206 .48 -.589 .863 -1.07 1.07l-5.574 2.388c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0")
+                .element("path", "d", "M9 12h6")
+                .element("path", "d", "M12 9v6");
+    }
+
+    static Icon octagonPlusN2() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M13.023 21.74l-.221 .095c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-.081 .19")
+                .element("path", "d", "M16 19h6")
+                .element("path", "d", "M19 16v6");
+    }
+
+    static Icon octahedron() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M12.859 21.652l8.845 -8.949a.984 .984 0 0 0 0 -1.407l-8.845 -8.948a1.233 1.233 0 0 0 -1.718 0l-8.845 8.949a.984 .984 0 0 0 0 1.407l8.845 8.949a1.234 1.234 0 0 0 1.718 -.001")
+                .element("path", "d", "M2 12c.004 .086 .103 .178 .296 .246l8.845 2.632c.459 .163 1.259 .163 1.718 0l8.845 -2.632c.195 -.07 .294 -.156 .296 -.243")
+                .element("path", "d", "M12 2.12v19.76");
+    }
+
+    static Icon octahedronOff() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M6.771 6.77l-4.475 4.527a.984 .984 0 0 0 0 1.407l8.845 8.949a1.234 1.234 0 0 0 1.718 -.001l4.36 -4.412m2.002 -2.025l2.483 -2.512a.984 .984 0 0 0 0 -1.407l-8.845 -8.948a1.233 1.233 0 0 0 -1.718 0l-2.375 2.403")
+                .element("path", "d", "M2 12c.004 .086 .103 .178 .296 .246l8.845 2.632c.459 .163 1.259 .163 1.718 0l1.544 -.46m3.094 -.92l4.207 -1.252c.195 -.07 .294 -.156 .296 -.243")
+                .element("path", "d", "M12 2.12v5.88m0 4v9.88")
+                .element("path", "d", "M3 3l18 18");
+    }
+
+    static Icon octahedronPlus() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M21.498 12.911l.206 -.208a.984 .984 0 0 0 0 -1.407l-8.845 -8.948a1.233 1.233 0 0 0 -1.718 0l-8.845 8.949a.984 .984 0 0 0 0 1.407l8.845 8.949a1.234 1.234 0 0 0 1.718 -.001l.08 -.081")
+                .element("path", "d", "M2 12c.004 .086 .103 .178 .296 .246l8.845 2.632c.459 .163 1.259 .163 1.718 0l2.634 -.784m5.41 -1.61l.801 -.238c.195 -.07 .294 -.156 .296 -.243")
+                .element("path", "d", "M12 2.12v19.76")
+                .element("path", "d", "M16 19h6")
+                .element("path", "d", "M19 16v6");
+    }
+
+    static Icon old() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M11 21l-1 -4l-2 -3v-6")
+                .element("path", "d", "M5 14l-1 -3l4 -3l3 2l3 .5")
+                .element("path", "d", "M7 4a1 1 0 1 0 2 0a1 1 0 1 0 -2 0")
+                .element("path", "d", "M7 17l-2 4")
+                .element("path", "d", "M16 21v-8.5a1.5 1.5 0 0 1 3 0v.5");
+    }
+
+    static Icon olympicTorch() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M14 21h-4c0 -4.364 -1 -7 -2 -11q 4 2 8 0c-1 4 -2 6.636 -2 11")
+                .element("path", "d", "M11 2c0 2.5 -1 2.66 -1 4a1.9 1.9 0 0 0 2 2a1.87 1.87 0 0 0 2 -2c0 -1.41 -1 -3 -3 -4");
+    }
+
+    static Icon olympics() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M3 9a3 3 0 1 0 6 0a3 3 0 1 0 -6 0")
+                .element("path", "d", "M15 9a3 3 0 1 0 6 0a3 3 0 1 0 -6 0")
+                .element("path", "d", "M9 9a3 3 0 1 0 6 0a3 3 0 1 0 -6 0")
+                .element("path", "d", "M6 15a3 3 0 1 0 6 0a3 3 0 1 0 -6 0")
+                .element("path", "d", "M12 15a3 3 0 1 0 6 0a3 3 0 1 0 -6 0");
+    }
+
+    static Icon olympicsOff() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M6 6a3 3 0 1 0 3 3")
+                .element("path", "d", "M15 9a3 3 0 1 0 6 0a3 3 0 1 0 -6 0")
+                .element("path", "d", "M9 9a3 3 0 0 0 3 3m2.566 -1.445a3 3 0 0 0 -4.135 -4.113")
+                .element("path", "d", "M6 15a3 3 0 1 0 6 0a3 3 0 1 0 -6 0")
+                .element("path", "d", "M12.878 12.88a3 3 0 0 0 4.239 4.247m.586 -3.431a3.012 3.012 0 0 0 -1.43 -1.414")
+                .element("path", "d", "M3 3l18 18");
+    }
+
+    static Icon om() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M7 12c2.21 0 4 -1.567 4 -3.5s-1.79 -3.5 -4 -3.5c-1.594 0 -2.97 .816 -3.613 2")
+                .element("path", "d", "M3.423 14.483a4.944 4.944 0 0 0 -.423 2.017c0 2.485 1.79 4.5 4 4.5s4 -2.015 4 -4.5s-1.79 -4.5 -4 -4.5")
+                .element("path", "d", "M14.071 17.01c.327 2.277 1.739 3.99 3.429 3.99c1.933 0 3.5 -2.239 3.5 -5s-1.567 -5 -3.5 -5c-.96 0 -1.868 .606 -2.5 1.5c-.717 1.049 -1.76 1.7 -2.936 1.7c-.92 0 -1.766 -.406 -2.434 -1.087")
+                .element("path", "d", "M17 3l2 2")
+                .element("path", "d", "M12 3c1.667 3.667 4.667 5.333 9 5");
+    }
+
+    static Icon omega() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M4 19h5v-1a7.35 7.35 0 1 1 6 0v1h5");
+    }
+
+    static Icon option() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M14 6h5m0 12h-5l-5 -12h-4");
+    }
+
+    static Icon outbound() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0")
+                .element("path", "d", "M9 15l6 -6")
+                .element("path", "d", "M11 9h4v4");
+    }
+
+    static Icon outlet() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12")
+                .element("path", "d", "M8.5 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0", "fill", "currentColor")
+                .element("path", "d", "M14.5 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0", "fill", "currentColor");
+    }
+
+    static Icon oval() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M6 12a6 9 0 1 0 12 0a6 9 0 1 0 -12 0");
+    }
+
+    static Icon ovalVertical() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M3 12c0 -3.314 4.03 -6 9 -6s9 2.686 9 6s-4.03 6 -9 6s-9 -2.686 -9 -6");
+    }
+
+    static Icon overline() {
+        return Icon.create()
+                .element("path", "stroke", "none", "d", "M0 0h24v24H0z", "fill", "none")
+                .element("path", "d", "M7 9v5a5 5 0 0 0 10 0v-5")
+                .element("path", "d", "M5 5h14");
+    }
+}

@@ -93,9 +93,15 @@ Use token-backed Tailwind classes for themed surfaces instead of hard-coded colo
 Button.create("Search")
     .variant(ButtonVariant.OUTLINE)
     .icon(LucideIcons.search());
+
+Button.create("Settings")
+    .variant(ButtonVariant.OUTLINE)
+    .icon(TablerIcons.settings());
 ```
 
 Icon variants use `currentColor` and theme token classes, so `IconVariant.PRIMARY`, `IconVariant.MUTED`, and `IconVariant.DESTRUCTIVE` follow light and dark mode automatically.
+
+Lucide and Tabler are optional generated icon modules. Add only the Maven dependency and GWT module inherit that the application uses.
 
 ## Router
 
