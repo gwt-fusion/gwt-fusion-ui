@@ -36,6 +36,11 @@
     </dependency>
     <dependency>
       <groupId>org.gwtfusion</groupId>
+      <artifactId>gwt-fusion-icons-heroicons</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gwtfusion</groupId>
       <artifactId>gwt-fusion-router</artifactId>
       <version>${project.version}</version>
     </dependency>

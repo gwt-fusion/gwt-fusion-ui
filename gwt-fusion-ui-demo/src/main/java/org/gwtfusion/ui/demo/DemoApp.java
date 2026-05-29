@@ -7,6 +7,8 @@ import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLElement;
 import elemental2.dom.HTMLInputElement;
 import elemental2.dom.KeyboardEvent;
+import org.gwtfusion.icons.heroicons.HeroIconStyle;
+import org.gwtfusion.icons.heroicons.HeroIcons;
 import org.gwtfusion.icons.lucide.LucideIcons;
 import org.gwtfusion.icons.tabler.TablerIcons;
 import org.gwtfusion.router.HistoryStrategy;
@@ -1832,6 +1834,19 @@ public final class DemoApp implements EntryPoint {
                         + "    .variant(IconVariant.MUTED)\n"
                         + "    .ariaLabel(\"Settings\");"));
 
+        HTMLElement heroiconsPreview = preview();
+        heroiconsPreview.appendChild(HeroIcons.magnifyingGlass(HeroIconStyle.OUTLINE).variant(IconVariant.PRIMARY).ariaLabel("Outline search").element());
+        heroiconsPreview.appendChild(HeroIcons.magnifyingGlass(HeroIconStyle.SOLID).variant(IconVariant.MUTED).ariaLabel("Solid search").element());
+        heroiconsPreview.appendChild(HeroIcons.magnifyingGlass(HeroIconStyle.MINI).variant(IconVariant.PRIMARY).size(20).ariaLabel("Mini search").element());
+        heroiconsPreview.appendChild(HeroIcons.magnifyingGlass(HeroIconStyle.MICRO).variant(IconVariant.MUTED).size(16).ariaLabel("Micro search").element());
+        grid.appendChild(example("Heroicons styles", heroiconsPreview,
+                "HeroIcons.magnifyingGlass(HeroIconStyle.OUTLINE);\n"
+                        + "HeroIcons.magnifyingGlass(HeroIconStyle.SOLID);\n"
+                        + "HeroIcons.magnifyingGlass(HeroIconStyle.MINI)\n"
+                        + "    .size(20);\n"
+                        + "HeroIcons.magnifyingGlass(HeroIconStyle.MICRO)\n"
+                        + "    .size(16);"));
+
         HTMLElement registryPreview = preview("demo-stack-preview");
         IconRegistry registry = IconRegistry.create()
                 .register("lucide", LucideIcons.provider())
@@ -1852,7 +1867,7 @@ public final class DemoApp implements EntryPoint {
     private void renderIconsPage() {
         clearContent();
         content.appendChild(textElement("h1", "", "Icons"));
-        content.appendChild(textElement("p", "demo-muted", "Lucide and Tabler are separate optional modules from the core UI module. Lucide exposes 1960 generated SVG icons and Tabler exposes 5093 generated outline icons. The gallery initially renders a limited Lucide slice; use search to narrow the catalog."));
+        content.appendChild(textElement("p", "demo-muted", "Lucide, Tabler, and Heroicons are separate optional modules from the core UI module. Lucide exposes 1960 generated SVG icons, Tabler exposes 5093 generated outline icons, and Heroicons exposes outline, solid, mini, and micro styles. The gallery initially renders a limited Lucide slice; use search to narrow the catalog."));
 
         HTMLElement usage = componentSection("icon-usage", "Icon Usage", "Standalone icons, Button composition, and explicit provider registration.");
         HTMLElement usageGrid = examplesGrid();

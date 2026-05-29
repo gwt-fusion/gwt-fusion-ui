@@ -278,18 +278,18 @@ Milestone 15 is split into four focused PR-sized sub-milestones. All additional 
 
 ### Milestone 15.2: Heroicons
 
-- [ ] Add Maven module `gwt-fusion-icons-heroicons`.
-- [ ] Use package `org.gwtfusion.icons.heroicons` and GWT module `org.gwtfusion.icons.heroicons.GwtFusionHeroicons`.
-- [ ] Include the complete Heroicons set for `OUTLINE`, `SOLID`, `MINI`, and `MICRO` styles as generated checked-in Java source.
-- [ ] Include Heroicons attribution and license files in the module resources.
-- [ ] Implement `HeroIconStyle` with `OUTLINE`, `SOLID`, `MINI`, and `MICRO`.
-- [ ] Implement `HeroIconProvider`.
-- [ ] Implement `HeroIcons` static factory API with `OUTLINE` as the default style.
-- [ ] Expose `HeroIcons.names(HeroIconStyle)`, `HeroIcons.icon(String, HeroIconStyle)`, and `HeroIcons.provider(HeroIconStyle)`.
-- [ ] Keep Heroicons independent from Lucide, Tabler, and Phosphor modules.
-- [ ] Add JVM tests for styles, provider behavior, icon counts, known icons, and unknown icon handling.
-- [ ] Add Heroicons style comparison examples to the demo Icons page.
-- [ ] Verify the Heroicons module build through Maven.
+- [x] Add Maven module `gwt-fusion-icons-heroicons`.
+- [x] Use package `org.gwtfusion.icons.heroicons` and GWT module `org.gwtfusion.icons.heroicons.GwtFusionHeroicons`.
+- [x] Include the complete Heroicons set for `OUTLINE`, `SOLID`, `MINI`, and `MICRO` styles as generated checked-in Java source.
+- [x] Include Heroicons attribution and license files in the module resources.
+- [x] Implement `HeroIconStyle` with `OUTLINE`, `SOLID`, `MINI`, and `MICRO`.
+- [x] Implement `HeroIconProvider`.
+- [x] Implement `HeroIcons` static factory API with `OUTLINE` as the default style.
+- [x] Expose `HeroIcons.names(HeroIconStyle)`, `HeroIcons.icon(String, HeroIconStyle)`, and `HeroIcons.provider(HeroIconStyle)`.
+- [x] Keep Heroicons independent from Lucide, Tabler, and Phosphor modules.
+- [x] Add JVM tests for styles, provider behavior, icon counts, known icons, and unknown icon handling.
+- [x] Add Heroicons style comparison examples to the demo Icons page.
+- [x] Verify the Heroicons module build through Maven.
 
 ### Milestone 15.3: Phosphor Icons
 
