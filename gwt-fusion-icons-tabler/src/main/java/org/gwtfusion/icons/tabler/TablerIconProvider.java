@@ -1,5 +1,8 @@
 package org.gwtfusion.icons.tabler;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import org.gwtfusion.ui.component.icon.Icon;
 import org.gwtfusion.ui.component.icon.IconProvider;
 
@@ -10,11 +13,21 @@ public final class TablerIconProvider implements IconProvider {
     }
 
     public boolean supports(String name) {
-        for (String supportedName : TablerIcons.names()) {
-            if (supportedName.equals(name)) {
-                return true;
-            }
+        return SupportedNames.HOLDER.contains(name);
+    }
+
+    private static final class SupportedNames {
+        private static final Set<String> HOLDER = names();
+
+        private SupportedNames() {
         }
-        return false;
+
+        private static Set<String> names() {
+            Set<String> names = new HashSet<>();
+            for (String name : TablerIcons.names()) {
+                names.add(name);
+            }
+            return Collections.unmodifiableSet(names);
+        }
     }
 }
