@@ -51,6 +51,7 @@
     <module>gwt-fusion-icons-lucide</module>
     <module>gwt-fusion-icons-tabler</module>
     <module>gwt-fusion-icons-heroicons</module>
+    <module>gwt-fusion-icons-phosphor</module>
     <module>gwt-fusion-ui-demo</module>
   </modules>
 

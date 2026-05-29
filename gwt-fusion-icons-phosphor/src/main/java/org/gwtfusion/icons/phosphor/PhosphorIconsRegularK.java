@@ -1,0 +1,77 @@
+package org.gwtfusion.icons.phosphor;
+
+import org.gwtfusion.ui.component.icon.Icon;
+import org.gwtfusion.ui.component.icon.IconTheme;
+
+final class PhosphorIconsRegularK {
+    private static final String[] NAMES = {"kanban", "key", "key-return", "keyboard", "keyhole", "knife"};
+
+    private PhosphorIconsRegularK() {
+    }
+
+    static String[] names() {
+        String[] names = new String[NAMES.length];
+        for (int i = 0; i < NAMES.length; i++) {
+            names[i] = NAMES[i];
+        }
+        return names;
+    }
+
+    static Icon icon(String name) {
+        if ("kanban".equals(name)) {
+            return kanban();
+        }
+        if ("key".equals(name)) {
+            return key();
+        }
+        if ("key-return".equals(name)) {
+            return keyReturn();
+        }
+        if ("keyboard".equals(name)) {
+            return keyboard();
+        }
+        if ("keyhole".equals(name)) {
+            return keyhole();
+        }
+        if ("knife".equals(name)) {
+            return knife();
+        }
+        return null;
+    }
+
+    static Icon kanban() {
+        return Icon.svg("0 0 256 256")
+                .theme(IconTheme.FILLED)
+                .element("path", "d", "M216,48H40a8,8,0,0,0-8,8V208a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V160h48v16a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V56A8,8,0,0,0,216,48ZM88,208H48V128H88Zm0-96H48V64H88Zm64,32H104V64h48Zm56,32H168V128h40Zm0-64H168V64h40Z");
+    }
+
+    static Icon key() {
+        return Icon.svg("0 0 256 256")
+                .theme(IconTheme.FILLED)
+                .element("path", "d", "M216.57,39.43A80,80,0,0,0,83.91,120.78L28.69,176A15.86,15.86,0,0,0,24,187.31V216a16,16,0,0,0,16,16H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A79.73,79.73,0,0,0,160,176h.1A80,80,0,0,0,216.57,39.43ZM224,98.1c-1.09,34.09-29.75,61.86-63.89,61.9H160a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A63.72,63.72,0,0,1,96,95.92c0-34.14,27.81-62.8,61.9-63.89A64,64,0,0,1,224,98.1ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z");
+    }
+
+    static Icon keyReturn() {
+        return Icon.svg("0 0 256 256")
+                .theme(IconTheme.FILLED)
+                .element("path", "d", "M184,104v32a8,8,0,0,1-8,8H99.31l10.35,10.34a8,8,0,0,1-11.32,11.32l-24-24a8,8,0,0,1,0-11.32l24-24a8,8,0,0,1,11.32,11.32L99.31,128H168V104a8,8,0,0,1,16,0Zm48-48V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Z");
+    }
+
+    static Icon keyboard() {
+        return Icon.svg("0 0 256 256")
+                .theme(IconTheme.FILLED)
+                .element("path", "d", "M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,144H32V64H224V192Zm-16-64a8,8,0,0,1-8,8H56a8,8,0,0,1,0-16H200A8,8,0,0,1,208,128Zm0-32a8,8,0,0,1-8,8H56a8,8,0,0,1,0-16H200A8,8,0,0,1,208,96ZM72,160a8,8,0,0,1-8,8H56a8,8,0,0,1,0-16h8A8,8,0,0,1,72,160Zm96,0a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,160Zm40,0a8,8,0,0,1-8,8h-8a8,8,0,0,1,0-16h8A8,8,0,0,1,208,160Z");
+    }
+
+    static Icon keyhole() {
+        return Icon.svg("0 0 256 256")
+                .theme(IconTheme.FILLED)
+                .element("path", "d", "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm40-104a40,40,0,1,0-65.94,30.44L88.68,172.77A8,8,0,0,0,96,184h64a8,8,0,0,0,7.32-11.23l-13.38-30.33A40.14,40.14,0,0,0,168,112ZM136.68,143l11,25.05H108.27l11-25.05A8,8,0,0,0,116,132.79a24,24,0,1,1,24,0A8,8,0,0,0,136.68,143Z");
+    }
+
+    static Icon knife() {
+        return Icon.svg("0 0 256 256")
+                .theme(IconTheme.FILLED)
+                .element("path", "d", "M231.87,32.13a27.84,27.84,0,0,0-39.32,0L18.34,206.4a8,8,0,0,0,3.86,13.45A160.67,160.67,0,0,0,58.4,224c32.95,0,65.92-10.2,96.95-30.23,31.76-20.5,50.19-43.82,51-44.81a8,8,0,0,0-.64-10.59L185.32,118l46.55-46.56A27.85,27.85,0,0,0,231.87,32.13ZM189.1,144.44a220.41,220.41,0,0,1-42.86,36.16c-34.43,22.1-69.94,30.92-105.77,26.3L146,101.33Zm31.46-84.3L174,106.7,157.32,90l46.55-46.56a11.8,11.8,0,0,1,16.69,16.69Z");
+    }
+}

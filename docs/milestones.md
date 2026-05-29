@@ -293,18 +293,18 @@ Milestone 15 is split into four focused PR-sized sub-milestones. All additional 
 
 ### Milestone 15.3: Phosphor Icons
 
-- [ ] Add Maven module `gwt-fusion-icons-phosphor`.
-- [ ] Use package `org.gwtfusion.icons.phosphor` and GWT module `org.gwtfusion.icons.phosphor.GwtFusionPhosphor`.
-- [ ] Include the complete Phosphor icon set for `THIN`, `LIGHT`, `REGULAR`, `BOLD`, `FILL`, and `DUOTONE` weights as generated checked-in Java source.
-- [ ] Include Phosphor attribution and license files in the module resources.
-- [ ] Implement `PhosphorWeight` with `THIN`, `LIGHT`, `REGULAR`, `BOLD`, `FILL`, and `DUOTONE`.
-- [ ] Implement `PhosphorIconProvider`.
-- [ ] Implement `PhosphorIcons` static factory API with `REGULAR` as the default weight.
-- [ ] Expose `PhosphorIcons.names(PhosphorWeight)`, `PhosphorIcons.icon(String, PhosphorWeight)`, and `PhosphorIcons.provider(PhosphorWeight)`.
-- [ ] Keep Phosphor independent from Lucide, Tabler, and Heroicons modules.
-- [ ] Add JVM tests for weights, provider behavior, icon counts, known icons, and unknown icon handling.
-- [ ] Add Phosphor weight comparison examples to the demo Icons page.
-- [ ] Verify the Phosphor module build through Maven.
+- [x] Add Maven module `gwt-fusion-icons-phosphor`.
+- [x] Use package `org.gwtfusion.icons.phosphor` and GWT module `org.gwtfusion.icons.phosphor.GwtFusionPhosphor`.
+- [x] Include the complete Phosphor icon set for `THIN`, `LIGHT`, `REGULAR`, `BOLD`, `FILL`, and `DUOTONE` weights as generated checked-in Java source.
+- [x] Include Phosphor attribution and license files in the module resources.
+- [x] Implement `PhosphorWeight` with `THIN`, `LIGHT`, `REGULAR`, `BOLD`, `FILL`, and `DUOTONE`.
+- [x] Implement `PhosphorIconProvider`.
+- [x] Implement `PhosphorIcons` static factory API with `REGULAR` as the default weight.
+- [x] Expose `PhosphorIcons.names(PhosphorWeight)`, `PhosphorIcons.icon(String, PhosphorWeight)`, and `PhosphorIcons.provider(PhosphorWeight)`.
+- [x] Keep Phosphor independent from Lucide, Tabler, and Heroicons modules.
+- [x] Add JVM tests for weights, provider behavior, icon counts, known icons, and unknown icon handling.
+- [x] Add Phosphor weight comparison examples to the demo Icons page.
+- [x] Verify the Phosphor module build through Maven.
 
 ### Milestone 15.4: Multi-Pack Demo, Docs, And Final Hardening
 

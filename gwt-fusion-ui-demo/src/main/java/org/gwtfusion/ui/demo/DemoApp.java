@@ -10,6 +10,8 @@ import elemental2.dom.KeyboardEvent;
 import org.gwtfusion.icons.heroicons.HeroIconStyle;
 import org.gwtfusion.icons.heroicons.HeroIcons;
 import org.gwtfusion.icons.lucide.LucideIcons;
+import org.gwtfusion.icons.phosphor.PhosphorIcons;
+import org.gwtfusion.icons.phosphor.PhosphorWeight;
 import org.gwtfusion.icons.tabler.TablerIcons;
 import org.gwtfusion.router.HistoryStrategy;
 import org.gwtfusion.router.Route;
@@ -1847,6 +1849,21 @@ public final class DemoApp implements EntryPoint {
                         + "HeroIcons.magnifyingGlass(HeroIconStyle.MICRO)\n"
                         + "    .size(16);"));
 
+        HTMLElement phosphorPreview = preview();
+        phosphorPreview.appendChild(PhosphorIcons.magnifyingGlass(PhosphorWeight.THIN).variant(IconVariant.MUTED).ariaLabel("Thin search").element());
+        phosphorPreview.appendChild(PhosphorIcons.magnifyingGlass(PhosphorWeight.LIGHT).variant(IconVariant.MUTED).ariaLabel("Light search").element());
+        phosphorPreview.appendChild(PhosphorIcons.magnifyingGlass(PhosphorWeight.REGULAR).variant(IconVariant.PRIMARY).ariaLabel("Regular search").element());
+        phosphorPreview.appendChild(PhosphorIcons.magnifyingGlass(PhosphorWeight.BOLD).variant(IconVariant.PRIMARY).ariaLabel("Bold search").element());
+        phosphorPreview.appendChild(PhosphorIcons.magnifyingGlass(PhosphorWeight.FILL).variant(IconVariant.DESTRUCTIVE).ariaLabel("Fill search").element());
+        phosphorPreview.appendChild(PhosphorIcons.magnifyingGlass(PhosphorWeight.DUOTONE).variant(IconVariant.MUTED).ariaLabel("Duotone search").element());
+        grid.appendChild(example("Phosphor weights", phosphorPreview,
+                "PhosphorIcons.magnifyingGlass(PhosphorWeight.THIN);\n"
+                        + "PhosphorIcons.magnifyingGlass(PhosphorWeight.LIGHT);\n"
+                        + "PhosphorIcons.magnifyingGlass(PhosphorWeight.REGULAR);\n"
+                        + "PhosphorIcons.magnifyingGlass(PhosphorWeight.BOLD);\n"
+                        + "PhosphorIcons.magnifyingGlass(PhosphorWeight.FILL);\n"
+                        + "PhosphorIcons.magnifyingGlass(PhosphorWeight.DUOTONE);"));
+
         HTMLElement registryPreview = preview("demo-stack-preview");
         IconRegistry registry = IconRegistry.create()
                 .register("lucide", LucideIcons.provider())
@@ -1867,7 +1884,7 @@ public final class DemoApp implements EntryPoint {
     private void renderIconsPage() {
         clearContent();
         content.appendChild(textElement("h1", "", "Icons"));
-        content.appendChild(textElement("p", "demo-muted", "Lucide, Tabler, and Heroicons are separate optional modules from the core UI module. Lucide exposes 1960 generated SVG icons, Tabler exposes 5093 generated outline icons, and Heroicons exposes outline, solid, mini, and micro styles. The gallery initially renders a limited Lucide slice; use search to narrow the catalog."));
+        content.appendChild(textElement("p", "demo-muted", "Lucide, Tabler, Heroicons, and Phosphor are separate optional modules from the core UI module. Lucide exposes 1960 generated SVG icons, Tabler exposes 5093 generated outline icons, Heroicons exposes outline, solid, mini, and micro styles, and Phosphor exposes thin, light, regular, bold, fill, and duotone weights. The gallery initially renders a limited Lucide slice; use search to narrow the catalog."));
 
         HTMLElement usage = componentSection("icon-usage", "Icon Usage", "Standalone icons, Button composition, and explicit provider registration.");
         HTMLElement usageGrid = examplesGrid();
