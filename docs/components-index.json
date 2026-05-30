@@ -19,6 +19,16 @@
       "purpose": "Generated Tabler outline icon factories for use with the UI Icon APIs."
     },
     {
+      "artifactId": "gwt-fusion-icons-heroicons",
+      "rootPackage": "org.gwtfusion.icons.heroicons",
+      "purpose": "Generated Heroicons icon factories for OUTLINE, SOLID, MINI, and MICRO styles."
+    },
+    {
+      "artifactId": "gwt-fusion-icons-phosphor",
+      "rootPackage": "org.gwtfusion.icons.phosphor",
+      "purpose": "Generated Phosphor icon factories for THIN, LIGHT, REGULAR, BOLD, FILL, and DUOTONE weights."
+    },
+    {
       "artifactId": "gwt-fusion-router",
       "rootPackage": "org.gwtfusion.router",
       "purpose": "Standalone client router that renders HTMLElement values."
@@ -101,6 +111,10 @@
     { "name": "DirectionManager", "package": "org.gwtfusion.ui.theme", "example": "DirectionManager.set(Direction.RTL)" },
     { "name": "LucideIcons", "package": "org.gwtfusion.icons.lucide", "example": "LucideIcons.search()" },
     { "name": "TablerIcons", "package": "org.gwtfusion.icons.tabler", "example": "TablerIcons.settings()" },
+    { "name": "HeroIcons", "package": "org.gwtfusion.icons.heroicons", "example": "HeroIcons.magnifyingGlass(HeroIconStyle.OUTLINE)" },
+    { "name": "HeroIconStyle", "package": "org.gwtfusion.icons.heroicons", "values": ["OUTLINE", "SOLID", "MINI", "MICRO"], "example": "HeroIconStyle.SOLID" },
+    { "name": "PhosphorIcons", "package": "org.gwtfusion.icons.phosphor", "example": "PhosphorIcons.magnifyingGlass(PhosphorWeight.REGULAR)" },
+    { "name": "PhosphorWeight", "package": "org.gwtfusion.icons.phosphor", "values": ["THIN", "LIGHT", "REGULAR", "BOLD", "FILL", "DUOTONE"], "example": "PhosphorWeight.DUOTONE" },
     { "name": "Router", "package": "org.gwtfusion.router", "example": "Router.create(HistoryStrategy.hash()).route(\"/\", context -> homeElement())" }
   ]
 }

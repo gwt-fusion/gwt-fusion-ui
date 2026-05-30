@@ -4,13 +4,17 @@
 
 `Icon` is a `UiComponent`. Its root is a lightweight `span` so it fits the existing `HTMLElement element()` contract, and the rendered graphic is an inline SVG child.
 
-Concrete icon sets are provided by separate modules. Lucide icons live in `gwt-fusion-icons-lucide` under `org.gwtfusion.icons.lucide`, and Tabler outline icons live in `gwt-fusion-icons-tabler` under `org.gwtfusion.icons.tabler`.
+Concrete icon sets are provided by separate modules. Lucide icons live in `gwt-fusion-icons-lucide`, Tabler outline icons live in `gwt-fusion-icons-tabler`, Heroicons live in `gwt-fusion-icons-heroicons`, and Phosphor icons live in `gwt-fusion-icons-phosphor`.
 
 ## Basic Usage
 
 ```java
 import org.gwtfusion.icons.lucide.LucideIcons;
 import org.gwtfusion.icons.tabler.TablerIcons;
+import org.gwtfusion.icons.heroicons.HeroIconStyle;
+import org.gwtfusion.icons.heroicons.HeroIcons;
+import org.gwtfusion.icons.phosphor.PhosphorIcons;
+import org.gwtfusion.icons.phosphor.PhosphorWeight;
 
 LucideIcons.check()
     .variant(IconVariant.PRIMARY)
@@ -19,6 +23,14 @@ LucideIcons.check()
 TablerIcons.settings()
     .variant(IconVariant.MUTED)
     .ariaLabel("Settings");
+
+HeroIcons.magnifyingGlass(HeroIconStyle.OUTLINE)
+    .variant(IconVariant.PRIMARY)
+    .ariaLabel("Search");
+
+PhosphorIcons.magnifyingGlass(PhosphorWeight.REGULAR)
+    .variant(IconVariant.PRIMARY)
+    .ariaLabel("Search");
 ```
 
 Use `decorative()` when the icon is only visual and nearby text already describes the action or state.
@@ -58,15 +70,39 @@ Button.create("")
 ```java
 IconRegistry registry = IconRegistry.create()
     .register("lucide", LucideIcons.provider())
-    .register("tabler", TablerIcons.provider());
+    .register("tabler", TablerIcons.provider())
+    .register("heroicons", HeroIcons.provider(HeroIconStyle.OUTLINE))
+    .register("phosphor", PhosphorIcons.provider(PhosphorWeight.REGULAR));
 
 registry.icon("lucide", "search")
     .ariaLabel("Search");
 
 registry.icon("tabler", "settings")
     .ariaLabel("Settings");
+
+registry.icon("heroicons", "magnifying-glass")
+    .ariaLabel("Heroicons search");
+
+registry.icon("phosphor", "magnifying-glass")
+    .ariaLabel("Phosphor search");
 ```
 
-The Lucide support in the optional `gwt-fusion-icons-lucide` module is generated from `lucide-static` and checked in. The Tabler support in the optional `gwt-fusion-icons-tabler` module is generated from `@tabler/icons` outline SVGs and checked in. Larger icon packs should stay in optional modules and follow the same generated-source pattern.
+## Multi-Pack Guidance
 
-The demo has a dedicated Icons page with multi-pack usage examples and a searchable Lucide gallery for browsing the full generated Lucide set.
+Add only the Maven dependencies and GWT module inherits for icon packs your application uses. Packs are independent and do not register globally, so applications can mix them explicitly through direct factories or an `IconRegistry`.
+
+Use pack-specific style APIs when a family has multiple visual styles:
+
+```java
+HeroIcons.magnifyingGlass(HeroIconStyle.SOLID);
+HeroIcons.magnifyingGlass(HeroIconStyle.MINI).size(20);
+HeroIcons.magnifyingGlass(HeroIconStyle.MICRO).size(16);
+
+PhosphorIcons.magnifyingGlass(PhosphorWeight.THIN);
+PhosphorIcons.magnifyingGlass(PhosphorWeight.BOLD);
+PhosphorIcons.magnifyingGlass(PhosphorWeight.DUOTONE);
+```
+
+The Lucide support in the optional `gwt-fusion-icons-lucide` module is generated from `lucide-static` and checked in. Tabler support is generated from `@tabler/icons` outline SVGs. Heroicons support is generated from `@heroicons/react`. Phosphor support is generated from `@phosphor-icons/core`. Larger icon packs should stay in optional modules and follow the same generated-source pattern.
+
+The demo has a dedicated Icons page with multi-pack usage examples, pack switching, an all-pack `IconRegistry` example, and a searchable Lucide gallery for browsing the full generated Lucide set.
