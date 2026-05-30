@@ -105,4 +105,4 @@ PhosphorIcons.magnifyingGlass(PhosphorWeight.DUOTONE);
 
 The Lucide support in the optional `gwt-fusion-icons-lucide` module is generated from `lucide-static` and checked in. Tabler support is generated from `@tabler/icons` outline SVGs. Heroicons support is generated from `@heroicons/react`. Phosphor support is generated from `@phosphor-icons/core`. Larger icon packs should stay in optional modules and follow the same generated-source pattern.
 
-The demo has a dedicated Icons page with multi-pack usage examples, pack switching, an all-pack `IconRegistry` example, and a searchable Lucide gallery for browsing the full generated Lucide set.
+The demo has a dedicated Icons page with multi-pack usage examples, pack switching, an all-pack `IconRegistry` example, and a searchable multi-pack gallery. The gallery can switch between Lucide, Tabler, Heroicons, and Phosphor, and shows style or weight controls for packs that expose variants.
