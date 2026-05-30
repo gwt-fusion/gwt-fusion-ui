@@ -50,6 +50,7 @@ import org.gwtfusion.ui.component.dropdown.DropdownMenu;
 import org.gwtfusion.ui.component.emptystate.EmptyState;
 import org.gwtfusion.ui.component.form.FormField;
 import org.gwtfusion.ui.component.hovercard.HoverCard;
+import org.gwtfusion.ui.component.icon.Icon;
 import org.gwtfusion.ui.component.icon.IconRegistry;
 import org.gwtfusion.ui.component.icon.IconSize;
 import org.gwtfusion.ui.component.icon.IconVariant;
@@ -1864,21 +1865,77 @@ public final class DemoApp implements EntryPoint {
                         + "PhosphorIcons.magnifyingGlass(PhosphorWeight.FILL);\n"
                         + "PhosphorIcons.magnifyingGlass(PhosphorWeight.DUOTONE);"));
 
+        HTMLElement multiPackPreview = preview("demo-stack-preview");
+        HTMLElement selectedPack = element("div", "demo-preview");
+        renderSelectedIconPack("lucide", selectedPack);
+        HTMLElement packButtons = element("div", "demo-button-row");
+        packButtons.appendChild(Button.create("Lucide").variant(ButtonVariant.OUTLINE).onClick(event -> renderSelectedIconPack("lucide", selectedPack)).element());
+        packButtons.appendChild(Button.create("Tabler").variant(ButtonVariant.OUTLINE).onClick(event -> renderSelectedIconPack("tabler", selectedPack)).element());
+        packButtons.appendChild(Button.create("Heroicons").variant(ButtonVariant.OUTLINE).onClick(event -> renderSelectedIconPack("heroicons", selectedPack)).element());
+        packButtons.appendChild(Button.create("Phosphor").variant(ButtonVariant.OUTLINE).onClick(event -> renderSelectedIconPack("phosphor", selectedPack)).element());
+        multiPackPreview.appendChild(packButtons);
+        multiPackPreview.appendChild(selectedPack);
+        grid.appendChild(example("Multi-pack switching", multiPackPreview,
+                "renderSelectedIconPack(\"lucide\", selectedPack);\n\n"
+                        + "Button.create(\"Heroicons\")\n"
+                        + "    .onClick(event -> renderSelectedIconPack(\"heroicons\", selectedPack));"));
+
         HTMLElement registryPreview = preview("demo-stack-preview");
         IconRegistry registry = IconRegistry.create()
                 .register("lucide", LucideIcons.provider())
-                .register("tabler", TablerIcons.provider());
+                .register("tabler", TablerIcons.provider())
+                .register("heroicons", HeroIcons.provider(HeroIconStyle.OUTLINE))
+                .register("phosphor", PhosphorIcons.provider(PhosphorWeight.REGULAR));
         registryPreview.appendChild(registry.icon("lucide", "search").ariaLabel("Search").element());
         registryPreview.appendChild(registry.icon("tabler", "settings").ariaLabel("Settings").element());
+        registryPreview.appendChild(registry.icon("heroicons", "magnifying-glass").ariaLabel("Heroicons search").element());
+        registryPreview.appendChild(registry.icon("phosphor", "magnifying-glass").ariaLabel("Phosphor search").element());
         registryPreview.appendChild(textElement("p", "demo-muted", "IconRegistry keeps providers explicit and avoids global icon registration."));
         grid.appendChild(example("IconRegistry", registryPreview,
                 "IconRegistry registry = IconRegistry.create()\n"
                         + "    .register(\"lucide\", LucideIcons.provider())\n"
-                        + "    .register(\"tabler\", TablerIcons.provider());\n\n"
+                        + "    .register(\"tabler\", TablerIcons.provider())\n"
+                        + "    .register(\"heroicons\", HeroIcons.provider(HeroIconStyle.OUTLINE))\n"
+                        + "    .register(\"phosphor\", PhosphorIcons.provider(PhosphorWeight.REGULAR));\n\n"
                         + "registry.icon(\"lucide\", \"search\")\n"
                         + "    .ariaLabel(\"Search\");\n\n"
                         + "registry.icon(\"tabler\", \"settings\")\n"
-                        + "    .ariaLabel(\"Settings\");"));
+                        + "    .ariaLabel(\"Settings\");\n\n"
+                        + "registry.icon(\"heroicons\", \"magnifying-glass\");\n"
+                        + "registry.icon(\"phosphor\", \"magnifying-glass\");"));
+    }
+
+    private void renderSelectedIconPack(String pack, HTMLElement target) {
+        clear(target);
+        Icon icon;
+        String label;
+        String code;
+        switch (pack) {
+            case "tabler":
+                icon = TablerIcons.search().variant(IconVariant.PRIMARY).ariaLabel("Tabler search");
+                label = "Tabler outline";
+                code = "TablerIcons.search()";
+                break;
+            case "heroicons":
+                icon = HeroIcons.magnifyingGlass(HeroIconStyle.OUTLINE).variant(IconVariant.PRIMARY).ariaLabel("Heroicons search");
+                label = "Heroicons outline";
+                code = "HeroIcons.magnifyingGlass(HeroIconStyle.OUTLINE)";
+                break;
+            case "phosphor":
+                icon = PhosphorIcons.magnifyingGlass(PhosphorWeight.REGULAR).variant(IconVariant.PRIMARY).ariaLabel("Phosphor search");
+                label = "Phosphor regular";
+                code = "PhosphorIcons.magnifyingGlass(PhosphorWeight.REGULAR)";
+                break;
+            case "lucide":
+            default:
+                icon = LucideIcons.search().variant(IconVariant.PRIMARY).ariaLabel("Lucide search");
+                label = "Lucide";
+                code = "LucideIcons.search()";
+                break;
+        }
+        target.appendChild(icon.size(32).element());
+        target.appendChild(textElement("span", "demo-icon-name", label));
+        target.appendChild(textElement("code", "demo-icon-code", code));
     }
 
     private void renderIconsPage() {

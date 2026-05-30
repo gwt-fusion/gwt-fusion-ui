@@ -227,6 +227,12 @@ pre {
   grid-template-columns: 1fr;
 }
 
+.demo-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
 .demo-resizable-preview {
   align-items: stretch;
   display: grid;

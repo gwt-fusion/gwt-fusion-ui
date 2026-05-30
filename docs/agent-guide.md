@@ -27,10 +27,17 @@ This guide is for coding agents that generate application code using GWT Fusion.
 ```java
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLElement;
+import org.gwtfusion.icons.heroicons.HeroIconStyle;
+import org.gwtfusion.icons.heroicons.HeroIcons;
+import org.gwtfusion.icons.lucide.LucideIcons;
+import org.gwtfusion.icons.phosphor.PhosphorIcons;
+import org.gwtfusion.icons.phosphor.PhosphorWeight;
+import org.gwtfusion.icons.tabler.TablerIcons;
 import org.gwtfusion.ui.UiComponent;
 import org.gwtfusion.ui.component.button.Button;
 import org.gwtfusion.ui.component.button.ButtonVariant;
 import org.gwtfusion.ui.component.card.Card;
+import org.gwtfusion.ui.component.icon.IconRegistry;
 import org.gwtfusion.ui.theme.Direction;
 import org.gwtfusion.ui.theme.DirectionManager;
 ```
@@ -97,11 +104,29 @@ Button.create("Search")
 Button.create("Settings")
     .variant(ButtonVariant.OUTLINE)
     .icon(TablerIcons.settings());
+
+Button.create("Find")
+    .variant(ButtonVariant.OUTLINE)
+    .icon(HeroIcons.magnifyingGlass(HeroIconStyle.OUTLINE));
+
+Button.create("Search")
+    .variant(ButtonVariant.OUTLINE)
+    .icon(PhosphorIcons.magnifyingGlass(PhosphorWeight.REGULAR));
 ```
 
 Icon variants use `currentColor` and theme token classes, so `IconVariant.PRIMARY`, `IconVariant.MUTED`, and `IconVariant.DESTRUCTIVE` follow light and dark mode automatically.
 
-Lucide and Tabler are optional generated icon modules. Add only the Maven dependency and GWT module inherit that the application uses.
+Lucide, Tabler, Heroicons, and Phosphor are optional generated icon modules. Add only the Maven dependency and GWT module inherit that the application uses. Use `HeroIconStyle` for Heroicons styles and `PhosphorWeight` for Phosphor weights.
+
+Use `IconRegistry` when an application intentionally mixes packs:
+
+```java
+IconRegistry registry = IconRegistry.create()
+    .register("lucide", LucideIcons.provider())
+    .register("tabler", TablerIcons.provider())
+    .register("heroicons", HeroIcons.provider(HeroIconStyle.OUTLINE))
+    .register("phosphor", PhosphorIcons.provider(PhosphorWeight.REGULAR));
+```
 
 ## Router
 

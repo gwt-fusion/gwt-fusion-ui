@@ -308,18 +308,18 @@ Milestone 15 is split into four focused PR-sized sub-milestones. All additional 
 
 ### Milestone 15.4: Multi-Pack Demo, Docs, And Final Hardening
 
-- [ ] Add demo examples that show switching between Lucide, Tabler, Heroicons, and Phosphor.
-- [ ] Add an `IconRegistry` example with independently registered providers for all icon packs.
-- [ ] Update `docs/icon-modules.md` with all implemented icon modules, style/weight APIs, GWT module names, and dependency examples.
-- [ ] Update `docs/icons.md` with multi-pack usage guidance.
-- [ ] Update `docs/components-index.json` non-component APIs with the new icon factories.
-- [ ] Update `llms.txt` and `docs/agent-guide.md` for agent discovery.
-- [ ] Ensure each icon module contains only its own icon assets and metadata.
-- [ ] Ensure no proprietary, paid, or pro icon assets are bundled.
-- [ ] Verify all icon modules build through Maven.
-- [ ] Verify the demo can use multiple icon modules together.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile.
+- [x] Add demo examples that show switching between Lucide, Tabler, Heroicons, and Phosphor.
+- [x] Add an `IconRegistry` example with independently registered providers for all icon packs.
+- [x] Update `docs/icon-modules.md` with all implemented icon modules, style/weight APIs, GWT module names, and dependency examples.
+- [x] Update `docs/icons.md` with multi-pack usage guidance.
+- [x] Update `docs/components-index.json` non-component APIs with the new icon factories.
+- [x] Update `llms.txt` and `docs/agent-guide.md` for agent discovery.
+- [x] Ensure each icon module contains only its own icon assets and metadata.
+- [x] Ensure no proprietary, paid, or pro icon assets are bundled.
+- [x] Verify all icon modules build through Maven.
+- [x] Verify the demo can use multiple icon modules together.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile.
 
 ## Milestone Definition Of Done
 

@@ -19,6 +19,8 @@ Core packages:
 - `org.gwtfusion.ui.component.*`: UI components.
 - `org.gwtfusion.icons.lucide`: Lucide icon factories.
 - `org.gwtfusion.icons.tabler`: Tabler outline icon factories.
+- `org.gwtfusion.icons.heroicons`: Heroicons icon factories with `HeroIconStyle`.
+- `org.gwtfusion.icons.phosphor`: Phosphor icon factories with `PhosphorWeight`.
 - `org.gwtfusion.router`: Standalone router.
 
 Important rules for generated code:
