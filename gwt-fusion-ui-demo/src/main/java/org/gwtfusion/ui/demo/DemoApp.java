@@ -1941,7 +1941,7 @@ public final class DemoApp implements EntryPoint {
     private void renderIconsPage() {
         clearContent();
         content.appendChild(textElement("h1", "", "Icons"));
-        content.appendChild(textElement("p", "demo-muted", "Lucide, Tabler, Heroicons, and Phosphor are separate optional modules from the core UI module. Lucide exposes 1960 generated SVG icons, Tabler exposes 5093 generated outline icons, Heroicons exposes outline, solid, mini, and micro styles, and Phosphor exposes thin, light, regular, bold, fill, and duotone weights. The gallery initially renders a limited Lucide slice; use search to narrow the catalog."));
+        content.appendChild(textElement("p", "demo-muted", "Lucide, Tabler, Heroicons, and Phosphor are separate optional modules from the core UI module. Lucide exposes 1960 generated SVG icons, Tabler exposes 5093 generated outline icons, Heroicons exposes outline, solid, mini, and micro styles, and Phosphor exposes thin, light, regular, bold, fill, and duotone weights. The gallery initially renders a limited slice; choose an icon pack and use search to narrow the catalog."));
 
         HTMLElement usage = componentSection("icon-usage", "Icon Usage", "Standalone icons, Button composition, and explicit provider registration.");
         HTMLElement usageGrid = examplesGrid();
@@ -1949,27 +1949,79 @@ public final class DemoApp implements EntryPoint {
         usage.appendChild(usageGrid);
         content.appendChild(usage);
 
-        HTMLElement gallerySection = componentSection("lucide-gallery", "Lucide Gallery", "Browse the generated Lucide icon factories available from gwt-fusion-icons-lucide.");
+        HTMLElement gallerySection = componentSection("icon-gallery", "Icon Gallery", "Browse generated icon factories from Lucide, Tabler, Heroicons, and Phosphor.");
         HTMLElement controls = element("div", "demo-icon-gallery-controls");
+        NativeSelect packSelect = NativeSelect.create()
+                .attr("id", "demo-icon-gallery-pack")
+                .option("lucide", "Lucide")
+                .option("tabler", "Tabler")
+                .option("heroicons", "Heroicons")
+                .option("phosphor", "Phosphor")
+                .value("lucide");
+        HTMLElement packControl = iconGalleryControl("Icon pack", "demo-icon-gallery-pack", packSelect.element());
+        NativeSelect variantSelect = NativeSelect.create().attr("id", "demo-icon-gallery-variant");
+        HTMLElement variantControl = iconGalleryControl("Variant", "demo-icon-gallery-variant", variantSelect.element());
+        updateIconGalleryVariants(packSelect.value(), variantSelect, variantControl);
         HTMLInputElement search = (HTMLInputElement) Input.create()
+                .attr("id", "demo-icon-gallery-search")
                 .type("search")
                 .placeholder("Filter icons, e.g. search, arrow, calendar")
                 .element();
+        HTMLElement searchControl = iconGalleryControl("Search", "demo-icon-gallery-search", search);
         HTMLElement status = textElement("p", "demo-muted", "");
-        controls.appendChild(search);
+        controls.appendChild(packControl);
+        controls.appendChild(variantControl);
+        controls.appendChild(searchControl);
         controls.appendChild(status);
         HTMLElement gallery = element("div", "demo-icon-gallery");
-        search.addEventListener("input", event -> renderLucideGallery(search.value, gallery, status));
+        packSelect.element().addEventListener("change", event -> {
+            updateIconGalleryVariants(packSelect.value(), variantSelect, variantControl);
+            renderIconGallery(packSelect.value(), variantSelect.value(), search.value, gallery, status);
+        });
+        variantSelect.element().addEventListener("change", event -> renderIconGallery(packSelect.value(), variantSelect.value(), search.value, gallery, status));
+        search.addEventListener("input", event -> renderIconGallery(packSelect.value(), variantSelect.value(), search.value, gallery, status));
         gallerySection.appendChild(controls);
         gallerySection.appendChild(gallery);
         content.appendChild(gallerySection);
-        renderLucideGallery("", gallery, status);
+        renderIconGallery(packSelect.value(), variantSelect.value(), "", gallery, status);
     }
 
-    private void renderLucideGallery(String query, HTMLElement gallery, HTMLElement status) {
+    private HTMLElement iconGalleryControl(String label, String forId, HTMLElement control) {
+        HTMLElement wrapper = element("div", "demo-icon-gallery-control");
+        wrapper.appendChild(Label.create(label).forId(forId).element());
+        wrapper.appendChild(control);
+        return wrapper;
+    }
+
+    private void updateIconGalleryVariants(String pack, NativeSelect variantSelect, HTMLElement variantControl) {
+        clear(variantSelect.element());
+        if ("heroicons".equals(pack)) {
+            variantSelect
+                    .option("OUTLINE", "Outline")
+                    .option("SOLID", "Solid")
+                    .option("MINI", "Mini")
+                    .option("MICRO", "Micro")
+                    .value("OUTLINE");
+            variantControl.style.display = "";
+        } else if ("phosphor".equals(pack)) {
+            variantSelect
+                    .option("REGULAR", "Regular")
+                    .option("THIN", "Thin")
+                    .option("LIGHT", "Light")
+                    .option("BOLD", "Bold")
+                    .option("FILL", "Fill")
+                    .option("DUOTONE", "Duotone")
+                    .value("REGULAR");
+            variantControl.style.display = "";
+        } else {
+            variantControl.style.display = "none";
+        }
+    }
+
+    private void renderIconGallery(String pack, String variant, String query, HTMLElement gallery, HTMLElement status) {
         clear(gallery);
         String filter = query == null ? "" : query.toLowerCase();
-        String[] names = LucideIcons.names();
+        String[] names = iconGalleryNames(pack, variant);
         int matched = 0;
         int rendered = 0;
         for (String name : names) {
@@ -1980,14 +2032,106 @@ public final class DemoApp implements EntryPoint {
             if (rendered >= ICON_GALLERY_LIMIT) {
                 continue;
             }
+            Icon icon = iconGalleryIcon(pack, variant, name);
+            if (icon == null) {
+                continue;
+            }
             HTMLElement item = element("div", "demo-icon-card");
-            item.appendChild(LucideIcons.icon(name).size(24).decorative().element());
+            item.appendChild(icon.size(24).decorative().element());
             item.appendChild(textElement("span", "demo-icon-name", name));
-            item.appendChild(textElement("code", "demo-icon-code", "LucideIcons.icon(\"" + name + "\")"));
+            item.appendChild(textElement("code", "demo-icon-code", iconGalleryCode(pack, variant, name)));
             gallery.appendChild(item);
             rendered++;
         }
-        status.textContent = "Showing " + rendered + " of " + matched + " matching icons (" + names.length + " total).";
+        status.textContent = "Showing " + rendered + " of " + matched + " matching " + iconGalleryLabel(pack, variant) + " icons (" + names.length + " total).";
+    }
+
+    private String[] iconGalleryNames(String pack, String variant) {
+        switch (pack) {
+            case "tabler":
+                return TablerIcons.names();
+            case "heroicons":
+                return HeroIcons.names(heroIconStyle(variant));
+            case "phosphor":
+                return PhosphorIcons.names(phosphorWeight(variant));
+            case "lucide":
+            default:
+                return LucideIcons.names();
+        }
+    }
+
+    private Icon iconGalleryIcon(String pack, String variant, String name) {
+        switch (pack) {
+            case "tabler":
+                return TablerIcons.icon(name);
+            case "heroicons":
+                return HeroIcons.icon(name, heroIconStyle(variant));
+            case "phosphor":
+                return PhosphorIcons.icon(name, phosphorWeight(variant));
+            case "lucide":
+            default:
+                return LucideIcons.icon(name);
+        }
+    }
+
+    private String iconGalleryCode(String pack, String variant, String name) {
+        switch (pack) {
+            case "tabler":
+                return "TablerIcons.icon(\"" + name + "\")";
+            case "heroicons":
+                return "HeroIcons.icon(\"" + name + "\", HeroIconStyle." + heroIconStyle(variant).name() + ")";
+            case "phosphor":
+                return "PhosphorIcons.icon(\"" + name + "\", PhosphorWeight." + phosphorWeight(variant).name() + ")";
+            case "lucide":
+            default:
+                return "LucideIcons.icon(\"" + name + "\")";
+        }
+    }
+
+    private String iconGalleryLabel(String pack, String variant) {
+        switch (pack) {
+            case "tabler":
+                return "Tabler";
+            case "heroicons":
+                return "Heroicons " + heroIconStyle(variant).name().toLowerCase();
+            case "phosphor":
+                return "Phosphor " + phosphorWeight(variant).name().toLowerCase();
+            case "lucide":
+            default:
+                return "Lucide";
+        }
+    }
+
+    private HeroIconStyle heroIconStyle(String value) {
+        if ("SOLID".equals(value)) {
+            return HeroIconStyle.SOLID;
+        }
+        if ("MINI".equals(value)) {
+            return HeroIconStyle.MINI;
+        }
+        if ("MICRO".equals(value)) {
+            return HeroIconStyle.MICRO;
+        }
+        return HeroIconStyle.OUTLINE;
+    }
+
+    private PhosphorWeight phosphorWeight(String value) {
+        if ("THIN".equals(value)) {
+            return PhosphorWeight.THIN;
+        }
+        if ("LIGHT".equals(value)) {
+            return PhosphorWeight.LIGHT;
+        }
+        if ("BOLD".equals(value)) {
+            return PhosphorWeight.BOLD;
+        }
+        if ("FILL".equals(value)) {
+            return PhosphorWeight.FILL;
+        }
+        if ("DUOTONE".equals(value)) {
+            return PhosphorWeight.DUOTONE;
+        }
+        return PhosphorWeight.REGULAR;
     }
 
     private void renderLayout(HTMLElement grid) {

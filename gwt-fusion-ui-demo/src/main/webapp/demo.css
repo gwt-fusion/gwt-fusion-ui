@@ -246,10 +246,16 @@ pre {
 .demo-icon-gallery-controls {
   display: grid;
   gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 }
 
-.demo-icon-gallery-controls input {
-  max-width: 32rem;
+.demo-icon-gallery-controls > p {
+  grid-column: 1 / -1;
+}
+
+.demo-icon-gallery-control {
+  display: grid;
+  gap: .4rem;
 }
 
 .demo-icon-gallery {

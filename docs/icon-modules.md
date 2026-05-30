@@ -76,4 +76,4 @@ Icon modules contain only their own icon assets, generated Java factories, GWT m
 
 ## Demo Gallery
 
-The demo includes a dedicated Icons page with Lucide, Tabler, Heroicons, and Phosphor usage examples, multi-pack switching, all-pack `IconRegistry` registration, and a searchable Lucide gallery. The Lucide gallery renders a limited initial slice of the 1960 generated icons and narrows the result set as the user types, using `LucideIcons.names()` and `LucideIcons.icon(String)`.
+The demo includes a dedicated Icons page with Lucide, Tabler, Heroicons, and Phosphor usage examples, multi-pack switching, all-pack `IconRegistry` registration, and a searchable multi-pack gallery. The gallery can switch between Lucide, Tabler, Heroicons, and Phosphor, shows style or weight selectors for packs that need them, renders a limited initial slice, and narrows the result set as the user types.
