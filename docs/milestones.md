@@ -327,20 +327,20 @@ Milestone 16 introduces optional application-infrastructure modules so GWT Fusio
 
 ### Milestone 16.1: HTTP And REST Client
 
-- [ ] Add Maven module `gwt-fusion-http`.
-- [ ] Use package `org.gwtfusion.http` and GWT module `org.gwtfusion.http.GwtFusionHttp`.
-- [ ] Implement a small `HttpClient` built on browser `fetch` through Elemental2/J2CL-compatible APIs.
-- [ ] Implement `HttpRequest`, `HttpResponse`, `HttpMethod`, `HttpHeaders`, and `HttpError` primitives.
-- [ ] Support request headers, query parameters, JSON request bodies, text bodies, and empty bodies.
-- [ ] Support typed response parsing through explicit parser functions rather than reflection.
-- [ ] Support request interceptors for auth headers, CSRF headers, correlation IDs, and shared error handling.
-- [ ] Support response interceptors for common status handling and token-refresh handoff.
-- [ ] Keep the API backend-agnostic and compatible with REST, OpenAPI-generated clients, and custom endpoints.
-- [ ] Document why GWT-RPC/GWT Services are not part of the core HTTP module.
-- [ ] Add demo examples using mocked or static endpoints without depending on a live external service.
-- [ ] Add JVM tests for URL/query construction, headers, request options, error mapping, and parser contracts.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile if demo code changed.
+- [x] Add Maven module `gwt-fusion-http`.
+- [x] Use package `org.gwtfusion.http` and GWT module `org.gwtfusion.http.GwtFusionHttp`.
+- [x] Implement a small `HttpClient` as a Java-idiomatic wrapper over Elemental2 `DomGlobal.fetch`; do not duplicate or replace the browser HTTP transport.
+- [x] Implement `HttpRequest`, `HttpResponse`, `HttpMethod`, `HttpHeaders`, and `HttpError` primitives.
+- [x] Support request headers, query parameters, JSON request bodies, text bodies, and empty bodies.
+- [x] Support typed response parsing through explicit parser functions rather than reflection.
+- [x] Support request interceptors for auth headers, CSRF headers, correlation IDs, and shared error handling.
+- [x] Support response interceptors for common status handling and token-refresh handoff.
+- [x] Keep the API backend-agnostic and compatible with REST, OpenAPI-generated clients, and custom endpoints.
+- [x] Document why GWT-RPC/GWT Services are not part of the core HTTP module.
+- [x] Add demo examples using mocked or static endpoints without depending on a live external service.
+- [x] Add JVM tests for URL/query construction, headers, request options, error mapping, and parser contracts.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile if demo code changed.
 
 ### Milestone 16.2: Storage Utilities
 
