@@ -321,6 +321,174 @@ Milestone 15 is split into four focused PR-sized sub-milestones. All additional 
 - [x] Verify `mvn -Dskip.tailwind=true verify`.
 - [x] Verify demo GWT compile.
 
+## Milestone 16: Professional Webapp Infrastructure Foundation
+
+Milestone 16 introduces optional application-infrastructure modules so GWT Fusion can support production webapps without coupling the UI package to backend, persistence, or authentication choices. New modules must remain GWT 2.13 and J2CL-compatible, avoid GWT-RPC as a core dependency, avoid reflection-based JSON mapping, and expose Java-idiomatic APIs.
+
+### Milestone 16.1: HTTP And REST Client
+
+- [ ] Add Maven module `gwt-fusion-http`.
+- [ ] Use package `org.gwtfusion.http` and GWT module `org.gwtfusion.http.GwtFusionHttp`.
+- [ ] Implement a small `HttpClient` built on browser `fetch` through Elemental2/J2CL-compatible APIs.
+- [ ] Implement `HttpRequest`, `HttpResponse`, `HttpMethod`, `HttpHeaders`, and `HttpError` primitives.
+- [ ] Support request headers, query parameters, JSON request bodies, text bodies, and empty bodies.
+- [ ] Support typed response parsing through explicit parser functions rather than reflection.
+- [ ] Support request interceptors for auth headers, CSRF headers, correlation IDs, and shared error handling.
+- [ ] Support response interceptors for common status handling and token-refresh handoff.
+- [ ] Keep the API backend-agnostic and compatible with REST, OpenAPI-generated clients, and custom endpoints.
+- [ ] Document why GWT-RPC/GWT Services are not part of the core HTTP module.
+- [ ] Add demo examples using mocked or static endpoints without depending on a live external service.
+- [ ] Add JVM tests for URL/query construction, headers, request options, error mapping, and parser contracts.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+- [ ] Verify demo GWT compile if demo code changed.
+
+### Milestone 16.2: Storage Utilities
+
+- [ ] Add Maven module `gwt-fusion-storage`.
+- [ ] Use package `org.gwtfusion.storage` and GWT module `org.gwtfusion.storage.GwtFusionStorage`.
+- [ ] Implement typed wrappers for `localStorage`, `sessionStorage`, and in-memory fallback storage.
+- [ ] Implement `StorageArea`, `StorageKey<T>`, `StorageCodec<T>`, and `StorageEntry<T>` primitives.
+- [ ] Support namespacing so apps and libraries avoid key collisions.
+- [ ] Support optional TTL/expiration metadata for cached entries, tokens, and preferences.
+- [ ] Handle unavailable or blocked browser storage gracefully with memory fallback.
+- [ ] Keep serialization explicit through codecs; do not use reflection-based JSON libraries.
+- [ ] Provide examples for theme/user preferences, draft form persistence, and token storage handoff.
+- [ ] Add JVM tests for key composition, TTL behavior, codec behavior, fallback storage, and null handling.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+
+### Milestone 16.3: Auth State And Router Guards
+
+- [ ] Add Maven module `gwt-fusion-auth`.
+- [ ] Use package `org.gwtfusion.auth` and GWT module `org.gwtfusion.auth.GwtFusionAuth`.
+- [ ] Model auth state with `AuthState`, `AuthSession`, `AuthToken`, and `AuthUser` primitives.
+- [ ] Support anonymous, loading, authenticated, expired, and failed states.
+- [ ] Integrate with `gwt-fusion-storage` for token/session persistence without hard-coding storage policy.
+- [ ] Integrate with `gwt-fusion-http` through an auth-header interceptor.
+- [ ] Provide token refresh hooks without assuming a specific OAuth, JWT, or cookie strategy.
+- [ ] Add optional router guard helpers for `gwt-fusion-router` without making the router depend on auth.
+- [ ] Support listener registration for auth-state changes.
+- [ ] Document recommended patterns for JWT bearer tokens, cookie-backed sessions, and logout cleanup.
+- [ ] Add demo examples for protected routes, login/logout state, and auth-aware navigation.
+- [ ] Add JVM tests for state transitions, listener registration, storage handoff, and guard decisions.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+- [ ] Verify demo GWT compile if demo code changed.
+
+## Milestone 17: Data Fetching, Query State, And Forms
+
+Milestone 17 builds on HTTP and storage with TanStack Query-inspired data fetching plus validation utilities. The goal is to make loading, error, empty, success, retry, cache, and mutation states first-class Java concepts that compose naturally with `Skeleton`, `Alert`, `EmptyState`, `Toast`, `DataTable`, and form components.
+
+### Milestone 17.1: TanStack Query-Inspired Data Module
+
+- [ ] Add Maven module `gwt-fusion-query`.
+- [ ] Use package `org.gwtfusion.query` and GWT module `org.gwtfusion.query.GwtFusionQuery`.
+- [ ] Implement `QueryClient`, `QueryKey`, `Query<T>`, `QueryState<T>`, `QueryObserver<T>`, and `QueryOptions`.
+- [ ] Support loading, success, error, stale, refreshing, and idle states.
+- [ ] Support request de-duplication for in-flight queries with the same key.
+- [ ] Support `staleTime`, `cacheTime` or `gcTime`, manual `refetch()`, and `invalidate(QueryKey)`.
+- [ ] Support retry and retry-delay policies with simple backoff helpers.
+- [ ] Support disabled/lazy queries that start only after required inputs are available.
+- [ ] Support query observers with `ListenerRegistration` for clean subscription removal.
+- [ ] Support mutation primitives with loading/error/success state and optional optimistic update hooks.
+- [ ] Keep query fetchers generic so they can use `gwt-fusion-http`, generated OpenAPI clients, or legacy async services through adapters.
+- [ ] Add demo examples that wire `Skeleton`, `Alert`, `EmptyState`, `Toast`, and `DataTable` to query state.
+- [ ] Add JVM tests for query keys, cache behavior, observer behavior, invalidation, retry decisions, stale decisions, and mutation state.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+- [ ] Verify demo GWT compile if demo code changed.
+
+### Milestone 17.2: Query UI Helpers
+
+- [ ] Decide whether query UI helpers belong in `gwt-fusion-query` or a separate optional `gwt-fusion-query-ui` module.
+- [ ] Implement a minimal `QueryView<T>` or equivalent helper only if it reduces repeated demo/application boilerplate.
+- [ ] Support configurable renderers for loading, error, empty, and success states.
+- [ ] Keep UI helpers optional so `gwt-fusion-query` remains usable without `gwt-fusion-ui`.
+- [ ] Provide examples for list loading, detail loading, retry button, empty results, and mutation success toast.
+- [ ] Add tests for state-to-renderer selection if implemented without DOM creation.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+- [ ] Verify demo GWT compile if demo code changed.
+
+### Milestone 17.3: Validation Module
+
+- [ ] Add Maven module `gwt-fusion-validation`.
+- [ ] Use package `org.gwtfusion.validation` and GWT module `org.gwtfusion.validation.GwtFusionValidation`.
+- [ ] Implement `Validator<T>`, `ValidationResult`, `FieldError`, `FormErrors`, and `ValidationRule<T>` primitives.
+- [ ] Provide built-in validators for required, email, min length, max length, numeric min/max, regex pattern, and custom predicates.
+- [ ] Support field-level and form-level validation.
+- [ ] Support mapping backend validation errors from HTTP/OpenAPI responses into `FormErrors`.
+- [ ] Keep the core validation module independent from UI components.
+- [ ] Add optional examples showing validation state on `FormField`, `Input`, `Textarea`, `NativeSelect`, `Checkbox`, and submit buttons.
+- [ ] Add JVM tests for built-in validators, custom validators, error aggregation, and backend-error mapping.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+- [ ] Verify demo GWT compile if demo code changed.
+
+## Milestone 18: Typed API Client Generation
+
+Milestone 18 adds code generation so applications can work with real Java DTOs and typed API clients instead of loose JSON maps. OpenAPI should be the initial source format because it is backend-agnostic, widely supported, and fits REST-first professional applications.
+
+### Milestone 18.1: OpenAPI Codegen Spike
+
+- [ ] Add a small generator module or tooling package for OpenAPI-driven code generation.
+- [ ] Decide whether the first implementation is a Maven plugin, a standalone generator, or both.
+- [ ] Generate Java DTOs from a constrained OpenAPI schema subset: objects, strings, numbers, booleans, arrays, enums, and nested objects.
+- [ ] Generate explicit `fromJson` and `toJson` methods without reflection.
+- [ ] Use J2CL-friendly JSON access helpers around `JsPropertyMap` or equivalent Elemental2-compatible structures.
+- [ ] Generate API client classes that call `gwt-fusion-http`.
+- [ ] Generate typed methods from `operationId`, path parameters, query parameters, request bodies, and typed responses.
+- [ ] Generate checked or unchecked API error models consistent with `gwt-fusion-http`.
+- [ ] Include a tiny sample OpenAPI document in the demo or test resources.
+- [ ] Add tests that compare generated source output for simple schemas and endpoints.
+- [ ] Verify generated clients compile in a GWT/J2CL-compatible Maven build.
+
+### Milestone 18.2: Query-Aware Generated Clients
+
+- [ ] Generate query key helpers for list, detail, and parameterized endpoints.
+- [ ] Generate optional query factory helpers that integrate typed API client methods with `gwt-fusion-query`.
+- [ ] Generate mutation helpers for POST, PUT, PATCH, and DELETE operations.
+- [ ] Support invalidation hints for related generated query keys where OpenAPI tags or operation metadata are sufficient.
+- [ ] Add demo examples showing generated API clients feeding query state, skeletons, empty states, and tables.
+- [ ] Document how generated code avoids reflection and why it is preferred over raw JSON handling.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+- [ ] Verify demo GWT compile if demo code changed.
+
+## Milestone 19: Internationalization, Runtime Config, And Notifications
+
+Milestone 19 rounds out production-app needs after HTTP/query/codegen foundations exist. These modules are important but should not block the core data stack.
+
+### Milestone 19.1: Internationalization
+
+- [ ] Add Maven module `gwt-fusion-i18n`.
+- [ ] Use package `org.gwtfusion.i18n` and GWT module `org.gwtfusion.i18n.GwtFusionI18n`.
+- [ ] Implement locale selection, message lookup, parameter interpolation, and fallback locale behavior.
+- [ ] Decide whether message bundles are generated Java classes, JSON resources, or both.
+- [ ] Support explicit locale switching without global static side effects.
+- [ ] Provide examples for UI labels, validation messages, date labels, and route titles.
+- [ ] Add JVM tests for fallback, interpolation, missing keys, and locale switching.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+
+### Milestone 19.2: Runtime Config And Feature Flags
+
+- [ ] Add Maven module `gwt-fusion-config`.
+- [ ] Use package `org.gwtfusion.config` and GWT module `org.gwtfusion.config.GwtFusionConfig`.
+- [ ] Implement `RuntimeConfig`, `ConfigKey<T>`, and `FeatureFlag` primitives.
+- [ ] Support config loaded from generated constants, embedded JSON, or a runtime endpoint.
+- [ ] Support typed config access without reflection.
+- [ ] Support feature flags for enabling routes, UI sections, or experimental query behavior.
+- [ ] Add examples for API base URL, environment label, and feature-gated demo content.
+- [ ] Add JVM tests for typed keys, default values, parsing, and feature flag decisions.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+
+### Milestone 19.3: Browser Notifications
+
+- [ ] Add Maven module `gwt-fusion-notifications` if browser notification support should be separate from UI `Toast`.
+- [ ] Use package `org.gwtfusion.notifications` and GWT module `org.gwtfusion.notifications.GwtFusionNotifications`.
+- [ ] Implement permission-state helpers for the Browser Notification API.
+- [ ] Implement notification creation helpers with title, body, icon, tag, and click callback support where browser APIs allow it.
+- [ ] Provide a bridge pattern from query/mutation outcomes to `ToastManager` and optional browser notifications.
+- [ ] Document that `Toast` remains the in-page notification system and browser notifications require permission.
+- [ ] Defer Web Push/service-worker delivery unless a concrete PWA milestone is started.
+- [ ] Add demo examples for permission request, granted/denied/default states, and fallback to toast.
+- [ ] Add JVM tests for permission-state mapping and notification option construction where possible.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+
 ## Milestone Definition Of Done
 
 - [ ] All planned source changes are implemented.
