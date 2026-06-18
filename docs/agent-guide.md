@@ -7,6 +7,7 @@ This guide is for coding agents that generate application code using GWT Fusion.
 - Read `llms.txt` first.
 - Use `docs/components-index.json` as the canonical machine-readable catalog.
 - Use `docs/snippets` if snippet files are added later.
+- Use `docs/http.md` for REST/fetch client examples.
 - Use `docs/router.md` for standalone routing examples.
 - Use `docs/release-readiness.md` for build, compatibility, test, artifact, and deployment checks.
 
@@ -33,6 +34,8 @@ import org.gwtfusion.icons.lucide.LucideIcons;
 import org.gwtfusion.icons.phosphor.PhosphorIcons;
 import org.gwtfusion.icons.phosphor.PhosphorWeight;
 import org.gwtfusion.icons.tabler.TablerIcons;
+import org.gwtfusion.http.HttpClient;
+import org.gwtfusion.http.HttpResponseParser;
 import org.gwtfusion.ui.UiComponent;
 import org.gwtfusion.ui.component.button.Button;
 import org.gwtfusion.ui.component.button.ButtonVariant;
@@ -142,6 +145,21 @@ router.navigate("/components/button");
 ```
 
 Use `HistoryStrategy.hash()` for static hosting. Use `HistoryStrategy.browser()` only when the server has an SPA fallback.
+
+## HTTP
+
+`gwt-fusion-http` is a thin wrapper over Elemental2 `DomGlobal.fetch`. Use it for REST-style requests without introducing GWT-RPC or reflection-based JSON mapping.
+
+```java
+HttpClient client = HttpClient.create().baseUrl("/api");
+
+client.get("/users")
+    .query("page", 1)
+    .header("Accept", "application/json")
+    .send(HttpResponseParser.json());
+```
+
+Use interceptors for shared auth, CSRF, correlation IDs, and status handling.
 
 ## Do Not Generate
 

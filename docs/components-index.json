@@ -32,6 +32,11 @@
       "artifactId": "gwt-fusion-router",
       "rootPackage": "org.gwtfusion.router",
       "purpose": "Standalone client router that renders HTMLElement values."
+    },
+    {
+      "artifactId": "gwt-fusion-http",
+      "rootPackage": "org.gwtfusion.http",
+      "purpose": "Java-idiomatic REST/fetch client wrapper over Elemental2 DomGlobal.fetch."
     }
   ],
   "globalRules": [
@@ -115,6 +120,8 @@
     { "name": "HeroIconStyle", "package": "org.gwtfusion.icons.heroicons", "values": ["OUTLINE", "SOLID", "MINI", "MICRO"], "example": "HeroIconStyle.SOLID" },
     { "name": "PhosphorIcons", "package": "org.gwtfusion.icons.phosphor", "example": "PhosphorIcons.magnifyingGlass(PhosphorWeight.REGULAR)" },
     { "name": "PhosphorWeight", "package": "org.gwtfusion.icons.phosphor", "values": ["THIN", "LIGHT", "REGULAR", "BOLD", "FILL", "DUOTONE"], "example": "PhosphorWeight.DUOTONE" },
-    { "name": "Router", "package": "org.gwtfusion.router", "example": "Router.create(HistoryStrategy.hash()).route(\"/\", context -> homeElement())" }
+    { "name": "Router", "package": "org.gwtfusion.router", "example": "Router.create(HistoryStrategy.hash()).route(\"/\", context -> homeElement())" },
+    { "name": "HttpClient", "package": "org.gwtfusion.http", "example": "HttpClient.create().baseUrl(\"/api\").get(\"/users\").send(HttpResponseParser.json())" },
+    { "name": "HttpResponseParser", "package": "org.gwtfusion.http", "example": "HttpResponseParser.json(json -> User.fromJson(json))" }
   ]
 }

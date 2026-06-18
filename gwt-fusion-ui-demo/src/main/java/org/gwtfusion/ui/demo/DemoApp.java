@@ -13,6 +13,8 @@ import org.gwtfusion.icons.lucide.LucideIcons;
 import org.gwtfusion.icons.phosphor.PhosphorIcons;
 import org.gwtfusion.icons.phosphor.PhosphorWeight;
 import org.gwtfusion.icons.tabler.TablerIcons;
+import org.gwtfusion.http.HttpClient;
+import org.gwtfusion.http.HttpRequest;
 import org.gwtfusion.router.HistoryStrategy;
 import org.gwtfusion.router.Route;
 import org.gwtfusion.router.Router;
@@ -178,6 +180,10 @@ public final class DemoApp implements EntryPoint {
                         Route.of("/router", context -> {
                             renderRouter();
                             return null;
+                        }),
+                        Route.of("/http", context -> {
+                            renderHttp();
+                            return null;
                         }))
                 .notFound(context -> {
                     renderNotFound();
@@ -208,7 +214,8 @@ public final class DemoApp implements EntryPoint {
                 .addTab("components", "Components", navigationPanel())
                 .addTab("icons", "Icons", navigationPanel())
                 .addTab("theme", "Theme", navigationPanel())
-                .addTab("router", "Router", navigationPanel());
+                .addTab("router", "Router", navigationPanel())
+                .addTab("http", "HTTP", navigationPanel());
         mainNavigation.onValueChange(value -> {
             if ("components".equals(value)) {
                 router.navigate("/components");
@@ -218,6 +225,8 @@ public final class DemoApp implements EntryPoint {
                 router.navigate("/theme");
             } else if ("router".equals(value)) {
                 router.navigate("/router");
+            } else if ("http".equals(value)) {
+                router.navigate("/http");
             } else {
                 router.navigate("/");
             }
@@ -3138,6 +3147,53 @@ public final class DemoApp implements EntryPoint {
                 .content(raw(textElement("p", "demo-muted", "Use LTR/RTL controls above to change the root direction.")))
                 .element());
         return preview;
+    }
+
+    private void renderHttp() {
+        selectMainNavigation("http");
+        clearContent();
+        content.appendChild(textElement("h1", "", "HTTP"));
+        content.appendChild(textElement("p", "demo-muted", "gwt-fusion-http is a thin Java API over Elemental2 DomGlobal.fetch. It adds request builders, headers, query parameters, parser hooks, and interceptors without replacing the browser transport."));
+
+        HttpClient client = HttpClient.create().baseUrl("/api");
+        HttpRequest searchRequest = client.get("/users")
+                .query("q", "status open")
+                .query("page", 1)
+                .header("Accept", "application/json");
+        HTMLElement requestPreview = preview("demo-stack-preview");
+        requestPreview.appendChild(textElement("p", "demo-muted", "Built URL: " + searchRequest.urlWithQuery()));
+        requestPreview.appendChild(textElement("p", "demo-muted", "Accept: " + searchRequest.headers().get("Accept")));
+        content.appendChild(example("Request builder", requestPreview,
+                "HttpClient client = HttpClient.create().baseUrl(\"/api\");\n\n"
+                        + "HttpRequest request = client.get(\"/users\")\n"
+                        + "    .query(\"q\", \"status open\")\n"
+                        + "    .query(\"page\", 1)\n"
+                        + "    .header(\"Accept\", \"application/json\");\n\n"
+                        + "request.send(HttpResponseParser.json());"));
+
+        HttpRequest createRequest = client.post("/users")
+                .json("{\"name\":\"Ada\"}");
+        HTMLElement jsonPreview = preview("demo-stack-preview");
+        jsonPreview.appendChild(textElement("p", "demo-muted", "Method: " + createRequest.method().value()));
+        jsonPreview.appendChild(textElement("p", "demo-muted", "Content-Type: " + createRequest.headers().get("Content-Type")));
+        jsonPreview.appendChild(textElement("code", "demo-icon-code", createRequest.body().content()));
+        content.appendChild(example("JSON request body", jsonPreview,
+                "client.post(\"/users\")\n"
+                        + "    .json(\"{\\\"name\\\":\\\"Ada\\\"}\")\n"
+                        + "    .send(HttpResponseParser.json());"));
+
+        HTMLElement interceptorPreview = preview("demo-stack-preview");
+        interceptorPreview.appendChild(textElement("p", "demo-muted", "Interceptors keep shared auth headers, CSRF headers, correlation IDs, and status handling outside individual requests."));
+        content.appendChild(example("Interceptors", interceptorPreview,
+                "HttpClient.create()\n"
+                        + "    .addRequestInterceptor(request -> request.copy()\n"
+                        + "        .header(\"Authorization\", \"Bearer \" + token))\n"
+                        + "    .addResponseInterceptor(response -> {\n"
+                        + "        if (response.status() == 401) {\n"
+                        + "            // trigger token refresh handoff\n"
+                        + "        }\n"
+                        + "        return response;\n"
+                        + "    });"));
     }
 
     private HTMLElement example(String title, UiComponent component, String code) {

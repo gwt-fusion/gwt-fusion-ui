@@ -10,6 +10,7 @@ Start here when using this project with coding agents:
 - `docs/events.md`: Listener and event conventions.
 - `docs/icons.md`: Icon component usage.
 - `docs/icon-modules.md`: Optional icon module usage.
+- `docs/http.md`: REST/fetch client usage.
 - `docs/router.md`: Standalone router usage.
 - `docs/release-readiness.md`: Build, compatibility, test, artifact, and deployment checks.
 
@@ -22,6 +23,7 @@ Core packages:
 - `org.gwtfusion.icons.heroicons`: Heroicons icon factories with `HeroIconStyle`.
 - `org.gwtfusion.icons.phosphor`: Phosphor icon factories with `PhosphorWeight`.
 - `org.gwtfusion.router`: Standalone router.
+- `org.gwtfusion.http`: REST/fetch client wrapper over Elemental2.
 
 Important rules for generated code:
 
@@ -33,3 +35,4 @@ Important rules for generated code:
 - Do not construct dynamic Tailwind class names such as `"bg-" + color`.
 - Use `DirectionManager` for root `dir` handling and logical `START`/`END` sides when placement should follow LTR/RTL.
 - Use token-backed themed surfaces such as `bg-card text-card-foreground` and `bg-popover text-popover-foreground`.
+- Use `HttpClient` for REST-style requests and avoid adding GWT-RPC dependencies.

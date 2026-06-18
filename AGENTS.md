@@ -8,6 +8,7 @@ This repository contains GWT Fusion, a set of GWT 2.13 and J2CL-compatible UI, i
 
 - `gwt-fusion-ui`: Reusable component library under the `org.gwtfusion.ui` package.
 - `gwt-fusion-router`: Standalone client router under the `org.gwtfusion.router` package.
+- `gwt-fusion-http`: REST/fetch client wrapper under the `org.gwtfusion.http` package.
 - `gwt-fusion-icons-lucide`: Optional Lucide icon module under `org.gwtfusion.icons.lucide`.
 - `gwt-fusion-ui-demo`: GWT demo website with visual component examples and code snippets.
 
@@ -62,6 +63,7 @@ This repository contains GWT Fusion, a set of GWT 2.13 and J2CL-compatible UI, i
 - Implemented components: `Button`, `Badge`, `Card`, `Alert`, `AlertDialog`, `Input`, `Label`, `Separator`, `Checkbox`, `Switch`, `Textarea`, `RadioGroup`, `FormField`, `NativeSelect`, `InputGroup`, `Slider`, `Tabs`, `CodeBlock`, `Accordion`, `Collapsible`, `AspectRatio`, `ButtonGroup`, `Breadcrumb`, `Pagination`, `ScrollArea`, `Toggle`, `ToggleGroup`, `Typography`, `Icon`, `Tooltip`, `Popover`, `Dialog`, `DropdownMenu`, `ContextMenu`, `HoverCard`, `Sheet`, `Drawer`, `Progress`, `Skeleton`, `Spinner`, `EmptyState`, `StatusIndicator`, `Toast`, `ToastManager`, `Table`, `DataTable`, `Avatar`, `Kbd`, `Item`, `Timeline`, `Calendar`, `DatePicker`, `Carousel`, `CommandMenu`, `CommandPalette`, `Combobox`, `Autocomplete`, `MultiSelect`, `Resizable`.
 - Base classes: `UiComponent`, `BaseComponent`, `CssClasses`, `ThemeManager`.
 - Router: standalone Hash, Browser, and Memory history strategies with static, `:param`, and `*` splat route matching.
+- HTTP: standalone `HttpClient` wrapper over Elemental2 `DomGlobal.fetch` with request builders, headers, query parameters, parser hooks, and interceptors.
 - Demo: home page, routed component view with categorized preview/Java code examples, form foundation examples, layout/navigation examples, overlay examples, icon gallery, events examples, router examples, and theme view.
 - Tailwind 3 is configured and executed through `frontend-maven-plugin`.
 - Current working status: Milestone 14 Build, Tests, And Release Readiness is complete.
