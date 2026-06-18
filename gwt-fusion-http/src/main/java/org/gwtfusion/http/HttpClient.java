@@ -119,6 +119,22 @@ public final class HttpClient {
     }
 
     private static boolean isAbsolute(String url) {
-        return url.startsWith("http://") || url.startsWith("https://") || url.startsWith("//");
+        if (url.startsWith("//")) {
+            return true;
+        }
+        int schemeEnd = url.indexOf(':');
+        if (schemeEnd <= 0) {
+            return false;
+        }
+        for (int i = 0; i < schemeEnd; i++) {
+            char c = url.charAt(i);
+            boolean valid = (c >= 'a' && c <= 'z')
+                    || (c >= 'A' && c <= 'Z')
+                    || (i > 0 && ((c >= '0' && c <= '9') || c == '+' || c == '-' || c == '.'));
+            if (!valid) {
+                return false;
+            }
+        }
+        return true;
     }
 }

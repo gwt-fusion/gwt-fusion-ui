@@ -15,6 +15,7 @@ public final class HttpRequest {
     private final HttpHeaders headers;
     private final Map<String, List<String>> query = new LinkedHashMap<>();
     private HttpBody body = HttpBody.empty();
+    private String managedContentType;
     private String credentials;
     private String mode;
 
@@ -34,6 +35,7 @@ public final class HttpRequest {
             this.query.put(entry.getKey(), new ArrayList<>(entry.getValue()));
         }
         this.body = source.body;
+        this.managedContentType = source.managedContentType;
         this.credentials = source.credentials;
         this.mode = source.mode;
     }
@@ -62,6 +64,9 @@ public final class HttpRequest {
 
     public HttpRequest header(String name, String value) {
         headers.set(name, value);
+        if (isContentType(name)) {
+            managedContentType = null;
+        }
         return this;
     }
 
@@ -83,15 +88,24 @@ public final class HttpRequest {
     public Map<String, List<String>> query() {
         Map<String, List<String>> copy = new LinkedHashMap<>();
         for (Map.Entry<String, List<String>> entry : query.entrySet()) {
-            copy.put(entry.getKey(), Collections.unmodifiableList(entry.getValue()));
+            copy.put(entry.getKey(), Collections.unmodifiableList(new ArrayList<>(entry.getValue())));
         }
         return Collections.unmodifiableMap(copy);
     }
 
     public HttpRequest body(HttpBody body) {
         this.body = body == null ? HttpBody.empty() : body;
-        if (this.body.contentType() != null && !headers.has("Content-Type")) {
-            headers.set("Content-Type", this.body.contentType());
+        String currentContentType = headers.get("Content-Type");
+        if (this.body.contentType() == null) {
+            if (managedContentType != null && managedContentType.equals(currentContentType)) {
+                headers.remove("Content-Type");
+            }
+            managedContentType = null;
+        } else if (currentContentType == null || (managedContentType != null && managedContentType.equals(currentContentType))) {
+            managedContentType = this.body.contentType();
+            headers.set("Content-Type", managedContentType);
+        } else {
+            managedContentType = null;
         }
         return this;
     }
@@ -174,5 +188,9 @@ public final class HttpRequest {
             init.setBody(body.content());
         }
         return init;
+    }
+
+    private static boolean isContentType(String name) {
+        return name != null && "Content-Type".equalsIgnoreCase(name.trim());
     }
 }
