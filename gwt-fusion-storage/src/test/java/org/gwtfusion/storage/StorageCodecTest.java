@@ -27,6 +27,12 @@ class StorageCodecTest {
     }
 
     @Test
+    void booleanCodecRejectsMalformedValues() {
+        assertThrows(IllegalArgumentException.class, () -> StorageCodec.bool().decode("yes"));
+        assertThrows(IllegalArgumentException.class, () -> StorageCodec.bool().decode("TRUE"));
+    }
+
+    @Test
     void customCodecRequiresEncoderAndDecoder() {
         assertThrows(IllegalArgumentException.class, () -> StorageCodec.<String>of(null, value -> value));
         assertThrows(IllegalArgumentException.class, () -> StorageCodec.<String>of(value -> value, null));

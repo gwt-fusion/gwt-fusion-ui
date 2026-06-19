@@ -3,6 +3,7 @@ package org.gwtfusion.storage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -116,6 +117,14 @@ class StorageAreaTest {
         assertEquals("dark", storage.get(key));
     }
 
+    @Test
+    void primaryBackendErrorsAreNotSwallowedByFallback() {
+        StorageArea storage = StorageArea.create(new ErrorStorageBackend(), new MemoryStorageBackend(), () -> 1_000);
+        StorageKey<String> key = StorageKey.string("demo", "theme");
+
+        assertThrows(AssertionError.class, () -> storage.set(key, "dark"));
+    }
+
     private static final class MutableClock implements StorageClock {
         long now;
 
@@ -148,6 +157,28 @@ class StorageAreaTest {
         @Override
         public List<String> keys() {
             throw new IllegalStateException("blocked");
+        }
+    }
+
+    private static final class ErrorStorageBackend implements StorageBackend {
+        @Override
+        public String getItem(String key) {
+            throw new AssertionError("fatal");
+        }
+
+        @Override
+        public void setItem(String key, String value) {
+            throw new AssertionError("fatal");
+        }
+
+        @Override
+        public void removeItem(String key) {
+            throw new AssertionError("fatal");
+        }
+
+        @Override
+        public List<String> keys() {
+            throw new AssertionError("fatal");
         }
     }
 }

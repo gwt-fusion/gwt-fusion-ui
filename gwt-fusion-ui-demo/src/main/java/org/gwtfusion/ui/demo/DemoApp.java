@@ -3221,8 +3221,8 @@ public final class DemoApp implements EntryPoint {
         preferencePreview.appendChild(textElement("p", "demo-muted", "Stored theme: " + preferences.get(themeKey)));
         preferencePreview.appendChild(textElement("p", "demo-muted", "Created at: " + themeEntry.createdAtMillis()));
         content.appendChild(example("Theme and user preferences", preferencePreview,
-                "StorageArea preferences = StorageArea.localStorage();\n"
-                        + "StorageKey<String> themeKey = StorageKey.string(\"app.preferences\", \"theme\");\n\n"
+                "StorageArea preferences = StorageArea.memory();\n"
+                        + "StorageKey<String> themeKey = StorageKey.string(\"demo.preferences\", \"theme\");\n\n"
                         + "preferences.set(themeKey, \"dark\");\n"
                         + "String theme = preferences.get(themeKey);"));
 
@@ -3235,8 +3235,8 @@ public final class DemoApp implements EntryPoint {
         draftPreview.appendChild(Button.create("Save draft").variant(ButtonVariant.OUTLINE).onClick(event -> drafts.set(draftKey, draftInput.value(), 60_000)).element());
         draftPreview.appendChild(textElement("p", "demo-muted", "This example stores the draft with a 60 second TTL."));
         content.appendChild(example("Draft form persistence", draftPreview,
-                "StorageArea drafts = StorageArea.localStorage();\n"
-                        + "StorageKey<String> draftKey = StorageKey.string(\"app.drafts\", \"profile-name\");\n\n"
+                "StorageArea drafts = StorageArea.memory();\n"
+                        + "StorageKey<String> draftKey = StorageKey.string(\"demo.drafts\", \"profile-name\");\n\n"
                         + "Input draftInput = Input.create().value(drafts.get(draftKey));\n\n"
                         + "Button.create(\"Save draft\")\n"
                         + "    .onClick(event -> drafts.set(draftKey, draftInput.value(), 60_000));"));
@@ -3249,8 +3249,8 @@ public final class DemoApp implements EntryPoint {
         tokenPreview.appendChild(textElement("p", "demo-muted", "Token present: " + session.contains(tokenKey)));
         tokenPreview.appendChild(textElement("p", "demo-muted", "Auth modules can decide whether to use localStorage, sessionStorage, or memory storage without hard-coding policy in HTTP."));
         content.appendChild(example("Token storage handoff", tokenPreview,
-                "StorageArea session = StorageArea.sessionStorage();\n"
-                        + "StorageKey<String> tokenKey = StorageKey.string(\"app.auth\", \"access-token\");\n\n"
+                "StorageArea session = StorageArea.memory();\n"
+                        + "StorageKey<String> tokenKey = StorageKey.string(\"demo.auth\", \"access-token\");\n\n"
                         + "session.set(tokenKey, token, 15 * 60 * 1_000);\n"
                         + "String token = session.get(tokenKey);\n"
                         + "session.remove(tokenKey);"));

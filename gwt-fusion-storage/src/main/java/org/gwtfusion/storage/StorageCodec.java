@@ -18,7 +18,18 @@ public interface StorageCodec<T> {
     }
 
     static StorageCodec<Boolean> bool() {
-        return of(value -> value == null ? null : String.valueOf(value), value -> value == null ? null : Boolean.valueOf(value));
+        return of(value -> value == null ? null : String.valueOf(value), value -> {
+            if (value == null) {
+                return null;
+            }
+            if ("true".equals(value)) {
+                return true;
+            }
+            if ("false".equals(value)) {
+                return false;
+            }
+            throw new IllegalArgumentException("Invalid boolean value: " + value);
+        });
     }
 
     static <T> StorageCodec<T> of(Encoder<T> encoder, Decoder<T> decoder) {

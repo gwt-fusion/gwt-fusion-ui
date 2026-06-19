@@ -131,7 +131,7 @@ public final class StorageArea {
         StorageBackend fallback = new MemoryStorageBackend();
         try {
             return new StorageArea(BrowserStorageBackend.create(type), fallback, null);
-        } catch (Throwable ignored) {
+        } catch (RuntimeException ignored) {
             return new StorageArea(fallback, fallback, null);
         }
     }
@@ -140,7 +140,7 @@ public final class StorageArea {
         if (!fallbackOnly) {
             try {
                 return primary.getItem(key);
-            } catch (Throwable ignored) {
+            } catch (RuntimeException ignored) {
                 fallbackOnly = true;
             }
         }
@@ -152,7 +152,7 @@ public final class StorageArea {
             try {
                 primary.setItem(key, value);
                 return;
-            } catch (Throwable ignored) {
+            } catch (RuntimeException ignored) {
                 fallbackOnly = true;
             }
         }
@@ -164,7 +164,7 @@ public final class StorageArea {
             try {
                 primary.removeItem(key);
                 return;
-            } catch (Throwable ignored) {
+            } catch (RuntimeException ignored) {
                 fallbackOnly = true;
             }
         }
@@ -175,7 +175,7 @@ public final class StorageArea {
         if (!fallbackOnly) {
             try {
                 return primary.keys();
-            } catch (Throwable ignored) {
+            } catch (RuntimeException ignored) {
                 fallbackOnly = true;
             }
         }
