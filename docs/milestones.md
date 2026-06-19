@@ -344,17 +344,17 @@ Milestone 16 introduces optional application-infrastructure modules so GWT Fusio
 
 ### Milestone 16.2: Storage Utilities
 
-- [ ] Add Maven module `gwt-fusion-storage`.
-- [ ] Use package `org.gwtfusion.storage` and GWT module `org.gwtfusion.storage.GwtFusionStorage`.
-- [ ] Implement typed wrappers for `localStorage`, `sessionStorage`, and in-memory fallback storage.
-- [ ] Implement `StorageArea`, `StorageKey<T>`, `StorageCodec<T>`, and `StorageEntry<T>` primitives.
-- [ ] Support namespacing so apps and libraries avoid key collisions.
-- [ ] Support optional TTL/expiration metadata for cached entries, tokens, and preferences.
-- [ ] Handle unavailable or blocked browser storage gracefully with memory fallback.
-- [ ] Keep serialization explicit through codecs; do not use reflection-based JSON libraries.
-- [ ] Provide examples for theme/user preferences, draft form persistence, and token storage handoff.
-- [ ] Add JVM tests for key composition, TTL behavior, codec behavior, fallback storage, and null handling.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Add Maven module `gwt-fusion-storage`.
+- [x] Use package `org.gwtfusion.storage` and GWT module `org.gwtfusion.storage.GwtFusionStorage`.
+- [x] Implement typed wrappers for `localStorage`, `sessionStorage`, and in-memory fallback storage.
+- [x] Implement `StorageArea`, `StorageKey<T>`, `StorageCodec<T>`, and `StorageEntry<T>` primitives.
+- [x] Support namespacing so apps and libraries avoid key collisions.
+- [x] Support optional TTL/expiration metadata for cached entries, tokens, and preferences.
+- [x] Handle unavailable or blocked browser storage gracefully with memory fallback.
+- [x] Keep serialization explicit through codecs; do not use reflection-based JSON libraries.
+- [x] Provide examples for theme/user preferences, draft form persistence, and token storage handoff.
+- [x] Add JVM tests for key composition, TTL behavior, codec behavior, fallback storage, and null handling.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
 
 ### Milestone 16.3: Auth State And Router Guards
 
