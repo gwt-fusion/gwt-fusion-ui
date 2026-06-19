@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <inherits name="com.google.gwt.user.User"/>
+  <inherits name="org.gwtfusion.storage.GwtFusionStorage"/>
+  <inherits name="org.gwtfusion.http.GwtFusionHttp"/>
+  <inherits name="org.gwtfusion.router.GwtFusionRouter"/>
+  <source path=""/>
+</module>

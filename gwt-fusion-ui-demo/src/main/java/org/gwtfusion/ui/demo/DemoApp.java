@@ -7,6 +7,14 @@ import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLElement;
 import elemental2.dom.HTMLInputElement;
 import elemental2.dom.KeyboardEvent;
+import org.gwtfusion.auth.AuthGuard;
+import org.gwtfusion.auth.AuthHttp;
+import org.gwtfusion.auth.AuthManager;
+import org.gwtfusion.auth.AuthSession;
+import org.gwtfusion.auth.AuthSessionStore;
+import org.gwtfusion.auth.AuthStatus;
+import org.gwtfusion.auth.AuthToken;
+import org.gwtfusion.auth.AuthUser;
 import org.gwtfusion.icons.heroicons.HeroIconStyle;
 import org.gwtfusion.icons.heroicons.HeroIcons;
 import org.gwtfusion.icons.lucide.LucideIcons;
@@ -124,6 +132,8 @@ public final class DemoApp implements EntryPoint {
     private HTMLElement componentPanel;
     private String selectedComponentId;
     private Router router;
+    private final AuthManager demoAuth = AuthManager.create()
+            .sessionStore(AuthSessionStore.create(StorageArea.memory()));
 
     private interface ComponentRenderer {
         void render(HTMLElement grid);
@@ -191,7 +201,16 @@ public final class DemoApp implements EntryPoint {
                         Route.of("/storage", context -> {
                             renderStorage();
                             return null;
-                        }))
+                        }),
+                        Route.of("/auth", context -> {
+                            renderAuth();
+                            return null;
+                        }),
+                        Route.of("/auth/protected", AuthGuard.requireAuthenticated(demoAuth, context -> {
+                            renderAuthProtected();
+                            return null;
+                        }, "/auth"))
+                )
                 .notFound(context -> {
                     renderNotFound();
                     return null;
@@ -223,7 +242,8 @@ public final class DemoApp implements EntryPoint {
                 .addTab("theme", "Theme", navigationPanel())
                 .addTab("router", "Router", navigationPanel())
                 .addTab("http", "HTTP", navigationPanel())
-                .addTab("storage", "Storage", navigationPanel());
+                .addTab("storage", "Storage", navigationPanel())
+                .addTab("auth", "Auth", navigationPanel());
         mainNavigation.onValueChange(value -> {
             if ("components".equals(value)) {
                 router.navigate("/components");
@@ -237,6 +257,8 @@ public final class DemoApp implements EntryPoint {
                 router.navigate("/http");
             } else if ("storage".equals(value)) {
                 router.navigate("/storage");
+            } else if ("auth".equals(value)) {
+                router.navigate("/auth");
             } else {
                 router.navigate("/");
             }
@@ -3254,6 +3276,85 @@ public final class DemoApp implements EntryPoint {
                         + "session.set(tokenKey, token, 15 * 60 * 1_000);\n"
                         + "String token = session.get(tokenKey);\n"
                         + "session.remove(tokenKey);"));
+    }
+
+    private void renderAuth() {
+        selectMainNavigation("auth");
+        clearContent();
+        content.appendChild(textElement("h1", "", "Auth"));
+        content.appendChild(textElement("p", "demo-muted", "gwt-fusion-auth models auth state, session persistence, HTTP auth headers, and router guards without assuming OAuth, JWT, or cookie policy."));
+
+        String redirect = router.location().search().get("redirect");
+        if (redirect != null && !redirect.isEmpty()) {
+            content.appendChild(Alert.create()
+                    .variant(AlertVariant.DEFAULT)
+                    .add(Alert.title("Protected route"))
+                    .add(Alert.description("Sign in to continue to " + redirect))
+                    .element());
+        }
+
+        HTMLElement statePreview = preview("demo-stack-preview");
+        statePreview.appendChild(textElement("p", "demo-muted", "Current state: " + authSummary()));
+        statePreview.appendChild(Button.create("Login as Ada").onClick(event -> {
+            demoAuth.login(demoSession());
+            renderAuth();
+        }).element());
+        statePreview.appendChild(Button.create("Expire session").variant(ButtonVariant.OUTLINE).onClick(event -> {
+            demoAuth.expire();
+            renderAuth();
+        }).element());
+        statePreview.appendChild(Button.create("Logout").variant(ButtonVariant.OUTLINE).onClick(event -> {
+            demoAuth.logout();
+            renderAuth();
+        }).element());
+        content.appendChild(example("Login/logout state", statePreview,
+                "AuthManager auth = AuthManager.create()\n"
+                        + "    .sessionStore(AuthSessionStore.create(StorageArea.sessionStorage()));\n\n"
+                        + "auth.login(AuthSession.of(user, AuthToken.bearer(token, expiresAtMillis)));\n"
+                        + "auth.logout();"));
+
+        HTMLElement guardPreview = preview("demo-stack-preview");
+        guardPreview.appendChild(textElement("p", "demo-muted", "The protected demo route redirects anonymous, expired, and failed auth states back to /auth."));
+        guardPreview.appendChild(Button.create("Open protected route").variant(ButtonVariant.OUTLINE).onClick(event -> router.navigate("/auth/protected")).element());
+        content.appendChild(example("Router guard", guardPreview,
+                "Route.of(\"/account\", AuthGuard.requireAuthenticated(auth, context -> {\n"
+                        + "    return accountElement();\n"
+                        + "}, \"/login\"));"));
+
+        HttpRequest authedRequest = AuthHttp.authorization(demoAuth).intercept(HttpClient.create().get("/me"));
+        HTMLElement headerPreview = preview("demo-stack-preview");
+        headerPreview.appendChild(textElement("p", "demo-muted", "Authorization header: " + valueOrNone(authedRequest.headers().get("Authorization"))));
+        headerPreview.appendChild(textElement("p", "demo-muted", "Existing Authorization headers are preserved by the interceptor."));
+        content.appendChild(example("HTTP auth header", headerPreview,
+                "HttpClient client = HttpClient.create()\n"
+                        + "    .addRequestInterceptor(AuthHttp.authorization(auth));"));
+    }
+
+    private void renderAuthProtected() {
+        selectMainNavigation("auth");
+        clearContent();
+        content.appendChild(textElement("h1", "", "Protected auth route"));
+        content.appendChild(textElement("p", "demo-muted", "This content rendered because AuthGuard allowed the current authenticated session."));
+        content.appendChild(Button.create("Back to Auth").variant(ButtonVariant.OUTLINE).onClick(event -> router.navigate("/auth")).element());
+    }
+
+    private AuthSession demoSession() {
+        return AuthSession.of(AuthUser.of("ada", "Ada Lovelace", "ada@example.test"), AuthToken.bearer("demo-token", System.currentTimeMillis() + 15 * 60 * 1_000))
+                .withRefreshToken(AuthToken.of("Refresh", "demo-refresh", System.currentTimeMillis() + 60 * 60 * 1_000))
+                .withMetadata("provider", "demo");
+    }
+
+    private String authSummary() {
+        AuthStatus status = demoAuth.state().status();
+        AuthSession session = demoAuth.session();
+        if (session == null) {
+            return status.name().toLowerCase();
+        }
+        return status.name().toLowerCase() + " as " + session.user().displayName();
+    }
+
+    private String valueOrNone(String value) {
+        return value == null || value.isEmpty() ? "(none)" : value;
     }
 
     private HTMLElement example(String title, UiComponent component, String code) {

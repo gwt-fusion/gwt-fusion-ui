@@ -46,3 +46,13 @@ The same route definitions work with every strategy. Use `router.href(path)` whe
 - Named parameters use `:name`: `/components/:id`.
 - Splat routes use `*` and expose the remaining path as `params().get("*")`.
 - Search parameters are available through `context.search()`.
+
+## Auth Guards
+
+`gwt-fusion-router` does not depend on auth. If an application uses `gwt-fusion-auth`, guard helpers can wrap route renderers from the auth module:
+
+```java
+Route.of("/account", AuthGuard.requireAuthenticated(auth, context -> {
+    return accountElement();
+}, "/login"));
+```

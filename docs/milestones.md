@@ -358,20 +358,20 @@ Milestone 16 introduces optional application-infrastructure modules so GWT Fusio
 
 ### Milestone 16.3: Auth State And Router Guards
 
-- [ ] Add Maven module `gwt-fusion-auth`.
-- [ ] Use package `org.gwtfusion.auth` and GWT module `org.gwtfusion.auth.GwtFusionAuth`.
-- [ ] Model auth state with `AuthState`, `AuthSession`, `AuthToken`, and `AuthUser` primitives.
-- [ ] Support anonymous, loading, authenticated, expired, and failed states.
-- [ ] Integrate with `gwt-fusion-storage` for token/session persistence without hard-coding storage policy.
-- [ ] Integrate with `gwt-fusion-http` through an auth-header interceptor.
-- [ ] Provide token refresh hooks without assuming a specific OAuth, JWT, or cookie strategy.
-- [ ] Add optional router guard helpers for `gwt-fusion-router` without making the router depend on auth.
-- [ ] Support listener registration for auth-state changes.
-- [ ] Document recommended patterns for JWT bearer tokens, cookie-backed sessions, and logout cleanup.
-- [ ] Add demo examples for protected routes, login/logout state, and auth-aware navigation.
-- [ ] Add JVM tests for state transitions, listener registration, storage handoff, and guard decisions.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile if demo code changed.
+- [x] Add Maven module `gwt-fusion-auth`.
+- [x] Use package `org.gwtfusion.auth` and GWT module `org.gwtfusion.auth.GwtFusionAuth`.
+- [x] Model auth state with `AuthState`, `AuthSession`, `AuthToken`, and `AuthUser` primitives.
+- [x] Support anonymous, loading, authenticated, expired, and failed states.
+- [x] Integrate with `gwt-fusion-storage` for token/session persistence without hard-coding storage policy.
+- [x] Integrate with `gwt-fusion-http` through an auth-header interceptor.
+- [x] Provide token refresh hooks without assuming a specific OAuth, JWT, or cookie strategy.
+- [x] Add optional router guard helpers for `gwt-fusion-router` without making the router depend on auth.
+- [x] Support listener registration for auth-state changes.
+- [x] Document recommended patterns for JWT bearer tokens, cookie-backed sessions, and logout cleanup.
+- [x] Add demo examples for protected routes, login/logout state, and auth-aware navigation.
+- [x] Add JVM tests for state transitions, listener registration, storage handoff, and guard decisions.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile if demo code changed.
 
 ## Milestone 17: Data Fetching, Query State, And Forms
 

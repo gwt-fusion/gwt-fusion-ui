@@ -42,6 +42,11 @@
       "artifactId": "gwt-fusion-storage",
       "rootPackage": "org.gwtfusion.storage",
       "purpose": "Typed wrappers for localStorage, sessionStorage, and memory fallback storage."
+    },
+    {
+      "artifactId": "gwt-fusion-auth",
+      "rootPackage": "org.gwtfusion.auth",
+      "purpose": "Auth state, session persistence, HTTP auth-header, and router guard helpers."
     }
   ],
   "globalRules": [
@@ -130,6 +135,10 @@
     { "name": "HttpResponseParser", "package": "org.gwtfusion.http", "example": "HttpResponseParser.json(json -> User.fromJson(json))" },
     { "name": "StorageArea", "package": "org.gwtfusion.storage", "example": "StorageArea.localStorage().set(StorageKey.string(\"app.preferences\", \"theme\"), \"dark\")" },
     { "name": "StorageKey", "package": "org.gwtfusion.storage", "example": "StorageKey.string(\"app.preferences\", \"theme\")" },
-    { "name": "StorageCodec", "package": "org.gwtfusion.storage", "example": "StorageCodec.of(value -> value.toStorageString(), value -> UserPreference.fromStorageString(value))" }
+    { "name": "StorageCodec", "package": "org.gwtfusion.storage", "example": "StorageCodec.of(value -> value.toStorageString(), value -> UserPreference.fromStorageString(value))" },
+    { "name": "AuthManager", "package": "org.gwtfusion.auth", "example": "AuthManager.create().sessionStore(AuthSessionStore.create(StorageArea.sessionStorage())).restore()" },
+    { "name": "AuthSession", "package": "org.gwtfusion.auth", "example": "AuthSession.of(AuthUser.of(\"ada\"), AuthToken.bearer(token, expiresAtMillis))" },
+    { "name": "AuthHttp", "package": "org.gwtfusion.auth", "example": "HttpClient.create().addRequestInterceptor(AuthHttp.authorization(auth))" },
+    { "name": "AuthGuard", "package": "org.gwtfusion.auth", "example": "Route.of(\"/account\", AuthGuard.requireAuthenticated(auth, renderer, \"/login\"))" }
   ]
 }

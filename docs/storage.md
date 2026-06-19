@@ -85,3 +85,11 @@ Remove tokens explicitly during logout:
 ```java
 session.remove(tokenKey);
 ```
+
+When using `gwt-fusion-auth`, prefer `AuthSessionStore` so session serialization and expiration metadata stay consistent:
+
+```java
+AuthManager auth = AuthManager.create()
+    .sessionStore(AuthSessionStore.create(StorageArea.sessionStorage()))
+    .restore();
+```

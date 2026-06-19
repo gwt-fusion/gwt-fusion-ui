@@ -9,6 +9,7 @@
   <inherits name="org.gwtfusion.router.GwtFusionRouter"/>
   <inherits name="org.gwtfusion.http.GwtFusionHttp"/>
   <inherits name="org.gwtfusion.storage.GwtFusionStorage"/>
+  <inherits name="org.gwtfusion.auth.GwtFusionAuth"/>
   <entry-point class="org.gwtfusion.ui.demo.DemoApp"/>
   <source path=""/>
 </module>
