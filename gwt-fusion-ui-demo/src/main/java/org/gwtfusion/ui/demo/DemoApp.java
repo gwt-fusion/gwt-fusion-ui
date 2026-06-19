@@ -18,6 +18,9 @@ import org.gwtfusion.http.HttpRequest;
 import org.gwtfusion.router.HistoryStrategy;
 import org.gwtfusion.router.Route;
 import org.gwtfusion.router.Router;
+import org.gwtfusion.storage.StorageArea;
+import org.gwtfusion.storage.StorageEntry;
+import org.gwtfusion.storage.StorageKey;
 import org.gwtfusion.ui.UiComponent;
 import org.gwtfusion.ui.component.alert.Alert;
 import org.gwtfusion.ui.component.alert.AlertVariant;
@@ -184,6 +187,10 @@ public final class DemoApp implements EntryPoint {
                         Route.of("/http", context -> {
                             renderHttp();
                             return null;
+                        }),
+                        Route.of("/storage", context -> {
+                            renderStorage();
+                            return null;
                         }))
                 .notFound(context -> {
                     renderNotFound();
@@ -215,7 +222,8 @@ public final class DemoApp implements EntryPoint {
                 .addTab("icons", "Icons", navigationPanel())
                 .addTab("theme", "Theme", navigationPanel())
                 .addTab("router", "Router", navigationPanel())
-                .addTab("http", "HTTP", navigationPanel());
+                .addTab("http", "HTTP", navigationPanel())
+                .addTab("storage", "Storage", navigationPanel());
         mainNavigation.onValueChange(value -> {
             if ("components".equals(value)) {
                 router.navigate("/components");
@@ -227,6 +235,8 @@ public final class DemoApp implements EntryPoint {
                 router.navigate("/router");
             } else if ("http".equals(value)) {
                 router.navigate("/http");
+            } else if ("storage".equals(value)) {
+                router.navigate("/storage");
             } else {
                 router.navigate("/");
             }
@@ -3194,6 +3204,56 @@ public final class DemoApp implements EntryPoint {
                         + "        }\n"
                         + "        return response;\n"
                         + "    });"));
+    }
+
+    private void renderStorage() {
+        selectMainNavigation("storage");
+        clearContent();
+        content.appendChild(textElement("h1", "", "Storage"));
+        content.appendChild(textElement("p", "demo-muted", "gwt-fusion-storage provides typed wrappers for browser localStorage, sessionStorage, and memory fallback storage. Serialization stays explicit through codecs and browser storage failures fall back to memory."));
+
+        StorageArea preferences = StorageArea.memory();
+        StorageKey<String> themeKey = StorageKey.string("demo.preferences", "theme");
+        preferences.set(themeKey, "dark");
+        StorageEntry<String> themeEntry = preferences.entry(themeKey);
+        HTMLElement preferencePreview = preview("demo-stack-preview");
+        preferencePreview.appendChild(textElement("p", "demo-muted", "Raw key: " + themeKey.rawKey()));
+        preferencePreview.appendChild(textElement("p", "demo-muted", "Stored theme: " + preferences.get(themeKey)));
+        preferencePreview.appendChild(textElement("p", "demo-muted", "Created at: " + themeEntry.createdAtMillis()));
+        content.appendChild(example("Theme and user preferences", preferencePreview,
+                "StorageArea preferences = StorageArea.memory();\n"
+                        + "StorageKey<String> themeKey = StorageKey.string(\"demo.preferences\", \"theme\");\n\n"
+                        + "preferences.set(themeKey, \"dark\");\n"
+                        + "String theme = preferences.get(themeKey);"));
+
+        StorageArea drafts = StorageArea.memory();
+        StorageKey<String> draftKey = StorageKey.string("demo.drafts", "profile-name");
+        drafts.set(draftKey, "Ada Lovelace", 60_000);
+        Input draftInput = Input.create().placeholder("Draft name").value(drafts.get(draftKey));
+        HTMLElement draftPreview = preview("demo-stack-preview");
+        draftPreview.appendChild(draftInput.element());
+        draftPreview.appendChild(Button.create("Save draft").variant(ButtonVariant.OUTLINE).onClick(event -> drafts.set(draftKey, draftInput.value(), 60_000)).element());
+        draftPreview.appendChild(textElement("p", "demo-muted", "This example stores the draft with a 60 second TTL."));
+        content.appendChild(example("Draft form persistence", draftPreview,
+                "StorageArea drafts = StorageArea.memory();\n"
+                        + "StorageKey<String> draftKey = StorageKey.string(\"demo.drafts\", \"profile-name\");\n\n"
+                        + "Input draftInput = Input.create().value(drafts.get(draftKey));\n\n"
+                        + "Button.create(\"Save draft\")\n"
+                        + "    .onClick(event -> drafts.set(draftKey, draftInput.value(), 60_000));"));
+
+        StorageArea session = StorageArea.memory();
+        StorageKey<String> tokenKey = StorageKey.string("demo.auth", "access-token");
+        session.set(tokenKey, "token-redacted", 15 * 60 * 1_000);
+        HTMLElement tokenPreview = preview("demo-stack-preview");
+        tokenPreview.appendChild(textElement("p", "demo-muted", "Token key: " + tokenKey.rawKey()));
+        tokenPreview.appendChild(textElement("p", "demo-muted", "Token present: " + session.contains(tokenKey)));
+        tokenPreview.appendChild(textElement("p", "demo-muted", "Auth modules can decide whether to use localStorage, sessionStorage, or memory storage without hard-coding policy in HTTP."));
+        content.appendChild(example("Token storage handoff", tokenPreview,
+                "StorageArea session = StorageArea.memory();\n"
+                        + "StorageKey<String> tokenKey = StorageKey.string(\"demo.auth\", \"access-token\");\n\n"
+                        + "session.set(tokenKey, token, 15 * 60 * 1_000);\n"
+                        + "String token = session.get(tokenKey);\n"
+                        + "session.remove(tokenKey);"));
     }
 
     private HTMLElement example(String title, UiComponent component, String code) {

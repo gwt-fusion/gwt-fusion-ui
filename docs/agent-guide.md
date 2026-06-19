@@ -8,6 +8,7 @@ This guide is for coding agents that generate application code using GWT Fusion.
 - Use `docs/components-index.json` as the canonical machine-readable catalog.
 - Use `docs/snippets` if snippet files are added later.
 - Use `docs/http.md` for REST/fetch client examples.
+- Use `docs/storage.md` for typed storage examples.
 - Use `docs/router.md` for standalone routing examples.
 - Use `docs/release-readiness.md` for build, compatibility, test, artifact, and deployment checks.
 
@@ -36,6 +37,8 @@ import org.gwtfusion.icons.phosphor.PhosphorWeight;
 import org.gwtfusion.icons.tabler.TablerIcons;
 import org.gwtfusion.http.HttpClient;
 import org.gwtfusion.http.HttpResponseParser;
+import org.gwtfusion.storage.StorageArea;
+import org.gwtfusion.storage.StorageKey;
 import org.gwtfusion.ui.UiComponent;
 import org.gwtfusion.ui.component.button.Button;
 import org.gwtfusion.ui.component.button.ButtonVariant;
@@ -160,6 +163,27 @@ client.get("/users")
 ```
 
 Use interceptors for shared auth, CSRF, correlation IDs, and status handling.
+
+## Storage
+
+`gwt-fusion-storage` provides typed wrappers for browser `localStorage`, browser `sessionStorage`, and memory fallback storage. Use explicit codecs and namespaced keys; do not add reflection-based JSON mapping.
+
+```java
+StorageArea preferences = StorageArea.localStorage();
+StorageKey<String> themeKey = StorageKey.string("app.preferences", "theme");
+
+preferences.set(themeKey, "dark");
+String theme = preferences.get(themeKey);
+```
+
+Use TTLs for drafts, tokens, and cached preferences that should expire:
+
+```java
+StorageArea session = StorageArea.sessionStorage();
+StorageKey<String> tokenKey = StorageKey.string("app.auth", "access-token");
+
+session.set(tokenKey, token, 15 * 60 * 1_000);
+```
 
 ## Do Not Generate
 

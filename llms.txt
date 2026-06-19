@@ -11,6 +11,7 @@ Start here when using this project with coding agents:
 - `docs/icons.md`: Icon component usage.
 - `docs/icon-modules.md`: Optional icon module usage.
 - `docs/http.md`: REST/fetch client usage.
+- `docs/storage.md`: Typed browser and fallback storage usage.
 - `docs/router.md`: Standalone router usage.
 - `docs/release-readiness.md`: Build, compatibility, test, artifact, and deployment checks.
 
@@ -24,6 +25,7 @@ Core packages:
 - `org.gwtfusion.icons.phosphor`: Phosphor icon factories with `PhosphorWeight`.
 - `org.gwtfusion.router`: Standalone router.
 - `org.gwtfusion.http`: REST/fetch client wrapper over Elemental2.
+- `org.gwtfusion.storage`: Typed localStorage, sessionStorage, and memory fallback wrappers.
 
 Important rules for generated code:
 
@@ -36,3 +38,4 @@ Important rules for generated code:
 - Use `DirectionManager` for root `dir` handling and logical `START`/`END` sides when placement should follow LTR/RTL.
 - Use token-backed themed surfaces such as `bg-card text-card-foreground` and `bg-popover text-popover-foreground`.
 - Use `HttpClient` for REST-style requests and avoid adding GWT-RPC dependencies.
+- Use `StorageArea` and explicit `StorageCodec` values for browser storage instead of reflection-based serialization.

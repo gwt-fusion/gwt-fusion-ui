@@ -8,6 +8,7 @@
   <inherits name="org.gwtfusion.icons.phosphor.GwtFusionPhosphor"/>
   <inherits name="org.gwtfusion.router.GwtFusionRouter"/>
   <inherits name="org.gwtfusion.http.GwtFusionHttp"/>
+  <inherits name="org.gwtfusion.storage.GwtFusionStorage"/>
   <entry-point class="org.gwtfusion.ui.demo.DemoApp"/>
   <source path=""/>
 </module>

@@ -37,6 +37,11 @@
       "artifactId": "gwt-fusion-http",
       "rootPackage": "org.gwtfusion.http",
       "purpose": "Java-idiomatic REST/fetch client wrapper over Elemental2 DomGlobal.fetch."
+    },
+    {
+      "artifactId": "gwt-fusion-storage",
+      "rootPackage": "org.gwtfusion.storage",
+      "purpose": "Typed wrappers for localStorage, sessionStorage, and memory fallback storage."
     }
   ],
   "globalRules": [
@@ -122,6 +127,9 @@
     { "name": "PhosphorWeight", "package": "org.gwtfusion.icons.phosphor", "values": ["THIN", "LIGHT", "REGULAR", "BOLD", "FILL", "DUOTONE"], "example": "PhosphorWeight.DUOTONE" },
     { "name": "Router", "package": "org.gwtfusion.router", "example": "Router.create(HistoryStrategy.hash()).route(\"/\", context -> homeElement())" },
     { "name": "HttpClient", "package": "org.gwtfusion.http", "example": "HttpClient.create().baseUrl(\"/api\").get(\"/users\").send(HttpResponseParser.json())" },
-    { "name": "HttpResponseParser", "package": "org.gwtfusion.http", "example": "HttpResponseParser.json(json -> User.fromJson(json))" }
+    { "name": "HttpResponseParser", "package": "org.gwtfusion.http", "example": "HttpResponseParser.json(json -> User.fromJson(json))" },
+    { "name": "StorageArea", "package": "org.gwtfusion.storage", "example": "StorageArea.localStorage().set(StorageKey.string(\"app.preferences\", \"theme\"), \"dark\")" },
+    { "name": "StorageKey", "package": "org.gwtfusion.storage", "example": "StorageKey.string(\"app.preferences\", \"theme\")" },
+    { "name": "StorageCodec", "package": "org.gwtfusion.storage", "example": "StorageCodec.of(value -> value.toStorageString(), value -> UserPreference.fromStorageString(value))" }
   ]
 }
