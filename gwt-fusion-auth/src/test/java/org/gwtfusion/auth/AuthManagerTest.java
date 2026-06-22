@@ -44,4 +44,17 @@ class AuthManagerTest {
         assertEquals(AuthStatus.FAILED, auth.state().status());
         assertEquals("refresh failed", auth.state().message());
     }
+
+    @Test
+    void refreshHandlerExceptionFailsInsteadOfLeavingLoadingState() {
+        AuthManager auth = AuthManager.create()
+                .login(AuthSession.of(AuthUser.of("u1"), AuthToken.bearer("old")));
+
+        auth.refresh(context -> {
+            throw new RuntimeException("boom");
+        });
+
+        assertEquals(AuthStatus.FAILED, auth.state().status());
+        assertEquals("boom", auth.state().message());
+    }
 }

@@ -38,13 +38,29 @@ public final class AuthSessionStore {
         if (session == null) {
             return clear();
         }
-        AuthToken ttlToken = session.refreshToken() == null ? session.accessToken() : session.refreshToken();
-        if (ttlToken != null && ttlToken.hasExpiration()) {
-            storage.setUntil(key, session, ttlToken.expiresAtMillis());
+        Long expiresAtMillis = latestExpiration(session.accessToken(), session.refreshToken());
+        if (expiresAtMillis != null) {
+            storage.setUntil(key, session, expiresAtMillis);
         } else {
             storage.set(key, session);
         }
         return this;
+    }
+
+    private static Long latestExpiration(AuthToken accessToken, AuthToken refreshToken) {
+        Long latest = null;
+        AuthToken[] tokens = {accessToken, refreshToken};
+        for (AuthToken token : tokens) {
+            if (token == null) {
+                continue;
+            }
+            if (!token.hasExpiration()) {
+                return null;
+            }
+            long expiresAtMillis = token.expiresAtMillis();
+            latest = latest == null ? expiresAtMillis : Math.max(latest, expiresAtMillis);
+        }
+        return latest;
     }
 
     public AuthSessionStore clear() {

@@ -3285,7 +3285,7 @@ public final class DemoApp implements EntryPoint {
         content.appendChild(textElement("p", "demo-muted", "gwt-fusion-auth models auth state, session persistence, HTTP auth headers, and router guards without assuming OAuth, JWT, or cookie policy."));
 
         String redirect = router.location().search().get("redirect");
-        if (redirect != null && !redirect.isEmpty()) {
+        if (!demoAuth.state().authenticated() && redirect != null && !redirect.isEmpty()) {
             content.appendChild(Alert.create()
                     .variant(AlertVariant.DEFAULT)
                     .add(Alert.title("Protected route"))

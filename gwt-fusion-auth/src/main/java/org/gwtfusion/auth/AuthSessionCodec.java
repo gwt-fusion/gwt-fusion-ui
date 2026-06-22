@@ -39,6 +39,7 @@ public final class AuthSessionCodec implements StorageCodec<AuthSession> {
         for (Map.Entry<String, String> entry : metadata.entrySet()) {
             session = session.withMetadata(entry.getKey(), entry.getValue());
         }
+        reader.requireExhausted();
         return session;
     }
 
@@ -92,6 +93,9 @@ public final class AuthSessionCodec implements StorageCodec<AuthSession> {
 
     private static Map<String, String> readMap(Reader reader) {
         int size = Integer.parseInt(reader.field());
+        if (size < 0) {
+            throw new IllegalArgumentException("Invalid auth session data");
+        }
         Map<String, String> values = new LinkedHashMap<>();
         for (int i = 0; i < size; i++) {
             values.put(reader.field(), reader.field());
@@ -131,6 +135,12 @@ public final class AuthSessionCodec implements StorageCodec<AuthSession> {
             String field = value.substring(index, index + length);
             index += length;
             return field;
+        }
+
+        void requireExhausted() {
+            if (index != value.length()) {
+                throw new IllegalArgumentException("Invalid auth session data");
+            }
         }
     }
 }

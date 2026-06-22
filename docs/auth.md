@@ -51,7 +51,7 @@ AuthManager auth = AuthManager.create()
     .restore();
 ```
 
-`AuthSessionStore` uses a reflection-free `AuthSessionCodec`. When a refresh token exists, its expiration controls storage TTL; otherwise the access-token expiration is used.
+`AuthSessionStore` uses a reflection-free `AuthSessionCodec`. Storage TTL follows the latest available access-token or refresh-token expiration, so a session remains restorable while either token is still valid. If a token has no expiration, the session is stored without a TTL.
 
 ## HTTP Headers
 

@@ -89,7 +89,11 @@ public final class AuthManager {
             return expire();
         }
         setState(AuthState.loading());
-        handler.refresh(new AuthRefreshContext(this, current));
+        try {
+            handler.refresh(new AuthRefreshContext(this, current));
+        } catch (RuntimeException exception) {
+            fail(exception.getMessage() == null ? "Refresh failed" : exception.getMessage());
+        }
         return this;
     }
 
