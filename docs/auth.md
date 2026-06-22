@@ -89,7 +89,7 @@ Route.of("/account", AuthGuard.requireAuthenticated(auth, context -> {
 }, "/login"));
 ```
 
-Anonymous, expired, and failed states redirect to the configured login route with a `redirect` query parameter. Loading state waits and renders nothing.
+Anonymous, expired, and failed states redirect to the configured login route with a UTF-8 encoded `redirect` query parameter. Loading state renders nothing and is re-evaluated automatically when auth leaves `LOADING`, as long as the user is still on the guarded route.
 
 ## Recommended Patterns
 

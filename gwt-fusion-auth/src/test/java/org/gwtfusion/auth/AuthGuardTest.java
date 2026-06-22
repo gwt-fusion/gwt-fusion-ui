@@ -33,4 +33,12 @@ class AuthGuardTest {
         assertEquals(AuthGuardResultType.REDIRECT, expired.type());
         assertEquals(AuthGuardResultType.REDIRECT, failed.type());
     }
+
+    @Test
+    void redirectsWithUtf8EncodedUnicodePath() {
+        AuthGuardResult result = AuthGuard.decide(AuthState.anonymous(), RouteLocation.parse("/konto/€-你好-🙂"), "/login");
+
+        assertEquals(AuthGuardResultType.REDIRECT, result.type());
+        assertEquals("/login?redirect=%2Fkonto%2F%E2%82%AC-%E4%BD%A0%E5%A5%BD-%F0%9F%99%82", result.redirectPath());
+    }
 }
