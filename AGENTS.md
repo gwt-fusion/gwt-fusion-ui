@@ -10,6 +10,7 @@ This repository contains GWT Fusion, a set of GWT 2.13 and J2CL-compatible UI, i
 - `gwt-fusion-router`: Standalone client router under the `org.gwtfusion.router` package.
 - `gwt-fusion-http`: REST/fetch client wrapper under the `org.gwtfusion.http` package.
 - `gwt-fusion-storage`: Typed localStorage, sessionStorage, and memory fallback utilities under `org.gwtfusion.storage`.
+- `gwt-fusion-auth`: Auth state, session persistence, HTTP auth-header, and router guard helpers under `org.gwtfusion.auth`.
 - `gwt-fusion-icons-lucide`: Optional Lucide icon module under `org.gwtfusion.icons.lucide`.
 - `gwt-fusion-ui-demo`: GWT demo website with visual component examples and code snippets.
 
@@ -66,7 +67,8 @@ This repository contains GWT Fusion, a set of GWT 2.13 and J2CL-compatible UI, i
 - Router: standalone Hash, Browser, and Memory history strategies with static, `:param`, and `*` splat route matching.
 - HTTP: standalone `HttpClient` wrapper over Elemental2 `DomGlobal.fetch` with request builders, headers, query parameters, parser hooks, and interceptors.
 - Storage: standalone typed wrappers for browser `localStorage`, browser `sessionStorage`, and memory fallback storage with explicit codecs, namespaced keys, and TTL metadata.
+- Auth: standalone auth state manager with explicit session persistence, HTTP auth-header interceptor, refresh hooks, and optional router guards.
 - Demo: home page, routed component view with categorized preview/Java code examples, form foundation examples, layout/navigation examples, overlay examples, icon gallery, events examples, router examples, and theme view.
-- Demo: includes infrastructure examples for router, HTTP, and storage.
+- Demo: includes infrastructure examples for router, HTTP, storage, and auth.
 - Tailwind 3 is configured and executed through `frontend-maven-plugin`.
-- Current working status: Milestone 16.2 Storage Utilities is complete.
+- Current working status: Milestone 16.3 Auth State And Router Guards is complete.

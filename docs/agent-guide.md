@@ -9,6 +9,7 @@ This guide is for coding agents that generate application code using GWT Fusion.
 - Use `docs/snippets` if snippet files are added later.
 - Use `docs/http.md` for REST/fetch client examples.
 - Use `docs/storage.md` for typed storage examples.
+- Use `docs/auth.md` for auth state, HTTP auth headers, and router guard examples.
 - Use `docs/router.md` for standalone routing examples.
 - Use `docs/release-readiness.md` for build, compatibility, test, artifact, and deployment checks.
 
@@ -29,6 +30,13 @@ This guide is for coding agents that generate application code using GWT Fusion.
 ```java
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLElement;
+import org.gwtfusion.auth.AuthGuard;
+import org.gwtfusion.auth.AuthHttp;
+import org.gwtfusion.auth.AuthManager;
+import org.gwtfusion.auth.AuthSession;
+import org.gwtfusion.auth.AuthSessionStore;
+import org.gwtfusion.auth.AuthToken;
+import org.gwtfusion.auth.AuthUser;
 import org.gwtfusion.icons.heroicons.HeroIconStyle;
 import org.gwtfusion.icons.heroicons.HeroIcons;
 import org.gwtfusion.icons.lucide.LucideIcons;
@@ -183,6 +191,35 @@ StorageArea session = StorageArea.sessionStorage();
 StorageKey<String> tokenKey = StorageKey.string("app.auth", "access-token");
 
 session.set(tokenKey, token, 15 * 60 * 1_000);
+```
+
+## Auth
+
+`gwt-fusion-auth` models local auth state without assuming OAuth, JWT, or cookie policy. Configure persistence explicitly through `StorageArea`.
+
+```java
+AuthManager auth = AuthManager.create()
+    .sessionStore(AuthSessionStore.create(StorageArea.sessionStorage()))
+    .restore();
+
+auth.login(AuthSession.of(
+    AuthUser.of("ada", "Ada Lovelace", "ada@example.test"),
+    AuthToken.bearer(token, expiresAtMillis)));
+```
+
+Use the HTTP interceptor only for token-backed sessions:
+
+```java
+HttpClient client = HttpClient.create()
+    .addRequestInterceptor(AuthHttp.authorization(auth));
+```
+
+Router guards live in the auth module so the router remains independent:
+
+```java
+Route.of("/account", AuthGuard.requireAuthenticated(auth, context -> {
+    return accountElement();
+}, "/login"));
 ```
 
 ## Do Not Generate

@@ -54,6 +54,13 @@ HttpClient client = HttpClient.create()
     });
 ```
 
+When using `gwt-fusion-auth`, prefer the provided auth-header interceptor:
+
+```java
+HttpClient client = HttpClient.create()
+    .addRequestInterceptor(AuthHttp.authorization(auth));
+```
+
 ## Typed Parsing
 
 Parsing is explicit and reflection-free. Generated OpenAPI clients or application code can provide parser functions:
