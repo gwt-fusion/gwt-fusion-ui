@@ -379,21 +379,21 @@ Milestone 17 builds on HTTP and storage with TanStack Query-inspired data fetchi
 
 ### Milestone 17.1: TanStack Query-Inspired Data Module
 
-- [ ] Add Maven module `gwt-fusion-query`.
-- [ ] Use package `org.gwtfusion.query` and GWT module `org.gwtfusion.query.GwtFusionQuery`.
-- [ ] Implement `QueryClient`, `QueryKey`, `Query<T>`, `QueryState<T>`, `QueryObserver<T>`, and `QueryOptions`.
-- [ ] Support loading, success, error, stale, refreshing, and idle states.
-- [ ] Support request de-duplication for in-flight queries with the same key.
-- [ ] Support `staleTime`, `cacheTime` or `gcTime`, manual `refetch()`, and `invalidate(QueryKey)`.
-- [ ] Support retry and retry-delay policies with simple backoff helpers.
-- [ ] Support disabled/lazy queries that start only after required inputs are available.
-- [ ] Support query observers with `ListenerRegistration` for clean subscription removal.
-- [ ] Support mutation primitives with loading/error/success state and optional optimistic update hooks.
-- [ ] Keep query fetchers generic so they can use `gwt-fusion-http`, generated OpenAPI clients, or legacy async services through adapters.
-- [ ] Add demo examples that wire `Skeleton`, `Alert`, `EmptyState`, `Toast`, and `DataTable` to query state.
-- [ ] Add JVM tests for query keys, cache behavior, observer behavior, invalidation, retry decisions, stale decisions, and mutation state.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile if demo code changed.
+- [x] Add Maven module `gwt-fusion-query`.
+- [x] Use package `org.gwtfusion.query` and GWT module `org.gwtfusion.query.GwtFusionQuery`.
+- [x] Implement `QueryClient`, `QueryKey`, `Query<T>`, `QueryState<T>`, `QueryObserver<T>`, and `QueryOptions`.
+- [x] Support loading, success, error, stale, refreshing, and idle states.
+- [x] Support request de-duplication for in-flight queries with the same key.
+- [x] Support `staleTime`, `cacheTime` or `gcTime`, manual `refetch()`, and `invalidate(QueryKey)`.
+- [x] Support retry and retry-delay policies with simple backoff helpers.
+- [x] Support disabled/lazy queries that start only after required inputs are available.
+- [x] Support query observers with `ListenerRegistration` for clean subscription removal.
+- [x] Support mutation primitives with loading/error/success state and optional optimistic update hooks.
+- [x] Keep query fetchers generic so they can use `gwt-fusion-http`, generated OpenAPI clients, or legacy async services through adapters.
+- [x] Add demo examples that wire `Skeleton`, `Alert`, `EmptyState`, `Toast`, and `DataTable` to query state.
+- [x] Add JVM tests for query keys, cache behavior, observer behavior, invalidation, retry decisions, stale decisions, and mutation state.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile if demo code changed.
 
 ### Milestone 17.2: Query UI Helpers
 

@@ -13,6 +13,7 @@ Start here when using this project with coding agents:
 - `docs/http.md`: REST/fetch client usage.
 - `docs/storage.md`: Typed browser and fallback storage usage.
 - `docs/auth.md`: Auth state, session persistence, HTTP auth headers, and router guards.
+- `docs/query.md`: Query cache, retry, invalidation, observers, and mutation state.
 - `docs/router.md`: Standalone router usage.
 - `docs/release-readiness.md`: Build, compatibility, test, artifact, and deployment checks.
 
@@ -28,6 +29,7 @@ Core packages:
 - `org.gwtfusion.http`: REST/fetch client wrapper over Elemental2.
 - `org.gwtfusion.storage`: Typed localStorage, sessionStorage, and memory fallback wrappers.
 - `org.gwtfusion.auth`: Auth state, session persistence, HTTP interceptor, and router guard helpers.
+- `org.gwtfusion.query`: Data fetching, cache state, retry, invalidation, observers, and mutation primitives.
 
 Important rules for generated code:
 
@@ -42,3 +44,4 @@ Important rules for generated code:
 - Use `HttpClient` for REST-style requests and avoid adding GWT-RPC dependencies.
 - Use `StorageArea` and explicit `StorageCodec` values for browser storage instead of reflection-based serialization.
 - Use `AuthManager`, `AuthSessionStore`, `AuthHttp`, and `AuthGuard` for auth state without hard-coding OAuth, JWT, or cookie policy.
+- Use `QueryClient`, `QueryKey`, `QueryOptions`, `QueryState`, and `Mutation` for data fetching state without coupling it to UI rendering.

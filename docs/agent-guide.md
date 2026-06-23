@@ -10,6 +10,7 @@ This guide is for coding agents that generate application code using GWT Fusion.
 - Use `docs/http.md` for REST/fetch client examples.
 - Use `docs/storage.md` for typed storage examples.
 - Use `docs/auth.md` for auth state, HTTP auth headers, and router guard examples.
+- Use `docs/query.md` for query cache, retry, invalidation, observers, and mutation examples.
 - Use `docs/router.md` for standalone routing examples.
 - Use `docs/release-readiness.md` for build, compatibility, test, artifact, and deployment checks.
 
@@ -45,6 +46,12 @@ import org.gwtfusion.icons.phosphor.PhosphorWeight;
 import org.gwtfusion.icons.tabler.TablerIcons;
 import org.gwtfusion.http.HttpClient;
 import org.gwtfusion.http.HttpResponseParser;
+import org.gwtfusion.query.Mutation;
+import org.gwtfusion.query.MutationOptions;
+import org.gwtfusion.query.QueryClient;
+import org.gwtfusion.query.QueryKey;
+import org.gwtfusion.query.QueryOptions;
+import org.gwtfusion.query.QueryRetryDelay;
 import org.gwtfusion.storage.StorageArea;
 import org.gwtfusion.storage.StorageKey;
 import org.gwtfusion.ui.UiComponent;
@@ -220,6 +227,29 @@ Router guards live in the auth module so the router remains independent:
 Route.of("/account", AuthGuard.requireAuthenticated(auth, context -> {
     return accountElement();
 }, "/login"));
+```
+
+## Query
+
+`gwt-fusion-query` models query cache, retry, stale, invalidation, observer, and mutation state. Keep UI rendering in application code or optional helpers.
+
+```java
+QueryClient queryClient = QueryClient.create();
+
+queryClient.query(
+    QueryKey.of("projects", "list"),
+    () -> api.projects(),
+    QueryOptions.create()
+        .staleTime(30_000)
+        .retry(2)
+        .retryDelay(QueryRetryDelay.exponential(250, 2_000)));
+```
+
+Use `Mutation` for writes:
+
+```java
+Mutation<FormValue, Project> saveProject = Mutation.create(
+    MutationOptions.create(value -> api.saveProject(value)));
 ```
 
 ## Do Not Generate
