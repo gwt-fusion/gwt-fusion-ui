@@ -233,6 +233,32 @@ pre {
   gap: .5rem;
 }
 
+.demo-query-panel {
+  display: grid;
+  gap: .75rem;
+}
+
+.demo-query-summary {
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+}
+
+.demo-query-metric {
+  border: 1px solid hsl(var(--border));
+  border-radius: .75rem;
+  display: grid;
+  gap: .2rem;
+  padding: .75rem;
+}
+
+.demo-query-label {
+  color: hsl(var(--muted-foreground));
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
 .demo-resizable-preview {
   align-items: stretch;
   display: grid;
