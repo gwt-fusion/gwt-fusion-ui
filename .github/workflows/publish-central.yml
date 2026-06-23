@@ -61,7 +61,7 @@ jobs:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: mvn -B -Pcentral-release -pl gwt-fusion-ui,gwt-fusion-router,gwt-fusion-icons-lucide -am deploy
+        run: mvn -B -Pcentral-release -pl gwt-fusion-ui,gwt-fusion-router,gwt-fusion-http,gwt-fusion-storage,gwt-fusion-auth,gwt-fusion-query,gwt-fusion-icons-lucide,gwt-fusion-icons-tabler,gwt-fusion-icons-heroicons,gwt-fusion-icons-phosphor -am deploy
 
       - name: Create release tag
         env:
