@@ -20,11 +20,11 @@ public final class QueryState<T> {
     }
 
     public static <T> QueryState<T> idle() {
-        return new QueryState<>(QueryStatus.IDLE, null, null, 0, false, true, 0);
+        return new QueryState<>(QueryStatus.IDLE, null, null, -1, false, true, 0);
     }
 
     public static <T> QueryState<T> loading() {
-        return new QueryState<>(QueryStatus.LOADING, null, null, 0, true, true, 0);
+        return new QueryState<>(QueryStatus.LOADING, null, null, -1, true, true, 0);
     }
 
     public static <T> QueryState<T> refreshing(T data, long updatedAtMillis) {

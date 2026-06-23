@@ -20,6 +20,9 @@ class QueryKeyTest {
 
     @Test
     void rejectsEmptyKeys() {
-        assertThrows(IllegalArgumentException.class, () -> QueryKey.of(" ", null));
+        assertThrows(IllegalArgumentException.class, QueryKey::of);
+        assertThrows(IllegalArgumentException.class, () -> QueryKey.of(" "));
+        assertThrows(IllegalArgumentException.class, () -> QueryKey.of("users", null));
+        assertThrows(IllegalArgumentException.class, () -> QueryKey.of("users", ""));
     }
 }

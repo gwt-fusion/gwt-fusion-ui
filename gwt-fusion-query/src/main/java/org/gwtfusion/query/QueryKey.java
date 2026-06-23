@@ -10,16 +10,15 @@ public final class QueryKey {
     private final List<String> parts;
 
     private QueryKey(List<String> parts) {
-        List<String> clean = new ArrayList<>();
-        if (parts != null) {
-            for (String part : parts) {
-                if (part != null && !part.trim().isEmpty()) {
-                    clean.add(part.trim());
-                }
-            }
-        }
-        if (clean.isEmpty()) {
+        if (parts == null || parts.isEmpty()) {
             throw new IllegalArgumentException("query key must not be empty");
+        }
+        List<String> clean = new ArrayList<>();
+        for (String part : parts) {
+            if (part == null || part.trim().isEmpty()) {
+                throw new IllegalArgumentException("query key parts must not be null or blank");
+            }
+            clean.add(part.trim());
         }
         this.parts = Collections.unmodifiableList(clean);
     }

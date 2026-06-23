@@ -61,8 +61,9 @@ public final class Query<T> {
         } else {
             setState(QueryState.loading());
         }
-        inFlight = runFetch(0);
-        return inFlight;
+        Promise<T> fetch = runFetch(0);
+        inFlight = state.fetching() ? fetch : null;
+        return fetch;
     }
 
     public Query<T> markStale() {
@@ -92,19 +93,25 @@ public final class Query<T> {
     }
 
     private Promise<T> runFetch(int failureCount) {
-        return fetcher.fetch().then(data -> {
-            inFlight = null;
-            setState(QueryState.success(data, client.now()));
-            return Promise.resolve(data);
-        }, error -> {
-            int nextFailureCount = failureCount + 1;
-            if (options.shouldRetry(nextFailureCount)) {
-                return delay(options.retryDelayMillis(nextFailureCount)).then(ignored -> runFetch(nextFailureCount));
-            }
-            inFlight = null;
-            setState(QueryState.error(error, state.data(), state.updatedAtMillis(), nextFailureCount));
-            return Promise.reject(error);
-        });
+        try {
+            return fetcher.fetch().then(data -> {
+                inFlight = null;
+                setState(QueryState.success(data, client.now()));
+                return Promise.resolve(data);
+            }, error -> handleFetchError(error, failureCount));
+        } catch (Throwable error) {
+            return handleFetchError(error, failureCount);
+        }
+    }
+
+    private Promise<T> handleFetchError(Object error, int failureCount) {
+        int nextFailureCount = failureCount + 1;
+        if (options.shouldRetry(nextFailureCount)) {
+            return delay(options.retryDelayMillis(nextFailureCount)).then(ignored -> runFetch(nextFailureCount));
+        }
+        inFlight = null;
+        setState(QueryState.error(error, state.data(), state.updatedAtMillis(), nextFailureCount));
+        return Promise.reject(error);
     }
 
     private Promise<Void> delay(long delayMillis) {

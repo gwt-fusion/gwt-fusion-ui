@@ -1,12 +1,18 @@
 package org.gwtfusion.query;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class MutationTest {
+    @Test
+    void rejectsNullOptions() {
+        assertThrows(IllegalArgumentException.class, () -> Mutation.create(null));
+    }
+
     @Test
     void supportsStateObserversRemovalAndReset() {
         Mutation<String, String> mutation = Mutation.create(() -> 10, MutationOptions.<String, String>create(value -> null));

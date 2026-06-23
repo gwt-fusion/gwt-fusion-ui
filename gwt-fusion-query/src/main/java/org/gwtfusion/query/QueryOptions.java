@@ -68,6 +68,6 @@ public final class QueryOptions {
     }
 
     public boolean stale(long updatedAtMillis, long nowMillis) {
-        return updatedAtMillis <= 0 || nowMillis - updatedAtMillis >= staleTimeMillis;
+        return updatedAtMillis < 0 || nowMillis - updatedAtMillis >= staleTimeMillis;
     }
 }

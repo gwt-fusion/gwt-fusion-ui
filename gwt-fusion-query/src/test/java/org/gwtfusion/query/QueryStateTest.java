@@ -23,4 +23,10 @@ class QueryStateTest {
         assertEquals("nope", error.errorMessage());
         assertEquals(2, error.failureCount());
     }
+
+    @Test
+    void usesNegativeUpdatedAtForUninitializedState() {
+        assertEquals(-1, QueryState.idle().updatedAtMillis());
+        assertEquals(-1, QueryState.loading().updatedAtMillis());
+    }
 }

@@ -27,6 +27,15 @@ class QueryOptionsTest {
     }
 
     @Test
+    void treatsOnlyNegativeUpdatedAtAsUninitialized() {
+        QueryOptions options = QueryOptions.create().staleTime(1_000);
+
+        assertFalse(options.stale(0, 999));
+        assertTrue(options.stale(0, 1_000));
+        assertTrue(options.stale(-1, 0));
+    }
+
+    @Test
     void supportsExponentialRetryDelay() {
         QueryRetryDelay delay = QueryRetryDelay.exponential(100, 1_000);
 

@@ -11,6 +11,9 @@ public final class Mutation<V, T> {
     private MutationState<T> state = MutationState.idle();
 
     private Mutation(QueryClock clock, MutationOptions<V, T> options) {
+        if (options == null) {
+            throw new IllegalArgumentException("options must not be null");
+        }
         this.clock = clock == null ? System::currentTimeMillis : clock;
         this.options = options;
     }
@@ -28,15 +31,20 @@ public final class Mutation<V, T> {
     }
 
     public Promise<T> execute(V variables) {
-        options.optimisticUpdate(variables);
-        setState(MutationState.loading(state.data()));
-        return options.handler().mutate(variables).then(data -> {
-            setState(MutationState.success(data, clock.now()));
-            return Promise.resolve(data);
-        }, error -> {
+        try {
+            options.optimisticUpdate(variables);
+            setState(MutationState.loading(state.data()));
+            return options.handler().mutate(variables).then(data -> {
+                setState(MutationState.success(data, clock.now()));
+                return Promise.resolve(data);
+            }, error -> {
+                setState(MutationState.error(error, state.data(), clock.now()));
+                return Promise.reject(error);
+            });
+        } catch (Throwable error) {
             setState(MutationState.error(error, state.data(), clock.now()));
             return Promise.reject(error);
-        });
+        }
     }
 
     public Mutation<V, T> reset() {
