@@ -489,6 +489,25 @@ Milestone 19 rounds out production-app needs after HTTP/query/codegen foundation
 - [ ] Add JVM tests for permission-state mapping and notification option construction where possible.
 - [ ] Verify `mvn -Dskip.tailwind=true verify`.
 
+## Milestone 20: Shared Base Module
+
+Milestone 20 extracts small cross-module primitives that currently appear in multiple independent modules. The goal is to reduce duplication without making infrastructure modules depend on `gwt-fusion-ui`, preserving standalone use for router, auth, query, storage, and future modules.
+
+### Milestone 20.1: Core Primitives Extraction
+
+- [ ] Add Maven module `gwt-fusion-core`.
+- [ ] Use package `org.gwtfusion.core` and GWT module `org.gwtfusion.core.GwtFusionCore`.
+- [ ] Move shared `ListenerRegistration` semantics into `gwt-fusion-core`.
+- [ ] Provide `ListenerRegistration.empty()` and `ListenerRegistration.combine(...)` in the core module.
+- [ ] Audit existing duplicates in `gwt-fusion-ui`, `gwt-fusion-router`, and `gwt-fusion-query`.
+- [ ] Decide whether to keep module-local adapter types temporarily for source compatibility or migrate imports directly.
+- [ ] Update `gwt-fusion-ui`, `gwt-fusion-router`, `gwt-fusion-auth`, and `gwt-fusion-query` to depend on `gwt-fusion-core` only where needed.
+- [ ] Evaluate whether other tiny shared contracts belong in core, such as value-change listener primitives, while avoiding UI-specific APIs.
+- [ ] Keep `gwt-fusion-core` free of DOM dependencies unless a primitive explicitly requires Elemental2.
+- [ ] Update docs, agent guide, and component index with the new module.
+- [ ] Add JVM tests for shared listener behavior.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+
 ## Milestone Definition Of Done
 
 - [ ] All planned source changes are implemented.
