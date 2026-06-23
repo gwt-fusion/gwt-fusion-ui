@@ -9,6 +9,7 @@ GWT Fusion is a Maven multi-module project for GWT 2.13 and J2CL-compatible UI c
 - `gwt-fusion-http`: REST/fetch client wrapper under `org.gwtfusion.http`.
 - `gwt-fusion-storage`: Typed browser and memory fallback storage under `org.gwtfusion.storage`.
 - `gwt-fusion-auth`: Auth state, session persistence, HTTP auth-header, and router guard helpers under `org.gwtfusion.auth`.
+- `gwt-fusion-query`: Data fetching, cache state, retry, invalidation, and mutation primitives under `org.gwtfusion.query`.
 - `gwt-fusion-icons-lucide`: Optional Lucide icon module, separate from the core UI.
 - `gwt-fusion-ui-demo`: Example web application with visual component demos and Java code samples.
 
@@ -113,5 +114,6 @@ Further API details:
 - `docs/http.md`
 - `docs/storage.md`
 - `docs/auth.md`
+- `docs/query.md`
 
 Development rules are in `AGENTS.md`.

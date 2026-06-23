@@ -47,6 +47,11 @@
       "artifactId": "gwt-fusion-auth",
       "rootPackage": "org.gwtfusion.auth",
       "purpose": "Auth state, session persistence, HTTP auth-header, and router guard helpers."
+    },
+    {
+      "artifactId": "gwt-fusion-query",
+      "rootPackage": "org.gwtfusion.query",
+      "purpose": "Query cache, retry, invalidation, observer, and mutation primitives."
     }
   ],
   "globalRules": [
@@ -139,6 +144,11 @@
     { "name": "AuthManager", "package": "org.gwtfusion.auth", "example": "AuthManager.create().sessionStore(AuthSessionStore.create(StorageArea.sessionStorage())).restore()" },
     { "name": "AuthSession", "package": "org.gwtfusion.auth", "example": "AuthSession.of(AuthUser.of(\"ada\"), AuthToken.bearer(token, expiresAtMillis))" },
     { "name": "AuthHttp", "package": "org.gwtfusion.auth", "example": "HttpClient.create().addRequestInterceptor(AuthHttp.authorization(auth))" },
-    { "name": "AuthGuard", "package": "org.gwtfusion.auth", "example": "Route.of(\"/account\", AuthGuard.requireAuthenticated(auth, renderer, \"/login\"))" }
+    { "name": "AuthGuard", "package": "org.gwtfusion.auth", "example": "Route.of(\"/account\", AuthGuard.requireAuthenticated(auth, renderer, \"/login\"))" },
+    { "name": "QueryClient", "package": "org.gwtfusion.query", "example": "QueryClient.create().query(QueryKey.of(\"projects\"), () -> api.projects(), QueryOptions.create().staleTime(30_000))" },
+    { "name": "QueryKey", "package": "org.gwtfusion.query", "example": "QueryKey.of(\"projects\", \"list\")" },
+    { "name": "QueryOptions", "package": "org.gwtfusion.query", "example": "QueryOptions.create().retry(2).retryDelay(QueryRetryDelay.exponential(250, 2_000))" },
+    { "name": "QueryRetryDelay", "package": "org.gwtfusion.query", "example": "QueryRetryDelay.exponential(250, 2_000)" },
+    { "name": "Mutation", "package": "org.gwtfusion.query", "example": "Mutation.create(MutationOptions.create(value -> api.saveProject(value)))" }
   ]
 }

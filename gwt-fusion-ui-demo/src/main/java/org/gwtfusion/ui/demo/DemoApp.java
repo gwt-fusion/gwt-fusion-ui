@@ -23,6 +23,11 @@ import org.gwtfusion.icons.phosphor.PhosphorWeight;
 import org.gwtfusion.icons.tabler.TablerIcons;
 import org.gwtfusion.http.HttpClient;
 import org.gwtfusion.http.HttpRequest;
+import org.gwtfusion.query.MutationState;
+import org.gwtfusion.query.QueryKey;
+import org.gwtfusion.query.QueryOptions;
+import org.gwtfusion.query.QueryRetryDelay;
+import org.gwtfusion.query.QueryState;
 import org.gwtfusion.router.HistoryStrategy;
 import org.gwtfusion.router.Route;
 import org.gwtfusion.router.Router;
@@ -206,6 +211,10 @@ public final class DemoApp implements EntryPoint {
                             renderAuth();
                             return null;
                         }),
+                        Route.of("/query", context -> {
+                            renderQuery();
+                            return null;
+                        }),
                         Route.of("/auth/protected", AuthGuard.requireAuthenticated(demoAuth, context -> {
                             renderAuthProtected();
                             return null;
@@ -243,7 +252,8 @@ public final class DemoApp implements EntryPoint {
                 .addTab("router", "Router", navigationPanel())
                 .addTab("http", "HTTP", navigationPanel())
                 .addTab("storage", "Storage", navigationPanel())
-                .addTab("auth", "Auth", navigationPanel());
+                .addTab("auth", "Auth", navigationPanel())
+                .addTab("query", "Query", navigationPanel());
         mainNavigation.onValueChange(value -> {
             if ("components".equals(value)) {
                 router.navigate("/components");
@@ -259,6 +269,8 @@ public final class DemoApp implements EntryPoint {
                 router.navigate("/storage");
             } else if ("auth".equals(value)) {
                 router.navigate("/auth");
+            } else if ("query".equals(value)) {
+                router.navigate("/query");
             } else {
                 router.navigate("/");
             }
@@ -3336,6 +3348,76 @@ public final class DemoApp implements EntryPoint {
         content.appendChild(textElement("h1", "", "Protected auth route"));
         content.appendChild(textElement("p", "demo-muted", "This content rendered because AuthGuard allowed the current authenticated session."));
         content.appendChild(Button.create("Back to Auth").variant(ButtonVariant.OUTLINE).onClick(event -> router.navigate("/auth")).element());
+    }
+
+    private void renderQuery() {
+        selectMainNavigation("query");
+        clearContent();
+        content.appendChild(textElement("h1", "", "Query"));
+        content.appendChild(textElement("p", "demo-muted", "gwt-fusion-query models loading, success, error, stale, retry, cache, and mutation state without coupling data fetching to the UI or a specific HTTP client."));
+
+        QueryState<String> loading = QueryState.loading();
+        QueryState<String> success = QueryState.success("12 projects", System.currentTimeMillis());
+        QueryState<String> stale = success.asStale();
+        String[][] queryRows = new String[][] {
+                { "Projects", "success", "12 rows" },
+                { "Activity", "refreshing", "stale" }
+        };
+        HTMLElement statePreview = preview("demo-stack-preview");
+        statePreview.appendChild(textElement("p", "demo-muted", "Loading: " + loading.fetching()));
+        statePreview.appendChild(Skeleton.create().classes("h-4 w-40").element());
+        statePreview.appendChild(textElement("p", "demo-muted", "Success data: " + success.data()));
+        statePreview.appendChild(DataTable.create()
+                .columns("Query", "State", "Result")
+                .rows(queryRows)
+                .element());
+        statePreview.appendChild(textElement("p", "demo-muted", "Stale after invalidation: " + stale.stale()));
+        statePreview.appendChild(Alert.create()
+                .variant(AlertVariant.DESTRUCTIVE)
+                .add(Alert.title("Query error"))
+                .add(Alert.description("Render an Alert and keep the retry action close to the failed query."))
+                .element());
+        statePreview.appendChild(EmptyState.create().title("No projects").description("Render EmptyState when a successful query returns no rows.").element());
+        content.appendChild(example("Query states", statePreview,
+                "QueryClient queryClient = QueryClient.create();\n"
+                        + "Query<Project[]> projects = queryClient.query(\n"
+                        + "    QueryKey.of(\"projects\", \"list\"),\n"
+                        + "    () -> api.projects(),\n"
+                        + "    QueryOptions.create().staleTime(30_000));\n\n"
+                        + "projects.observe(state -> renderProjects(state));\n"
+                        + "projects.refetch();\n\n"
+                        + "// Map state to Skeleton, Alert, EmptyState, or DataTable."));
+
+        QueryKey detailKey = QueryKey.of("projects", "detail", "42");
+        QueryOptions options = QueryOptions.create()
+                .staleTime(30_000)
+                .gcTime(5 * 60 * 1_000)
+                .retry(2)
+                .retryDelay(QueryRetryDelay.exponential(250, 2_000));
+        HTMLElement cachePreview = preview("demo-stack-preview");
+        cachePreview.appendChild(textElement("p", "demo-muted", "Detail key: " + detailKey.value()));
+        cachePreview.appendChild(textElement("p", "demo-muted", "Retry #2 delay: " + options.retryDelayMillis(2) + "ms"));
+        cachePreview.appendChild(textElement("p", "demo-muted", "Stale after 30s: " + options.stale(1_000, 31_000)));
+        content.appendChild(example("Cache keys and retry policy", cachePreview,
+                "QueryOptions options = QueryOptions.create()\n"
+                        + "    .staleTime(30_000)\n"
+                        + "    .gcTime(5 * 60 * 1_000)\n"
+                        + "    .retry(2)\n"
+                        + "    .retryDelay(QueryRetryDelay.exponential(250, 2_000));\n\n"
+                        + "queryClient.invalidate(QueryKey.of(\"projects\"));"));
+
+        MutationState<String> mutation = MutationState.success("Saved project", System.currentTimeMillis());
+        ToastManager queryToastManager = ToastManager.create();
+        HTMLElement mutationPreview = preview("demo-stack-preview");
+        mutationPreview.appendChild(textElement("p", "demo-muted", "Mutation status: " + mutation.status().name().toLowerCase()));
+        mutationPreview.appendChild(textElement("p", "demo-muted", "Result: " + mutation.data()));
+        mutationPreview.appendChild(Button.create("Show success toast").variant(ButtonVariant.OUTLINE).onClick(event -> queryToastManager.show(Toast.create().title("Mutation complete").description("Saved project"))).element());
+        content.appendChild(example("Mutation state", mutationPreview,
+                "Mutation<FormValue, Project> saveProject = Mutation.create(\n"
+                        + "    MutationOptions.create(value -> api.saveProject(value))\n"
+                        + "        .onMutate(value -> optimisticUpdate(value)));\n\n"
+                        + "saveProject.observe(state -> updateSubmitButton(state));\n"
+                        + "saveProject.execute(formValue);"));
     }
 
     private AuthSession demoSession() {

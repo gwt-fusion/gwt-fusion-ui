@@ -379,21 +379,21 @@ Milestone 17 builds on HTTP and storage with TanStack Query-inspired data fetchi
 
 ### Milestone 17.1: TanStack Query-Inspired Data Module
 
-- [ ] Add Maven module `gwt-fusion-query`.
-- [ ] Use package `org.gwtfusion.query` and GWT module `org.gwtfusion.query.GwtFusionQuery`.
-- [ ] Implement `QueryClient`, `QueryKey`, `Query<T>`, `QueryState<T>`, `QueryObserver<T>`, and `QueryOptions`.
-- [ ] Support loading, success, error, stale, refreshing, and idle states.
-- [ ] Support request de-duplication for in-flight queries with the same key.
-- [ ] Support `staleTime`, `cacheTime` or `gcTime`, manual `refetch()`, and `invalidate(QueryKey)`.
-- [ ] Support retry and retry-delay policies with simple backoff helpers.
-- [ ] Support disabled/lazy queries that start only after required inputs are available.
-- [ ] Support query observers with `ListenerRegistration` for clean subscription removal.
-- [ ] Support mutation primitives with loading/error/success state and optional optimistic update hooks.
-- [ ] Keep query fetchers generic so they can use `gwt-fusion-http`, generated OpenAPI clients, or legacy async services through adapters.
-- [ ] Add demo examples that wire `Skeleton`, `Alert`, `EmptyState`, `Toast`, and `DataTable` to query state.
-- [ ] Add JVM tests for query keys, cache behavior, observer behavior, invalidation, retry decisions, stale decisions, and mutation state.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile if demo code changed.
+- [x] Add Maven module `gwt-fusion-query`.
+- [x] Use package `org.gwtfusion.query` and GWT module `org.gwtfusion.query.GwtFusionQuery`.
+- [x] Implement `QueryClient`, `QueryKey`, `Query<T>`, `QueryState<T>`, `QueryObserver<T>`, and `QueryOptions`.
+- [x] Support loading, success, error, stale, refreshing, and idle states.
+- [x] Support request de-duplication for in-flight queries with the same key.
+- [x] Support `staleTime`, `cacheTime` or `gcTime`, manual `refetch()`, and `invalidate(QueryKey)`.
+- [x] Support retry and retry-delay policies with simple backoff helpers.
+- [x] Support disabled/lazy queries that start only after required inputs are available.
+- [x] Support query observers with `ListenerRegistration` for clean subscription removal.
+- [x] Support mutation primitives with loading/error/success state and optional optimistic update hooks.
+- [x] Keep query fetchers generic so they can use `gwt-fusion-http`, generated OpenAPI clients, or legacy async services through adapters.
+- [x] Add demo examples that wire `Skeleton`, `Alert`, `EmptyState`, `Toast`, and `DataTable` to query state.
+- [x] Add JVM tests for query keys, cache behavior, observer behavior, invalidation, retry decisions, stale decisions, and mutation state.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile if demo code changed.
 
 ### Milestone 17.2: Query UI Helpers
 
@@ -487,6 +487,25 @@ Milestone 19 rounds out production-app needs after HTTP/query/codegen foundation
 - [ ] Defer Web Push/service-worker delivery unless a concrete PWA milestone is started.
 - [ ] Add demo examples for permission request, granted/denied/default states, and fallback to toast.
 - [ ] Add JVM tests for permission-state mapping and notification option construction where possible.
+- [ ] Verify `mvn -Dskip.tailwind=true verify`.
+
+## Milestone 20: Shared Base Module
+
+Milestone 20 extracts small cross-module primitives that currently appear in multiple independent modules. The goal is to reduce duplication without making infrastructure modules depend on `gwt-fusion-ui`, preserving standalone use for router, auth, query, storage, and future modules.
+
+### Milestone 20.1: Core Primitives Extraction
+
+- [ ] Add Maven module `gwt-fusion-core`.
+- [ ] Use package `org.gwtfusion.core` and GWT module `org.gwtfusion.core.GwtFusionCore`.
+- [ ] Move shared `ListenerRegistration` semantics into `gwt-fusion-core`.
+- [ ] Provide `ListenerRegistration.empty()` and `ListenerRegistration.combine(...)` in the core module.
+- [ ] Audit existing duplicates in `gwt-fusion-ui`, `gwt-fusion-router`, and `gwt-fusion-query`.
+- [ ] Decide whether to keep module-local adapter types temporarily for source compatibility or migrate imports directly.
+- [ ] Update `gwt-fusion-ui`, `gwt-fusion-router`, `gwt-fusion-auth`, and `gwt-fusion-query` to depend on `gwt-fusion-core` only where needed.
+- [ ] Evaluate whether other tiny shared contracts belong in core, such as value-change listener primitives, while avoiding UI-specific APIs.
+- [ ] Keep `gwt-fusion-core` free of DOM dependencies unless a primitive explicitly requires Elemental2.
+- [ ] Update docs, agent guide, and component index with the new module.
+- [ ] Add JVM tests for shared listener behavior.
 - [ ] Verify `mvn -Dskip.tailwind=true verify`.
 
 ## Milestone Definition Of Done
