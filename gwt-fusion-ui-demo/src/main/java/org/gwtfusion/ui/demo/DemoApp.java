@@ -7,6 +7,10 @@ import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLElement;
 import elemental2.dom.HTMLInputElement;
 import elemental2.dom.KeyboardEvent;
+import elemental2.promise.Promise;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.gwtfusion.auth.AuthGuard;
 import org.gwtfusion.auth.AuthHttp;
 import org.gwtfusion.auth.AuthManager;
@@ -23,7 +27,11 @@ import org.gwtfusion.icons.phosphor.PhosphorWeight;
 import org.gwtfusion.icons.tabler.TablerIcons;
 import org.gwtfusion.http.HttpClient;
 import org.gwtfusion.http.HttpRequest;
+import org.gwtfusion.query.Mutation;
+import org.gwtfusion.query.MutationOptions;
 import org.gwtfusion.query.MutationState;
+import org.gwtfusion.query.Query;
+import org.gwtfusion.query.QueryClient;
 import org.gwtfusion.query.QueryKey;
 import org.gwtfusion.query.QueryOptions;
 import org.gwtfusion.query.QueryRetryDelay;
@@ -3356,68 +3364,357 @@ public final class DemoApp implements EntryPoint {
         content.appendChild(textElement("h1", "", "Query"));
         content.appendChild(textElement("p", "demo-muted", "gwt-fusion-query models loading, success, error, stale, retry, cache, and mutation state without coupling data fetching to the UI or a specific HTTP client."));
 
-        QueryState<String> loading = QueryState.loading();
-        QueryState<String> success = QueryState.success("12 projects", System.currentTimeMillis());
-        QueryState<String> stale = success.asStale();
-        String[][] queryRows = new String[][] {
-                { "Projects", "success", "12 rows" },
-                { "Activity", "refreshing", "stale" }
-        };
-        HTMLElement statePreview = preview("demo-stack-preview");
-        statePreview.appendChild(textElement("p", "demo-muted", "Loading: " + loading.fetching()));
-        statePreview.appendChild(Skeleton.create().classes("h-4 w-40").element());
-        statePreview.appendChild(textElement("p", "demo-muted", "Success data: " + success.data()));
-        statePreview.appendChild(DataTable.create()
-                .columns("Query", "State", "Result")
-                .rows(queryRows)
-                .element());
-        statePreview.appendChild(textElement("p", "demo-muted", "Stale after invalidation: " + stale.stale()));
-        statePreview.appendChild(Alert.create()
-                .variant(AlertVariant.DESTRUCTIVE)
-                .add(Alert.title("Query error"))
-                .add(Alert.description("Render an Alert and keep the retry action close to the failed query."))
-                .element());
-        statePreview.appendChild(EmptyState.create().title("No projects").description("Render EmptyState when a successful query returns no rows.").element());
-        content.appendChild(example("Query states", statePreview,
+        QueryDemoApi api = new QueryDemoApi();
+        QueryClient queryClient = QueryClient.create();
+        ToastManager queryToastManager = ToastManager.create();
+        QueryOptions listOptions = QueryOptions.create()
+                .staleTime(10_000)
+                .gcTime(15_000)
+                .retry(2)
+                .retryDelay(QueryRetryDelay.exponential(250, 1_000));
+        Query<DemoProject[]> projects = queryClient.query(
+                QueryKey.of("projects", "list"),
+                api::fetchProjects,
+                listOptions);
+
+        HTMLElement livePreview = preview("demo-stack-preview");
+        HTMLElement liveControls = element("div", "demo-button-row");
+        HTMLElement liveState = element("div", "demo-query-panel");
+        liveControls.appendChild(Button.create("Fetch projects").onClick(event -> projects.refetch()).element());
+        liveControls.appendChild(Button.create("Refetch twice").variant(ButtonVariant.OUTLINE).onClick(event -> {
+            projects.refetch();
+            projects.refetch();
+        }).element());
+        liveControls.appendChild(Button.create("Fail next request").variant(ButtonVariant.DESTRUCTIVE).onClick(event -> {
+            api.failNextFetch();
+            projects.refetch();
+        }).element());
+        liveControls.appendChild(Button.create("Return empty list").variant(ButtonVariant.OUTLINE).onClick(event -> {
+            api.emptyNextFetch();
+            projects.refetch();
+        }).element());
+        liveControls.appendChild(Button.create("Invalidate projects").variant(ButtonVariant.OUTLINE).onClick(event -> queryClient.invalidate(QueryKey.of("projects"))).element());
+        livePreview.appendChild(liveControls);
+        livePreview.appendChild(liveState);
+        projects.observe(state -> renderProjectQueryState(liveState, state, projects));
+        content.appendChild(example("Live query lifecycle", livePreview,
                 "QueryClient queryClient = QueryClient.create();\n"
                         + "Query<Project[]> projects = queryClient.query(\n"
                         + "    QueryKey.of(\"projects\", \"list\"),\n"
                         + "    () -> api.projects(),\n"
-                        + "    QueryOptions.create().staleTime(30_000));\n\n"
+                        + "    QueryOptions.create()\n"
+                        + "        .staleTime(10_000)\n"
+                        + "        .retry(2)\n"
+                        + "        .retryDelay(QueryRetryDelay.exponential(250, 1_000)));\n\n"
                         + "projects.observe(state -> renderProjects(state));\n"
-                        + "projects.refetch();\n\n"
-                        + "// Map state to Skeleton, Alert, EmptyState, or DataTable."));
-
-        QueryKey detailKey = QueryKey.of("projects", "detail", "42");
-        QueryOptions options = QueryOptions.create()
-                .staleTime(30_000)
-                .gcTime(5 * 60 * 1_000)
-                .retry(2)
-                .retryDelay(QueryRetryDelay.exponential(250, 2_000));
-        HTMLElement cachePreview = preview("demo-stack-preview");
-        cachePreview.appendChild(textElement("p", "demo-muted", "Detail key: " + detailKey.value()));
-        cachePreview.appendChild(textElement("p", "demo-muted", "Retry #2 delay: " + options.retryDelayMillis(2) + "ms"));
-        cachePreview.appendChild(textElement("p", "demo-muted", "Stale after 30s: " + options.stale(1_000, 31_000)));
-        content.appendChild(example("Cache keys and retry policy", cachePreview,
-                "QueryOptions options = QueryOptions.create()\n"
-                        + "    .staleTime(30_000)\n"
-                        + "    .gcTime(5 * 60 * 1_000)\n"
-                        + "    .retry(2)\n"
-                        + "    .retryDelay(QueryRetryDelay.exponential(250, 2_000));\n\n"
+                        + "projects.refetch();\n"
                         + "queryClient.invalidate(QueryKey.of(\"projects\"));"));
 
-        MutationState<String> mutation = MutationState.success("Saved project", System.currentTimeMillis());
-        ToastManager queryToastManager = ToastManager.create();
+        Query<DemoProject> detail = queryClient.query(
+                QueryKey.of("projects", "detail", "42"),
+                () -> api.fetchProject("42"),
+                QueryOptions.create().staleTime(30_000).gcTime(15_000));
+        HTMLElement cachePreview = preview("demo-stack-preview");
+        HTMLElement cacheControls = element("div", "demo-button-row");
+        HTMLElement cacheState = element("div", "demo-query-panel");
+        cacheControls.appendChild(Button.create("Load list").onClick(event -> projects.refetch()).element());
+        cacheControls.appendChild(Button.create("Load detail").variant(ButtonVariant.OUTLINE).onClick(event -> detail.refetch()).element());
+        cacheControls.appendChild(Button.create("Add unused query").variant(ButtonVariant.OUTLINE).onClick(event -> {
+            queryClient.query(QueryKey.of("projects", "archived"), api::fetchProjects, QueryOptions.create().gcTime(0));
+            renderCacheInspector(cacheState, queryClient, listOptions, detail);
+        }).element());
+        cacheControls.appendChild(Button.create("Invalidate projects").variant(ButtonVariant.OUTLINE).onClick(event -> {
+            queryClient.invalidate(QueryKey.of("projects"));
+            renderCacheInspector(cacheState, queryClient, listOptions, detail);
+        }).element());
+        cacheControls.appendChild(Button.create("Collect garbage").variant(ButtonVariant.OUTLINE).onClick(event -> {
+            queryClient.collectGarbage();
+            renderCacheInspector(cacheState, queryClient, listOptions, detail);
+        }).element());
+        cachePreview.appendChild(cacheControls);
+        cachePreview.appendChild(cacheState);
+        detail.observe(state -> renderCacheInspector(cacheState, queryClient, listOptions, detail));
+        renderCacheInspector(cacheState, queryClient, listOptions, detail);
+        content.appendChild(example("Cache and retry inspector", cachePreview,
+                "QueryKey listKey = QueryKey.of(\"projects\", \"list\");\n"
+                        + "QueryKey detailKey = QueryKey.of(\"projects\", \"detail\", id);\n\n"
+                        + "queryClient.invalidate(QueryKey.of(\"projects\"));\n"
+                        + "queryClient.collectGarbage();\n\n"
+                        + "long delay = QueryRetryDelay.exponential(250, 1_000)\n"
+                        + "    .delayMillis(2);"));
+
+        Mutation<String, DemoProject> saveProject = Mutation.create(
+                MutationOptions.<String, DemoProject>create(api::saveProject)
+                        .onMutate(name -> api.addOptimisticProject(name)));
+        Input projectName = Input.create().placeholder("Project name").value("Design system audit");
         HTMLElement mutationPreview = preview("demo-stack-preview");
-        mutationPreview.appendChild(textElement("p", "demo-muted", "Mutation status: " + mutation.status().name().toLowerCase()));
-        mutationPreview.appendChild(textElement("p", "demo-muted", "Result: " + mutation.data()));
-        mutationPreview.appendChild(Button.create("Show success toast").variant(ButtonVariant.OUTLINE).onClick(event -> queryToastManager.show(Toast.create().title("Mutation complete").description("Saved project"))).element());
-        content.appendChild(example("Mutation state", mutationPreview,
+        HTMLElement mutationControls = element("div", "demo-button-row");
+        HTMLElement mutationState = element("div", "demo-query-panel");
+        mutationPreview.appendChild(projectName.element());
+        mutationControls.appendChild(Button.create("Save project").onClick(event -> {
+            String name = projectName.value() == null ? "" : projectName.value().trim();
+            if (name.isEmpty()) {
+                queryToastManager.show(Toast.create().title("Project name required").description("Type a name before saving.").variant(ToastVariant.ERROR));
+                return;
+            }
+            if (saveProject.state().isLoading()) {
+                return;
+            }
+            saveProject.execute(name).then(project -> {
+                queryClient.invalidate(QueryKey.of("projects"));
+                projects.refetch();
+                queryToastManager.show(Toast.create().title("Mutation complete").description("Saved " + project.name));
+                renderMutationDemoState(mutationState, saveProject.state(), api.projects());
+                return Promise.resolve(project);
+            }, error -> {
+                queryToastManager.show(Toast.create().title("Mutation failed").description(String.valueOf(error)).variant(ToastVariant.ERROR));
+                renderMutationDemoState(mutationState, saveProject.state(), api.projects());
+                return Promise.resolve((DemoProject) null);
+            });
+        }).element());
+        mutationControls.appendChild(Button.create("Fail next save").variant(ButtonVariant.DESTRUCTIVE).onClick(event -> {
+            api.failNextSave();
+            saveProject.execute(projectName.value()).then(project -> Promise.resolve(project), error -> {
+                queryToastManager.show(Toast.create().title("Mutation failed").description(String.valueOf(error)).variant(ToastVariant.ERROR));
+                return Promise.resolve((DemoProject) null);
+            });
+        }).element());
+        mutationControls.appendChild(Button.create("Reset mutation").variant(ButtonVariant.OUTLINE).onClick(event -> saveProject.reset()).element());
+        mutationPreview.appendChild(mutationControls);
+        mutationPreview.appendChild(mutationState);
+        saveProject.observe(state -> renderMutationDemoState(mutationState, state, api.projects()));
+        content.appendChild(example("Mutation with optimistic UI", mutationPreview,
                 "Mutation<FormValue, Project> saveProject = Mutation.create(\n"
                         + "    MutationOptions.create(value -> api.saveProject(value))\n"
                         + "        .onMutate(value -> optimisticUpdate(value)));\n\n"
                         + "saveProject.observe(state -> updateSubmitButton(state));\n"
-                        + "saveProject.execute(formValue);"));
+                        + "saveProject.execute(formValue).then(project -> {\n"
+                        + "    queryClient.invalidate(QueryKey.of(\"projects\"));\n"
+                        + "    return Promise.resolve(project);\n"
+                        + "});"));
+    }
+
+    private void renderProjectQueryState(HTMLElement target, QueryState<DemoProject[]> state, Query<DemoProject[]> query) {
+        clear(target);
+        target.appendChild(querySummary("Status", state.status().name().toLowerCase(), "Fetching", String.valueOf(state.fetching()), "In flight", String.valueOf(query.inFlight())));
+        if (state.stale()) {
+            target.appendChild(Badge.create("stale").variant(BadgeVariant.SECONDARY).element());
+        }
+        if (state.isLoading() && !state.hasData()) {
+            target.appendChild(Skeleton.create().classes("h-4 w-48").element());
+            target.appendChild(Skeleton.create().classes("h-4 w-64").element());
+            target.appendChild(Spinner.create().size(SpinnerSize.SM).element());
+            return;
+        }
+        if (state.isError()) {
+            target.appendChild(Alert.create()
+                    .variant(AlertVariant.DESTRUCTIVE)
+                    .add(Alert.title("Query error"))
+                    .add(Alert.description(state.errorMessage()))
+                    .add(Button.create("Retry").variant(ButtonVariant.OUTLINE).onClick(event -> query.refetch()))
+                    .element());
+            return;
+        }
+        DemoProject[] projects = state.data();
+        if (projects == null) {
+            target.appendChild(EmptyState.create().title("Idle query").description("Click Fetch projects to start the first request.").element());
+            return;
+        }
+        if (projects.length == 0) {
+            target.appendChild(EmptyState.create().title("No projects").description("The fake API returned an empty success response.").element());
+            return;
+        }
+        if (state.isRefreshing()) {
+            target.appendChild(textElement("p", "demo-muted", "Refreshing with cached rows visible."));
+        }
+        target.appendChild(DataTable.create()
+                .columns("ID", "Project", "Status")
+                .rows(projectRows(projects))
+                .element());
+    }
+
+    private void renderCacheInspector(HTMLElement target, QueryClient queryClient, QueryOptions options, Query<DemoProject> detail) {
+        clear(target);
+        QueryState<DemoProject> detailState = detail.state();
+        target.appendChild(querySummary("Queries", String.valueOf(queryClient.size()), "Detail", detailState.status().name().toLowerCase(), "Retry #2", options.retryDelayMillis(2) + "ms"));
+        target.appendChild(textElement("p", "demo-muted", "Keys: " + queryKeys(queryClient.keys())));
+        target.appendChild(textElement("p", "demo-muted", "List key prefix invalidation: " + QueryKey.of("projects", "list").startsWith(QueryKey.of("projects"))));
+        target.appendChild(textElement("p", "demo-muted", "Stale after 10s: " + options.stale(1_000, 11_000)));
+        if (detailState.hasData()) {
+            DemoProject project = detailState.data();
+            target.appendChild(DataTable.create()
+                    .columns("Detail key", "Project", "Status")
+                    .rows(new String[][] {{ detail.key().value(), project.name, project.status }})
+                    .element());
+        } else {
+            target.appendChild(textElement("p", "demo-muted", "Detail query has not loaded yet."));
+        }
+    }
+
+    private void renderMutationDemoState(HTMLElement target, MutationState<DemoProject> state, DemoProject[] projects) {
+        clear(target);
+        target.appendChild(querySummary("Mutation", state.status().name().toLowerCase(), "Result", state.data() == null ? "none" : state.data().name, "Updated", String.valueOf(state.updatedAtMillis())));
+        if (state.isLoading()) {
+            target.appendChild(textElement("p", "demo-muted", "Saving with optimistic row already visible."));
+            target.appendChild(Spinner.create().size(SpinnerSize.SM).element());
+        }
+        if (state.isError()) {
+            target.appendChild(Alert.create()
+                    .variant(AlertVariant.DESTRUCTIVE)
+                    .add(Alert.title("Mutation error"))
+                    .add(Alert.description(state.errorMessage()))
+                    .element());
+        }
+        target.appendChild(DataTable.create()
+                .columns("ID", "Project", "Status")
+                .rows(projectRows(projects))
+                .element());
+    }
+
+    private HTMLElement querySummary(String firstLabel, String firstValue, String secondLabel, String secondValue, String thirdLabel, String thirdValue) {
+        HTMLElement summary = element("div", "demo-query-summary");
+        summary.appendChild(queryMetric(firstLabel, firstValue));
+        summary.appendChild(queryMetric(secondLabel, secondValue));
+        summary.appendChild(queryMetric(thirdLabel, thirdValue));
+        return summary;
+    }
+
+    private HTMLElement queryMetric(String label, String value) {
+        HTMLElement metric = element("div", "demo-query-metric");
+        metric.appendChild(textElement("span", "demo-query-label", label));
+        metric.appendChild(textElement("strong", "", value));
+        return metric;
+    }
+
+    private String[][] projectRows(DemoProject[] projects) {
+        String[][] rows = new String[projects.length][3];
+        for (int i = 0; i < projects.length; i++) {
+            rows[i][0] = projects[i].id;
+            rows[i][1] = projects[i].name;
+            rows[i][2] = projects[i].status;
+        }
+        return rows;
+    }
+
+    private String queryKeys(List<QueryKey> keys) {
+        if (keys.isEmpty()) {
+            return "(none)";
+        }
+        StringBuilder builder = new StringBuilder();
+        for (QueryKey key : keys) {
+            if (builder.length() > 0) {
+                builder.append(", ");
+            }
+            builder.append(key.value());
+        }
+        return builder.toString();
+    }
+
+    private static final class DemoProject {
+        final String id;
+        final String name;
+        String status;
+
+        DemoProject(String id, String name, String status) {
+            this.id = id;
+            this.name = name;
+            this.status = status;
+        }
+    }
+
+    private static final class QueryDemoApi {
+        private final List<DemoProject> projects = new ArrayList<>(Arrays.asList(
+                new DemoProject("P-101", "Component inventory", "ready"),
+                new DemoProject("P-102", "Token migration", "in review"),
+                new DemoProject("P-103", "Docs refresh", "planned")));
+        private boolean failNextFetch;
+        private boolean emptyNextFetch;
+        private boolean failNextSave;
+        private int nextId = 104;
+
+        Promise<DemoProject[]> fetchProjects() {
+            boolean shouldFail = failNextFetch;
+            boolean shouldReturnEmpty = emptyNextFetch;
+            failNextFetch = false;
+            emptyNextFetch = false;
+            return new Promise<>((resolve, reject) -> DomGlobal.setTimeout(event -> {
+                if (shouldFail) {
+                    reject.onInvoke("Demo API returned 500 for /projects");
+                    return;
+                }
+                if (shouldReturnEmpty) {
+                    resolve.onInvoke(new DemoProject[0]);
+                    return;
+                }
+                resolve.onInvoke(projects());
+            }, 650));
+        }
+
+        Promise<DemoProject> fetchProject(String id) {
+            return new Promise<>((resolve, reject) -> DomGlobal.setTimeout(event -> resolve.onInvoke(new DemoProject(id, "Detail project " + id, "loaded")), 350));
+        }
+
+        Promise<DemoProject> saveProject(String name) {
+            boolean shouldFail = failNextSave;
+            failNextSave = false;
+            return new Promise<>((resolve, reject) -> DomGlobal.setTimeout(event -> {
+                DemoProject optimistic = optimisticProject(name);
+                if (shouldFail) {
+                    if (optimistic != null) {
+                        projects.remove(optimistic);
+                    }
+                    reject.onInvoke("Demo API rejected the save");
+                    return;
+                }
+                DemoProject project = optimistic == null ? addProject(name, "saved") : optimistic;
+                project.status = "saved";
+                resolve.onInvoke(project);
+            }, 700));
+        }
+
+        void addOptimisticProject(String name) {
+            if (name == null || name.trim().isEmpty()) {
+                return;
+            }
+            if (optimisticProject(name.trim()) == null) {
+                projects.add(0, new DemoProject("P-" + nextId++, name.trim(), "optimistic"));
+            }
+        }
+
+        void failNextFetch() {
+            failNextFetch = true;
+        }
+
+        void emptyNextFetch() {
+            emptyNextFetch = true;
+        }
+
+        void failNextSave() {
+            failNextSave = true;
+        }
+
+        DemoProject[] projects() {
+            return projects.toArray(new DemoProject[0]);
+        }
+
+        private DemoProject addProject(String name, String status) {
+            DemoProject project = new DemoProject("P-" + nextId++, name.trim(), status);
+            projects.add(0, project);
+            return project;
+        }
+
+        private DemoProject optimisticProject(String name) {
+            if (name == null) {
+                return null;
+            }
+            String clean = name.trim();
+            for (DemoProject project : projects) {
+                if (project.name.equals(clean) && "optimistic".equals(project.status)) {
+                    return project;
+                }
+            }
+            return null;
+        }
     }
 
     private AuthSession demoSession() {
