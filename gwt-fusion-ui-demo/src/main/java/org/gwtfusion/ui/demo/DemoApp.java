@@ -3457,6 +3457,9 @@ public final class DemoApp implements EntryPoint {
                 queryToastManager.show(Toast.create().title("Project name required").description("Type a name before saving.").variant(ToastVariant.ERROR));
                 return;
             }
+            if (saveProject.state().isLoading()) {
+                return;
+            }
             saveProject.execute(name).then(project -> {
                 queryClient.invalidate(QueryKey.of("projects"));
                 projects.refetch();
@@ -3630,14 +3633,16 @@ public final class DemoApp implements EntryPoint {
         private int nextId = 104;
 
         Promise<DemoProject[]> fetchProjects() {
+            boolean shouldFail = failNextFetch;
+            boolean shouldReturnEmpty = emptyNextFetch;
+            failNextFetch = false;
+            emptyNextFetch = false;
             return new Promise<>((resolve, reject) -> DomGlobal.setTimeout(event -> {
-                if (failNextFetch) {
-                    failNextFetch = false;
+                if (shouldFail) {
                     reject.onInvoke("Demo API returned 500 for /projects");
                     return;
                 }
-                if (emptyNextFetch) {
-                    emptyNextFetch = false;
+                if (shouldReturnEmpty) {
                     resolve.onInvoke(new DemoProject[0]);
                     return;
                 }
@@ -3650,10 +3655,11 @@ public final class DemoApp implements EntryPoint {
         }
 
         Promise<DemoProject> saveProject(String name) {
+            boolean shouldFail = failNextSave;
+            failNextSave = false;
             return new Promise<>((resolve, reject) -> DomGlobal.setTimeout(event -> {
                 DemoProject optimistic = optimisticProject(name);
-                if (failNextSave) {
-                    failNextSave = false;
+                if (shouldFail) {
                     if (optimistic != null) {
                         projects.remove(optimistic);
                     }
