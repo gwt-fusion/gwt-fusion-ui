@@ -10,7 +10,7 @@ This guide is for coding agents that generate application code using GWT Fusion.
 - Use `docs/http.md` for REST/fetch client examples.
 - Use `docs/storage.md` for typed storage examples.
 - Use `docs/auth.md` for auth state, HTTP auth headers, and router guard examples.
-- Use `docs/query.md` for query cache, retry, invalidation, observers, and mutation examples.
+- Use `docs/query.md` for query cache, retry, invalidation, observers, mutations, and optional QueryView examples.
 - Use `docs/router.md` for standalone routing examples.
 - Use `docs/release-readiness.md` for build, compatibility, test, artifact, and deployment checks.
 
@@ -52,6 +52,7 @@ import org.gwtfusion.query.QueryClient;
 import org.gwtfusion.query.QueryKey;
 import org.gwtfusion.query.QueryOptions;
 import org.gwtfusion.query.QueryRetryDelay;
+import org.gwtfusion.query.ui.QueryView;
 import org.gwtfusion.storage.StorageArea;
 import org.gwtfusion.storage.StorageKey;
 import org.gwtfusion.ui.UiComponent;
@@ -231,7 +232,7 @@ Route.of("/account", AuthGuard.requireAuthenticated(auth, context -> {
 
 ## Query
 
-`gwt-fusion-query` models query cache, retry, stale, invalidation, observer, and mutation state. Keep UI rendering in application code or optional helpers.
+`gwt-fusion-query` models query cache, retry, stale, invalidation, observer, and mutation state. It remains UI-independent. Add the optional `gwt-fusion-query-ui` module when declarative lifecycle rendering is useful.
 
 ```java
 QueryClient queryClient = QueryClient.create();
@@ -244,6 +245,19 @@ queryClient.query(
         .retry(2)
         .retryDelay(QueryRetryDelay.exponential(250, 2_000)));
 ```
+
+Map query state to UI components with `QueryView`:
+
+```java
+QueryView<Project[]> view = QueryView.create(projects)
+    .loading((state, retry) -> Skeleton.create().size("h-32 w-full"))
+    .error((state, retry) -> errorWithRetry(state.errorMessage(), retry))
+    .emptyWhen(values -> values.length == 0)
+    .empty((state, retry) -> EmptyState.create().title("No projects"))
+    .success((state, retry) -> projectTable(state.data()));
+```
+
+Refreshing queries with non-empty cached data use the success renderer; matching empty data remains in the empty renderer. Call `view.dispose()` whenever the view is removed while its query client remains retained.
 
 Use `Mutation` for writes:
 

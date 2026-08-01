@@ -70,6 +70,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.gwtfusion</groupId>
+      <artifactId>gwt-fusion-query-ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.gwtproject</groupId>
       <artifactId>gwt-user</artifactId>
       <scope>provided</scope>

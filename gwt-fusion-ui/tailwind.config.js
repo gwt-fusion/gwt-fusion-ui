@@ -26,6 +26,7 @@ module.exports = {
   darkMode: ['class'],
   content: [
     './src/main/java/**/*.java',
+    '../gwt-fusion-query-ui/src/main/java/**/*.java',
     '../gwt-fusion-ui-demo/src/main/java/**/*.java',
     '../gwt-fusion-ui-demo/src/main/webapp/**/*.html'
   ],
