@@ -52,6 +52,11 @@
       "artifactId": "gwt-fusion-query",
       "rootPackage": "org.gwtfusion.query",
       "purpose": "Query cache, retry, invalidation, observer, and mutation primitives."
+    },
+    {
+      "artifactId": "gwt-fusion-query-ui",
+      "rootPackage": "org.gwtfusion.query.ui",
+      "purpose": "Optional QueryView lifecycle rendering for query state."
     }
   ],
   "globalRules": [
@@ -149,6 +154,8 @@
     { "name": "QueryKey", "package": "org.gwtfusion.query", "example": "QueryKey.of(\"projects\", \"list\")" },
     { "name": "QueryOptions", "package": "org.gwtfusion.query", "example": "QueryOptions.create().retry(2).retryDelay(QueryRetryDelay.exponential(250, 2_000))" },
     { "name": "QueryRetryDelay", "package": "org.gwtfusion.query", "example": "QueryRetryDelay.exponential(250, 2_000)" },
-    { "name": "Mutation", "package": "org.gwtfusion.query", "example": "Mutation.create(MutationOptions.create(value -> api.saveProject(value)))" }
+    { "name": "Mutation", "package": "org.gwtfusion.query", "example": "Mutation.create(MutationOptions.create(value -> api.saveProject(value)))" },
+    { "name": "QueryView", "package": "org.gwtfusion.query.ui", "example": "QueryView.create(query).emptyWhen(List::isEmpty).success((state, retry) -> render(state.data()))" },
+    { "name": "QueryViewPhase", "package": "org.gwtfusion.query.ui", "values": ["IDLE", "LOADING", "ERROR", "EMPTY", "SUCCESS"], "example": "view.phase()" }
   ]
 }

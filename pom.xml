@@ -52,6 +52,7 @@
     <module>gwt-fusion-storage</module>
     <module>gwt-fusion-auth</module>
     <module>gwt-fusion-query</module>
+    <module>gwt-fusion-query-ui</module>
     <module>gwt-fusion-icons-lucide</module>
     <module>gwt-fusion-icons-tabler</module>
     <module>gwt-fusion-icons-heroicons</module>

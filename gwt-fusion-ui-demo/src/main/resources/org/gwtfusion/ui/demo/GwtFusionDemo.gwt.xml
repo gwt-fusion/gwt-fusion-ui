@@ -11,6 +11,7 @@
   <inherits name="org.gwtfusion.storage.GwtFusionStorage"/>
   <inherits name="org.gwtfusion.auth.GwtFusionAuth"/>
   <inherits name="org.gwtfusion.query.GwtFusionQuery"/>
+  <inherits name="org.gwtfusion.query.ui.GwtFusionQueryUi"/>
   <entry-point class="org.gwtfusion.ui.demo.DemoApp"/>
   <source path=""/>
 </module>

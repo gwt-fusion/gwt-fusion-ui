@@ -79,11 +79,43 @@ saveProject.execute(formValue);
 
 `MutationState` supports idle, loading, success, and error states.
 
-## UI Composition
+## Query UI Helpers
 
-Keep UI rendering in the application or optional helpers. Typical mappings are:
+`gwt-fusion-query-ui` is an optional module that depends on both `gwt-fusion-query` and `gwt-fusion-ui`. The core query module remains usable without UI dependencies.
 
-- Loading query state: `Skeleton` or `Spinner`.
-- Error query state: `Alert` with retry button.
-- Empty success state: `EmptyState`.
-- Mutation success: `ToastManager` or invalidation of related query keys.
+```xml
+<dependency>
+  <groupId>org.gwtfusion</groupId>
+  <artifactId>gwt-fusion-query-ui</artifactId>
+  <version>${gwt-fusion.version}</version>
+</dependency>
+```
+
+For GWT applications, inherit the optional module:
+
+```xml
+<inherits name="org.gwtfusion.query.ui.GwtFusionQueryUi"/>
+```
+
+`QueryView<T>` observes a query and selects idle, loading, error, empty, or success renderers. Idle, loading, error, and empty states have built-in renderers; applications normally configure the success renderer and their domain-specific empty predicate.
+
+```java
+QueryView<Project[]> view = QueryView.create(projects)
+    .loading((state, retry) -> Skeleton.create().size("h-32 w-full"))
+    .error((state, retry) -> Alert.create()
+        .variant(AlertVariant.DESTRUCTIVE)
+        .add(Alert.title("Unable to load projects"))
+        .add(Alert.description(state.errorMessage()))
+        .add(Button.create("Retry").onClick(event -> retry.run())))
+    .emptyWhen(values -> values != null && values.length == 0)
+    .empty((state, retry) -> EmptyState.create().title("No projects"))
+    .success((state, retry) -> DataTable.create()
+        .columns("Project", "Status")
+        .rows(projectRows(state.data())));
+```
+
+Refreshing queries with cached non-empty data use the success renderer, allowing rows to remain visible while `state.isRefreshing()` is true. A matching empty predicate still selects the empty renderer. `view.phase()` exposes the selected `QueryViewPhase`, and the root element reflects it through `data-state` and `aria-busy`.
+
+Call `view.dispose()` whenever the view is removed while its query or `QueryClient` remains retained. This removes the observer so the detached view stops rendering and the query can become eligible for garbage collection.
+
+Mutation notifications stay outside `QueryView`: use `ToastManager` for mutation success or errors and invalidate related query keys after successful writes.

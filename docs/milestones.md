@@ -397,14 +397,14 @@ Milestone 17 builds on HTTP and storage with TanStack Query-inspired data fetchi
 
 ### Milestone 17.2: Query UI Helpers
 
-- [ ] Decide whether query UI helpers belong in `gwt-fusion-query` or a separate optional `gwt-fusion-query-ui` module.
-- [ ] Implement a minimal `QueryView<T>` or equivalent helper only if it reduces repeated demo/application boilerplate.
-- [ ] Support configurable renderers for loading, error, empty, and success states.
-- [ ] Keep UI helpers optional so `gwt-fusion-query` remains usable without `gwt-fusion-ui`.
-- [ ] Provide examples for list loading, detail loading, retry button, empty results, and mutation success toast.
-- [ ] Add tests for state-to-renderer selection if implemented without DOM creation.
-- [ ] Verify `mvn -Dskip.tailwind=true verify`.
-- [ ] Verify demo GWT compile if demo code changed.
+- [x] Decide whether query UI helpers belong in `gwt-fusion-query` or a separate optional `gwt-fusion-query-ui` module.
+- [x] Implement a minimal `QueryView<T>` or equivalent helper only if it reduces repeated demo/application boilerplate.
+- [x] Support configurable renderers for loading, error, empty, and success states.
+- [x] Keep UI helpers optional so `gwt-fusion-query` remains usable without `gwt-fusion-ui`.
+- [x] Provide examples for list loading, detail loading, retry button, empty results, and mutation success toast.
+- [x] Add tests for state-to-renderer selection if implemented without DOM creation.
+- [x] Verify `mvn -Dskip.tailwind=true verify`.
+- [x] Verify demo GWT compile if demo code changed.
 
 ### Milestone 17.3: Validation Module
 

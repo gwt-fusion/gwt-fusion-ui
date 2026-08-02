@@ -36,6 +36,7 @@ import org.gwtfusion.query.QueryKey;
 import org.gwtfusion.query.QueryOptions;
 import org.gwtfusion.query.QueryRetryDelay;
 import org.gwtfusion.query.QueryState;
+import org.gwtfusion.query.ui.QueryView;
 import org.gwtfusion.router.HistoryStrategy;
 import org.gwtfusion.router.Route;
 import org.gwtfusion.router.Router;
@@ -3362,7 +3363,7 @@ public final class DemoApp implements EntryPoint {
         selectMainNavigation("query");
         clearContent();
         content.appendChild(textElement("h1", "", "Query"));
-        content.appendChild(textElement("p", "demo-muted", "gwt-fusion-query models loading, success, error, stale, retry, cache, and mutation state without coupling data fetching to the UI or a specific HTTP client."));
+        content.appendChild(textElement("p", "demo-muted", "gwt-fusion-query models cache and mutation state, while the optional gwt-fusion-query-ui module maps query lifecycles to reusable loading, error, empty, and success renderers."));
 
         QueryDemoApi api = new QueryDemoApi();
         QueryClient queryClient = QueryClient.create();
@@ -3380,14 +3381,31 @@ public final class DemoApp implements EntryPoint {
         HTMLElement livePreview = preview("demo-stack-preview");
         HTMLElement liveControls = element("div", "demo-button-row");
         HTMLElement liveState = element("div", "demo-query-panel");
+        HTMLElement liveSummary = element("div", "demo-query-panel");
+        QueryView<DemoProject[]> projectsView = QueryView.create(projects)
+                .idle((state, retry) -> EmptyState.create()
+                        .title("Idle query")
+                        .description("Load the first page when project data is needed.")
+                        .action(Button.create("Fetch projects").onClick(event -> retry.run())))
+                .loading((state, retry) -> projectLoadingView())
+                .error((state, retry) -> Alert.create()
+                        .variant(AlertVariant.DESTRUCTIVE)
+                        .add(Alert.title("Query error"))
+                        .add(Alert.description(state.errorMessage()))
+                        .add(Button.create("Retry").variant(ButtonVariant.OUTLINE).onClick(event -> retry.run())))
+                .emptyWhen(values -> values != null && values.length == 0)
+                .empty((state, retry) -> EmptyState.create()
+                        .title("No projects")
+                        .description("The fake API returned an empty success response."))
+                .success((state, retry) -> projectSuccessView(state));
         liveControls.appendChild(Button.create("Fetch projects").onClick(event -> projects.refetch()).element());
         liveControls.appendChild(Button.create("Refetch twice").variant(ButtonVariant.OUTLINE).onClick(event -> {
             projects.refetch();
             projects.refetch();
         }).element());
-        liveControls.appendChild(Button.create("Fail next request").variant(ButtonVariant.DESTRUCTIVE).onClick(event -> {
-            api.failNextFetch();
-            projects.refetch();
+        liveControls.appendChild(Button.create("Exhaust retries").variant(ButtonVariant.DESTRUCTIVE).onClick(event -> {
+            api.failNextFetches(3);
+            projects.refetch().then(Promise::resolve, error -> Promise.resolve((DemoProject[]) null));
         }).element());
         liveControls.appendChild(Button.create("Return empty list").variant(ButtonVariant.OUTLINE).onClick(event -> {
             api.emptyNextFetch();
@@ -3395,9 +3413,11 @@ public final class DemoApp implements EntryPoint {
         }).element());
         liveControls.appendChild(Button.create("Invalidate projects").variant(ButtonVariant.OUTLINE).onClick(event -> queryClient.invalidate(QueryKey.of("projects"))).element());
         livePreview.appendChild(liveControls);
+        liveState.appendChild(liveSummary);
+        liveState.appendChild(projectsView.element());
         livePreview.appendChild(liveState);
-        projects.observe(state -> renderProjectQueryState(liveState, state, projects));
-        content.appendChild(example("Live query lifecycle", livePreview,
+        projects.observe(state -> renderProjectQuerySummary(liveSummary, state, projects));
+        content.appendChild(example("QueryView lifecycle renderers", livePreview,
                 "QueryClient queryClient = QueryClient.create();\n"
                         + "Query<Project[]> projects = queryClient.query(\n"
                         + "    QueryKey.of(\"projects\", \"list\"),\n"
@@ -3406,9 +3426,16 @@ public final class DemoApp implements EntryPoint {
                         + "        .staleTime(10_000)\n"
                         + "        .retry(2)\n"
                         + "        .retryDelay(QueryRetryDelay.exponential(250, 1_000)));\n\n"
-                        + "projects.observe(state -> renderProjects(state));\n"
+                        + "QueryView<Project[]> view = QueryView.create(projects)\n"
+                        + "    .loading((state, retry) -> Skeleton.create().size(\"h-32 w-full\"))\n"
+                        + "    .error((state, retry) -> errorWithRetry(state, retry))\n"
+                        + "    .emptyWhen(values -> values.length == 0)\n"
+                        + "    .empty((state, retry) -> EmptyState.create().title(\"No projects\"))\n"
+                        + "    .success((state, retry) -> projectTable(state.data()));\n\n"
                         + "projects.refetch();\n"
-                        + "queryClient.invalidate(QueryKey.of(\"projects\"));"));
+                        + "queryClient.invalidate(QueryKey.of(\"projects\"));\n\n"
+                        + "// Required when the view is removed but the query client remains.\n"
+                        + "view.dispose();"));
 
         Query<DemoProject> detail = queryClient.query(
                 QueryKey.of("projects", "detail", "42"),
@@ -3417,6 +3444,10 @@ public final class DemoApp implements EntryPoint {
         HTMLElement cachePreview = preview("demo-stack-preview");
         HTMLElement cacheControls = element("div", "demo-button-row");
         HTMLElement cacheState = element("div", "demo-query-panel");
+        QueryView<DemoProject> detailView = QueryView.create(detail)
+                .success((state, retry) -> DataTable.create()
+                        .columns("Detail key", "Project", "Status")
+                        .rows(new String[][] {{detail.key().value(), state.data().name, state.data().status}}));
         cacheControls.appendChild(Button.create("Load list").onClick(event -> projects.refetch()).element());
         cacheControls.appendChild(Button.create("Load detail").variant(ButtonVariant.OUTLINE).onClick(event -> detail.refetch()).element());
         cacheControls.appendChild(Button.create("Add unused query").variant(ButtonVariant.OUTLINE).onClick(event -> {
@@ -3433,6 +3464,8 @@ public final class DemoApp implements EntryPoint {
         }).element());
         cachePreview.appendChild(cacheControls);
         cachePreview.appendChild(cacheState);
+        cachePreview.appendChild(textElement("h3", "", "Detail QueryView with defaults"));
+        cachePreview.appendChild(detailView.element());
         detail.observe(state -> renderCacheInspector(cacheState, queryClient, listOptions, detail));
         renderCacheInspector(cacheState, queryClient, listOptions, detail);
         content.appendChild(example("Cache and retry inspector", cachePreview,
@@ -3440,6 +3473,8 @@ public final class DemoApp implements EntryPoint {
                         + "QueryKey detailKey = QueryKey.of(\"projects\", \"detail\", id);\n\n"
                         + "queryClient.invalidate(QueryKey.of(\"projects\"));\n"
                         + "queryClient.collectGarbage();\n\n"
+                        + "QueryView<Project> detailView = QueryView.create(detail)\n"
+                        + "    .success((state, retry) -> projectDetail(state.data()));\n\n"
                         + "long delay = QueryRetryDelay.exponential(250, 1_000)\n"
                         + "    .delayMillis(2);"));
 
@@ -3494,43 +3529,32 @@ public final class DemoApp implements EntryPoint {
                         + "});"));
     }
 
-    private void renderProjectQueryState(HTMLElement target, QueryState<DemoProject[]> state, Query<DemoProject[]> query) {
+    private void renderProjectQuerySummary(HTMLElement target, QueryState<DemoProject[]> state, Query<DemoProject[]> query) {
         clear(target);
         target.appendChild(querySummary("Status", state.status().name().toLowerCase(), "Fetching", String.valueOf(state.fetching()), "In flight", String.valueOf(query.inFlight())));
         if (state.stale()) {
             target.appendChild(Badge.create("stale").variant(BadgeVariant.SECONDARY).element());
         }
-        if (state.isLoading() && !state.hasData()) {
-            target.appendChild(Skeleton.create().classes("h-4 w-48").element());
-            target.appendChild(Skeleton.create().classes("h-4 w-64").element());
-            target.appendChild(Spinner.create().size(SpinnerSize.SM).element());
-            return;
-        }
-        if (state.isError()) {
-            target.appendChild(Alert.create()
-                    .variant(AlertVariant.DESTRUCTIVE)
-                    .add(Alert.title("Query error"))
-                    .add(Alert.description(state.errorMessage()))
-                    .add(Button.create("Retry").variant(ButtonVariant.OUTLINE).onClick(event -> query.refetch()))
-                    .element());
-            return;
-        }
-        DemoProject[] projects = state.data();
-        if (projects == null) {
-            target.appendChild(EmptyState.create().title("Idle query").description("Click Fetch projects to start the first request.").element());
-            return;
-        }
-        if (projects.length == 0) {
-            target.appendChild(EmptyState.create().title("No projects").description("The fake API returned an empty success response.").element());
-            return;
-        }
+    }
+
+    private UiComponent projectLoadingView() {
+        HTMLElement loading = element("div", "demo-query-panel");
+        loading.appendChild(Skeleton.create().classes("h-4 w-48").element());
+        loading.appendChild(Skeleton.create().classes("h-4 w-64").element());
+        loading.appendChild(Spinner.create().size(SpinnerSize.SM).element());
+        return raw(loading);
+    }
+
+    private UiComponent projectSuccessView(QueryState<DemoProject[]> state) {
+        HTMLElement result = element("div", "demo-query-panel");
         if (state.isRefreshing()) {
-            target.appendChild(textElement("p", "demo-muted", "Refreshing with cached rows visible."));
+            result.appendChild(textElement("p", "demo-muted", "Refreshing with cached rows visible."));
         }
-        target.appendChild(DataTable.create()
+        result.appendChild(DataTable.create()
                 .columns("ID", "Project", "Status")
-                .rows(projectRows(projects))
+                .rows(projectRows(state.data()))
                 .element());
+        return raw(result);
     }
 
     private void renderCacheInspector(HTMLElement target, QueryClient queryClient, QueryOptions options, Query<DemoProject> detail) {
@@ -3627,15 +3651,17 @@ public final class DemoApp implements EntryPoint {
                 new DemoProject("P-101", "Component inventory", "ready"),
                 new DemoProject("P-102", "Token migration", "in review"),
                 new DemoProject("P-103", "Docs refresh", "planned")));
-        private boolean failNextFetch;
+        private int remainingFetchFailures;
         private boolean emptyNextFetch;
         private boolean failNextSave;
         private int nextId = 104;
 
         Promise<DemoProject[]> fetchProjects() {
-            boolean shouldFail = failNextFetch;
+            boolean shouldFail = remainingFetchFailures > 0;
             boolean shouldReturnEmpty = emptyNextFetch;
-            failNextFetch = false;
+            if (shouldFail) {
+                remainingFetchFailures--;
+            }
             emptyNextFetch = false;
             return new Promise<>((resolve, reject) -> DomGlobal.setTimeout(event -> {
                 if (shouldFail) {
@@ -3681,8 +3707,8 @@ public final class DemoApp implements EntryPoint {
             }
         }
 
-        void failNextFetch() {
-            failNextFetch = true;
+        void failNextFetches(int attempts) {
+            remainingFetchFailures = Math.max(0, attempts);
         }
 
         void emptyNextFetch() {
